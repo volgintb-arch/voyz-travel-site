@@ -8,6 +8,22 @@
   var A = '../assets/', V = A + 'video/';
   var VID = { 'grand-expedition': 'hero', 'put-karavanov': 'song', 'vesna-issyk-kul': 'jeti', 'osen-son-kul': 'serp' };
   var phone = $('.phone');
+  var EN = document.documentElement.lang === 'en', UI = window.VOYZ_UI || {}, CYR = /[А-Яа-яЁё]/;
+  function tx(s) { return EN && UI[s] != null ? UI[s] : s; }
+  function tl(s) { return tx(s.trim()) + (/\s$/.test(s) ? ' ' : ''); }
+  var RULES = [[/^(\d+) дней$/, '$1 days'], [/^(\d+) тур$/, '$1 tour'], [/^(\d+) тура$/, '$1 tours'],
+    [/^Тур: (.+)\. Оставьте контакты, мы вернёмся с программой и расчётом\.$/, 'Tour: $1. Leave your contacts and we will come back with a program and a quote.']];
+  function trStr(s) {
+    var k = s.trim(); if (!CYR.test(k)) return s; var v = UI[k];
+    if (v == null) for (var i = 0; i < RULES.length; i++) if (RULES[i][0].test(k)) { v = k.replace(RULES[i][0], RULES[i][1]); break; }
+    return v == null ? s : s.replace(k, v);
+  }
+  function trTree(n) {
+    if (n.nodeType === 3) { var v = trStr(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; return; }
+    if (n.nodeType !== 1) return;
+    ['placeholder', 'aria-label', 'alt', 'title'].forEach(function (a) { if (n.hasAttribute(a)) var o = n.getAttribute(a), v2 = trStr(o); if (v2 !== o) n.setAttribute(a, v2); });
+    [].slice.call(n.childNodes).forEach(trTree);
+  }
   function img(k, s) { return A + 'img/' + k + '-' + (s || 'm') + '.webp'; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function by(slug) { return T.filter(function (t) { return t.slug === slug; })[0]; }
@@ -202,7 +218,7 @@
         if (!agree) { bad = true; toast('Нужно согласие на обработку данных'); }
         if (bad) { buzz(); return; }
         var d = { name: f.name.value, contact: f.contact.value, season: season || '—', people: people, comment: f.comment.value, tour: f.dataset.tour || '', page: location.href, at: new Date().toISOString(), source: 'app' };
-        var text = ['Заявка VOYZ (приложение)', 'Тур: ' + (d.tour || 'не выбран'), 'Имя: ' + d.name, 'Контакт: ' + d.contact, 'Сезон: ' + d.season, 'Человек: ' + d.people, d.comment ? 'Комментарий: ' + d.comment : ''].filter(Boolean).join('\n');
+        var text = [tx('Заявка VOYZ (приложение)'), tl('Тур: ') + (d.tour || tx('не выбран')), tl('Имя: ') + d.name, tl('Контакт: ') + d.contact, tl('Сезон: ') + d.season, tl('Человек: ') + d.people, d.comment ? tl('Комментарий: ') + d.comment : ''].filter(Boolean).join('\n');
         var done = function (live) {
           $$('.group,.grouplabel,.seg,.small,.wrapx', f).forEach(function (x) { x.style.display = 'none'; });
           var ok = $('.ok', f); ok.style.display = 'block'; ok.innerHTML = live ? '<b>Заявка отправлена.</b> Мы вернёмся с программой и расчётом.' : '<b>Заявка собрана.</b> Форма в демо-режиме: скопируйте текст и отправьте нам.<br><br><button type="button" class="btn" data-copy>Скопировать заявку</button>';
@@ -239,5 +255,9 @@
   // scroll position bookkeeping for tab screens
   screens.addEventListener('scroll', function (e) { if (e.target.dataset && cache[e.target.dataset.id]) scrolls[e.target.dataset.id] = e.target.scrollTop; }, true);
 
+  if (EN) {
+    new MutationObserver(function (ms) { ms.forEach(function (m) { [].slice.call(m.addedNodes).forEach(function (n) { trTree(n); }); if (m.type === 'characterData') trTree(m.target); }); }).observe(phone, { childList: true, subtree: true, characterData: true });
+  }
   route(); bindForm(screens);
+  if (EN) trTree(phone);
 })();

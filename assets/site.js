@@ -1,4 +1,18 @@
 (function () {
+  var EN = document.documentElement.lang === 'en';
+  var S = EN ? {
+    subject: 'Request from the VOYZ website', hello: 'Hello! I would like to know more about ', defTopic: 'VOYZ tours',
+    head: 'VOYZ request', tour: 'Tour: ', none: 'not chosen', name: 'Name: ', contact: 'Contact: ', season: 'Season: ', people: 'People: ', comment: 'Comment: ',
+    sent: '<strong>Request sent.</strong> We will come back with a program and a quote.',
+    demo: '<strong>Request prepared.</strong> The form is in demo mode right now: copy the text and send it to us.<br><button type="button" class="btn sm dark" data-copy style="margin-top:14px">Copy request</button>',
+    copied: 'Copied', manual: 'Select the text manually', fail: 'Could not send. Please try again or contact us directly.'
+  } : {
+    subject: 'Заявка с сайта VOYZ', hello: 'Здравствуйте! Хочу узнать про ', defTopic: 'туры VOYZ',
+    head: 'Заявка VOYZ', tour: 'Тур: ', none: 'не выбран', name: 'Имя: ', contact: 'Контакт: ', season: 'Сезон: ', people: 'Человек: ', comment: 'Комментарий: ',
+    sent: '<strong>Заявка отправлена.</strong> Мы вернёмся с программой и расчётом.',
+    demo: '<strong>Заявка собрана.</strong> Форма сейчас в демо-режиме: скопируйте текст и отправьте нам.<br><button type="button" class="btn sm dark" data-copy style="margin-top:14px">Скопировать заявку</button>',
+    copied: 'Скопировано', manual: 'Выделите текст вручную', fail: 'Не удалось отправить. Попробуйте ещё раз или свяжитесь с нами напрямую.'
+  };
   var C = window.VOYZ_CONFIG || {};
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -44,11 +58,11 @@
     if (kind === 'telegram' && C.telegram) return 'https://t.me/' + C.telegram.replace(/^@/, '') + '?text=' + encodeURIComponent(text);
     if (kind === 'whatsapp' && C.whatsapp) return 'https://wa.me/' + C.whatsapp.replace(/\D/g, '') + '?text=' + encodeURIComponent(text);
     if (kind === 'phone' && C.phone) return 'tel:' + C.phone.replace(/[^\d+]/g, '');
-    if (kind === 'email' && C.email) return 'mailto:' + C.email + '?subject=' + encodeURIComponent('Заявка с сайта VOYZ') + '&body=' + encodeURIComponent(text);
+    if (kind === 'email' && C.email) return 'mailto:' + C.email + '?subject=' + encodeURIComponent(S.subject) + '&body=' + encodeURIComponent(text);
     return null;
   }
   $$('[data-contact]').forEach(function (a) {
-    var h = contactHref(a.getAttribute('data-contact'), 'Здравствуйте! Хочу узнать про ' + (a.getAttribute('data-topic') || 'туры VOYZ'));
+    var h = contactHref(a.getAttribute('data-contact'), S.hello + (a.getAttribute('data-topic') || S.defTopic));
     if (h) { a.href = h; a.hidden = false; if (/^http/.test(h)) { a.target = '_blank'; a.rel = 'noopener'; } }
   });
   $$('[data-if-contacts]').forEach(function (el) { if (!(C.telegram || C.whatsapp || C.phone || C.email)) el.hidden = true; });
@@ -63,16 +77,16 @@
       if (!ok) { var first = $('.bad input,.bad select', form); if (first) first.focus(); return; }
       var d = {}; new FormData(form).forEach(function (v, k) { d[k] = v; });
       d.tour = form.dataset.tour || ''; d.source = form.dataset.source || location.pathname; d.page = location.href; d.at = new Date().toISOString();
-      var text = ['Заявка VOYZ', 'Тур: ' + (d.tour || 'не выбран'), 'Имя: ' + d.name, 'Контакт: ' + d.contact, 'Месяц: ' + (d.month || '—'), 'Человек: ' + (d.people || '—'), d.comment ? 'Комментарий: ' + d.comment : ''].filter(Boolean).join('\n');
+      var text = [S.head, S.tour + (d.tour || S.none), S.name + d.name, S.contact + d.contact, S.season + (d.month || '—'), S.people + (d.people || '—'), d.comment ? S.comment + d.comment : ''].filter(Boolean).join(String.fromCharCode(10));
       var done = function (live) {
         form.classList.add('sent');
-        var m = $('.ok', form); if (m) m.innerHTML = live ? '<strong>Заявка отправлена.</strong> Мы вернёмся с программой и расчётом.' : '<strong>Заявка собрана.</strong> Форма сейчас в демо-режиме: скопируйте текст и отправьте нам.<br><button type="button" class="btn sm dark" data-copy style="margin-top:14px">Скопировать заявку</button>';
-        var cp = $('[data-copy]', form); if (cp) cp.addEventListener('click', function () { (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { cp.textContent = 'Скопировано'; }).catch(function () { cp.textContent = 'Выделите текст вручную'; }); });
+        var m = $('.ok', form); if (m) m.innerHTML = live ? S.sent : S.demo;
+        var cp = $('[data-copy]', form); if (cp) cp.addEventListener('click', function () { (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { cp.textContent = S.copied; }).catch(function () { cp.textContent = S.manual; }); });
       };
       if (C.formEndpoint) {
         fetch(C.formEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(d) })
           .then(function (r) { if (!r.ok) throw 0; done(true); })
-          .catch(function () { alert('Не удалось отправить. Попробуйте ещё раз или свяжитесь с нами напрямую.'); });
+          .catch(function () { alert(S.fail); });
       } else { try { var q = JSON.parse(localStorage.getItem('voyz_requests') || '[]'); q.push(d); localStorage.setItem('voyz_requests', JSON.stringify(q)); } catch (x) {} done(false); }
     });
   });

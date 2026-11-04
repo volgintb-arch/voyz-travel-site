@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://volgintb-arch.github.io/voyz-travel-site/sitemap.xml

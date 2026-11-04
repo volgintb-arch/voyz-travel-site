@@ -1,12 +1,27 @@
-"""Static site generator: data/*.json -> plain HTML pages (good for SEO, deployable anywhere).
-Run: python build_site.py   (every tour in data/tours.json + data/tours_extra.json gets its own page)"""
-import json, os, html, re
+"""Static site generator: data/*.json -> plain HTML pages (RU at /, EN at /en/).
+Run: python build_site.py      (then: python build_app.py, python make_og.py if titles changed)
+
+Languages: the site is written in Russian; English comes from data/en.json (Russian string -> English string),
+applied to the generated HTML, so one template serves both languages.
+SEO: canonical + hreflang (ru, en, x-default), Open Graph / Twitter cards, JSON-LD, sitemap.xml, robots.txt, manifest."""
+import json, os, html, re, datetime
+
 H = html.escape
 ROOT = os.path.dirname(os.path.abspath(__file__))
-NOINDEX = True   # preview deployment: keep out of search engines; set False for the real launch
+
+# ---------------- launch settings (change these when the real domain goes live) ----------------
+SITE_URL = 'https://volgintb-arch.github.io/voyz-travel-site'   # no trailing slash; e.g. 'https://voyz.ru'
+INDEXABLE = False        # False = preview: pages carry noindex. Set True when the site is ready for search engines.
+VERIFY = {'google-site-verification': '', 'yandex-verification': '', 'msvalidate.01': ''}   # paste verification codes here
+BRAND = 'VOYZ Travel'
+TODAY = datetime.date.today().isoformat()
+VER = '1793795000'       # cache-busting suffix for css/js (bumped by the build)
+
 def load(p): return json.load(open(os.path.join(ROOT, p), encoding='utf-8'))
 BASE, EXTRA, CR = load('data/tours.json'), load('data/tours_extra.json'), load('data/credits.json')
-LOGO = open(os.path.join(ROOT, 'assets/logo.svg'), encoding='utf-8').read()
+EN_PATH = os.path.join(ROOT, 'data/en.json')
+EN = load('data/en.json') if os.path.exists(EN_PATH) else {}
+HAS_EN = os.path.exists(EN_PATH)
 DEF = EXTRA['defaults']
 TOURS = BASE['tours'] + EXTRA['tours']
 for t in TOURS:
@@ -16,28 +31,68 @@ G = TOURS[0]                       # flagship tour (home hero, map)
 MONTHS = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
 SEASONS = [('spring', 'Весна'), ('summer', 'Лето'), ('autumn', 'Осень'), ('winter', 'Зима')]
 
-def img(k, size='l', root=''): return '%sassets/img/%s-%s.webp' % (root, k, size)
-def tour_url(t, root): return '%stours/%s/' % (root, t['slug'])
+# per-build state (set in build())
+LANG, PFX, CUR = 'ru', '', {'path': '', 'og': 'home', 'ld': []}
 
-def head(title, desc, root, og=None, extra=''):
-    og = og or img(G['hero'], 'm', root)
-    robots = '<meta name="robots" content="noindex,nofollow">' if NOINDEX else ''
-    return f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">{robots}
-<title>{H(title)}</title><meta name="description" content="{H(desc)}">
-<meta property="og:title" content="{H(title)}"><meta property="og:description" content="{H(desc)}"><meta property="og:type" content="website"><meta property="og:image" content="{og}">
-<meta name="theme-color" content="#0B0B0B">
+def img(k, size='l', root=''): return '%sassets/img/%s-%s.webp' % (root, k, size)
+def tour_url(t, root): return '%s%stours/%s/' % (root, PFX, t['slug'])
+def rootfor(depth): return '../' * (depth + (1 if LANG == 'en' else 0))
+def tt(s): return EN.get(s, s) if LANG == 'en' else s        # translate a plain string at build time
+
+# ---------------- <head>: meta, social, structured data ----------------
+def page_url(lang, path): return '%s/%s%s' % (SITE_URL, 'en/' if lang == 'en' else '', path)
+
+def org_ld():
+    return {"@type": "TravelAgency", "@id": SITE_URL + "/#org", "name": BRAND, "url": SITE_URL + "/",
+            "logo": SITE_URL + "/assets/icons/icon-512.png", "image": SITE_URL + "/assets/og/home-%s.jpg" % LANG,
+            "description": tt('Авторские путешествия по Кыргызстану на внедорожниках. Небольшие группы, продуманные маршруты, поездки в любое время года.'),
+            "areaServed": [{"@type": "Country", "name": "Kyrgyzstan"}, {"@type": "Place", "name": "Europe"}, {"@type": "Place", "name": "Asia"}],
+            "knowsLanguage": ["ru", "en"], "slogan": tt('Кыргызстан. За пределами привычного.')}
+
+def crumbs(items):
+    return {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(items)]}
+
+def head(title, desc, root, extra_ld=None, keywords=''):
+    path, ogk = CUR['path'], CUR['og']
+    url = page_url(LANG, path)
+    og_img = '%s/assets/og/%s-%s.jpg' % (SITE_URL, ogk, LANG)
+    robots = ('index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' if INDEXABLE else 'noindex,nofollow')
+    ld = {"@context": "https://schema.org", "@graph": [org_ld(), {"@type": "WebSite", "@id": SITE_URL + "/#site", "url": SITE_URL + "/", "name": BRAND, "inLanguage": LANG, "publisher": {"@id": SITE_URL + "/#org"}}] + (extra_ld or [])}
+    verify = ''.join(f'<meta name="{k}" content="{v}">' for k, v in VERIFY.items() if v)
+    loc, alt = ('ru_RU', 'en_US') if LANG == 'ru' else ('en_US', 'ru_RU')
+    kw = f'<meta name="keywords" content="{H(keywords)}">' if keywords else ''
+    return f'''<!doctype html><html lang="{LANG}" prefix="og: https://ogp.me/ns#"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{H(title)}</title><meta name="description" content="{H(desc)}">{kw}
+<meta name="robots" content="{robots}"><meta name="googlebot" content="{robots}"><meta name="author" content="{BRAND}"><meta name="format-detection" content="telephone=no">
+<link rel="canonical" href="{url}">
+<link rel="alternate" hreflang="ru" href="{page_url('ru', path)}"><link rel="alternate" hreflang="en" href="{page_url('en', path)}"><link rel="alternate" hreflang="x-default" href="{page_url('en', path)}">
+<meta property="og:site_name" content="{BRAND}"><meta property="og:type" content="website"><meta property="og:title" content="{H(title)}"><meta property="og:description" content="{H(desc)}">
+<meta property="og:url" content="{url}"><meta property="og:locale" content="{loc}"><meta property="og:locale:alternate" content="{alt}">
+<meta property="og:image" content="{og_img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{H(title)}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{H(title)}"><meta name="twitter:description" content="{H(desc)}"><meta name="twitter:image" content="{og_img}"><meta name="twitter:image:alt" content="{H(title)}">
+<meta name="theme-color" content="#0B0B0B"><meta name="application-name" content="{BRAND}"><meta name="apple-mobile-web-app-title" content="VOYZ">{verify}
+<link rel="icon" href="{root}favicon.ico" sizes="48x48"><link rel="icon" href="{root}favicon.svg" type="image/svg+xml"><link rel="icon" href="{root}assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="{root}assets/icons/apple-touch-icon.png"><link rel="manifest" href="{root}site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/site.css?v=1793790503"><link rel="stylesheet" href="{root}assets/v2.css?v=1793790503">{extra}</head><body>'''
+<link rel="stylesheet" href="{root}assets/site.css?v={VER}"><link rel="stylesheet" href="{root}assets/v2.css?v={VER}">
+<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script></head><body>'''
+
+def lang_switch(root):
+    p = CUR['path']
+    base = '../' * (len([x for x in p.split('/') if x]) + (1 if LANG == 'en' else 0))
+    ru, en = base + p, base + 'en/' + p
+    return f'<span class="lang" role="group" aria-label="Language"><a href="{ru or "./"}" hreflang="ru" lang="ru"{" aria-current=true" if LANG == "ru" else ""}>RU</a><a href="{en}" hreflang="en" lang="en"{" aria-current=true" if LANG == "en" else ""}>EN</a></span>'
 
 def header(root, cur=''):
     nav = [('tours/', 'Туры'), ('#year', 'Туры на весь год'), ('#how', 'Как это работает'), ('#faq', 'Вопросы')]
-    def href(h): return root + h if h == 'tours/' else (h if cur == 'home' else root + 'index.html' + h)
+    def href(h): return root + PFX + h if h == 'tours/' else (h if cur == 'home' else root + PFX + 'index.html' + h)
     links = ''.join(f'<a href="{href(h)}"{" aria-current=page" if (cur == "tours" and h == "tours/") else ""}>{t}</a>' for h, t in nav)
-    return f'''<header class="hdr"><div class="wrap"><a class="logo-link" href="{root}index.html" aria-label="VOYZ Travel"><img src="{root}assets/logo.svg" alt="VOYZ" width="118" height="16"></a>
-<nav class="nav" aria-label="Основное">{links}<a class="btn sm" href="#request" data-open-form="header">Подобрать тур</a></nav>
+    sw = lang_switch(root)
+    return f'''<header class="hdr"><div class="wrap"><a class="logo-link" href="{root}{PFX}index.html" aria-label="VOYZ Travel"><img src="{root}assets/logo.svg" alt="VOYZ" width="118" height="16"></a>
+<nav class="nav" aria-label="Основное">{links}{sw}<a class="btn sm" href="#request" data-open-form="header">Подобрать тур</a></nav>
 <button class="burger" data-menu aria-label="Меню"><span></span></button></div></header>
-<div class="mnav" role="dialog" aria-label="Меню"><button class="x" data-menu aria-label="Закрыть">×</button>{links}<a href="#request" data-open-form="menu" style="color:var(--lime)">Оставить заявку</a></div>'''
+<div class="mnav" role="dialog" aria-label="Меню"><button class="x" data-menu aria-label="Закрыть">×</button>{links}{sw}<a href="#request" data-open-form="menu" style="color:var(--lime)">Оставить заявку</a></div>'''
 
 def form(tour_name='', idp='f', source='page', root=''):
     months = ''.join(f'<option>{m}</option>' for m in ['Весна', 'Лето', 'Осень', 'Зима', 'Пока не знаю'])
@@ -49,7 +104,7 @@ def form(tour_name='', idp='f', source='page', root=''):
 <div class="two"><div class="field"><label for="{idp}m">Когда хотите поехать</label><select id="{idp}m" name="month"><option value="">Выберите сезон</option>{months}</select></div>
 <div class="field"><label for="{idp}p">Сколько вас человек</label><select id="{idp}p" name="people"><option value="">Выберите</option>{people}</select></div></div>
 <div class="field"><label for="{idp}t">Пожелания</label><textarea id="{idp}t" name="comment" placeholder="Что важно для вас в поездке: опыт, дети, сроки, вопросы"></textarea></div>
-<label class="consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных и с <a href="{root}privacy/">политикой конфиденциальности</a></span></label>
+<label class="consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных и с <a href="{root}{PFX}privacy/">политикой конфиденциальности</a></span></label>
 <button class="btn" type="submit">Получить программу и расчёт <span class="arrow">→</span></button>
 </div><div class="ok" role="status"></div></form>'''
 
@@ -65,16 +120,12 @@ def footer(root, modal_html='', mbar_html=''):
     return f'''<footer class="ftr"><div class="wrap"><div class="cols">
 <div><div class="logo-lg"><img src="{root}assets/logo.svg" alt="VOYZ" width="220" height="29"></div>
 <p class="body dim" style="margin-top:20px;max-width:26em">Авторские путешествия по Кыргызстану на внедорожниках. Небольшие группы, продуманные маршруты и честный разговор о том, что вас ждёт.</p></div>
-<div><p class="meta dim">Туры</p><ul>{links}<li><a href="{root}tours/">Все туры</a></li></ul></div>
+<div><p class="meta dim">Туры</p><ul>{links}<li><a href="{root}{PFX}tours/">Все туры</a></li></ul></div>
 <div><p class="meta dim">Связаться</p><ul><li><a href="#request" data-open-form="footer">Оставить заявку</a></li>
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
-<div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}privacy/">Политика конфиденциальности</a> · <a href="{root}credits/">Авторы фотографий</a></span></div></div></footer>
-{modal_html}{mbar_html}<script src="{root}assets/config.js?v=1793790503"></script><script src="{root}assets/site.js?v=1793790503"></script><script src="{root}assets/scale.js?v=1793790503"></script><script src="{root}assets/v2.js?v=1793790503"></script></body></html>'''
-
-def write(path, content):
-    p = os.path.join(ROOT, path); os.makedirs(os.path.dirname(p), exist_ok=True)
-    open(p, 'w', encoding='utf-8').write(content)
+<div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}{PFX}privacy/">Политика конфиденциальности</a> · <a href="{root}{PFX}credits/">Авторы фотографий</a></span></div></div></footer>
+{modal_html}{mbar_html}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
 
 # ---------------- blocks ----------------
 def facts_bar(t): return '<div class="facts rv">' + ''.join(f'<div><div class="num">{H(a)}</div><p class="meta">{H(b)}</p></div>' for a, b in t['facts']) + '</div>'
@@ -108,17 +159,16 @@ def steps_block():
          ('Выезд', 'Встречаем и едем: внедорожники, небольшая группа, горы.')]
     return '<div class="steps">' + ''.join(f'<div class="step rv"><div class="num">{i + 1}</div><h3 class="h3" style="margin-bottom:10px">{a}</h3><p class="body dim" style="font-size:16px">{b}</p></div>' for i, (a, b) in enumerate(s)) + '</div>'
 
-def faq_block(items, schema=True):
-    h = '<div class="faq">' + ''.join(f'<details><summary>{H(q)}</summary><p>{H(a)}</p></details>' for q, a in items) + '</div>'
-    if schema:
-        ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in items]}
-        h += '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>'
-    return h
+def faq_ld(items):
+    return {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in items]}
+
+def faq_block(items):
+    return '<div class="faq">' + ''.join(f'<details><summary>{H(q)}</summary><p>{H(a)}</p></details>' for q, a in items) + '</div>'
 
 def ctaband(root=''):
     return f'''<section class="sec ctaband" style="background-image:url({root}assets/img/song_sunset-l.webp)"><div class="wrap"><h2 class="h2">Выберите сезон. <span class="hl">Остальное мы подскажем.</span></h2><a class="btn" href="#request" data-open-form="cta-band">Подобрать тур <span class="arrow">→</span></a></div></section>'''
 
-def request_block(tour_name, root, idp='r', cls='light'):
+def request_block(tour_name, root, idp='r', cls='light white'):
     return ctaband(root) + f'''<section class="sec {cls}" id="request"><div class="wrap req"><div class="side stack" style="--gap:22px"><span class="tag">Заявка</span>
 <h2 class="h2">Хотите поехать? <span class="hl">Давайте поговорим</span></h2>
 <p class="body dim">Оставьте контакты — вернёмся с программой и расчётом под вашу группу и даты. Если пока сомневаетесь, тоже напишите: расскажем, подходит ли вам такой формат.</p>
@@ -141,8 +191,6 @@ def reel_block(root):
     clips = [('issyk', 'Иссык-Куль'), ('bars', 'Водопады Барскоона'), ('aksai', 'Каньоны Ак-Сай'), ('serp', 'Серпантин «33 попугая»'), ('song', 'Юрты Сон-Куля'), ('jeti', 'Джети-Огуз')]
     return '<div class="reel">' + ''.join(f'<figure class="vcard rv"><video muted loop playsinline preload="none" poster="{root}assets/video/{k}.jpg"><source src="{root}assets/video/{k}.mp4" type="video/mp4"></video><figcaption class="cap">{n}</figcaption></figure>' for k, n in clips) + '</div>'
 
-def season_labels(t): return ' · '.join(dict(SEASONS)[s] for s in t['seasons'])
-
 def tcard(t, root, big=False):
     chips = ''.join(f'<span class="chip">{H(a)} {H(b)}</span>' for a, b in t['facts'][:3])
     return f'''<a class="tcard rv" href="{tour_url(t, root)}" data-seasons="{' '.join(t['seasons'])}"><img src="{img(t['card_img'], 'l' if big else 'm', root)}" alt="{H(t['title'])}" loading="lazy"><div class="in"><span class="tag">{H(t['badge'])}</span><h2 class="h2" style="font-size:clamp(26px,calc(2.8*var(--vw)),44px)">{H(t['title'])}</h2><p class="body" style="font-size:16px;color:rgba(255,255,255,.9)">{H(t['card_title'])}</p><div style="display:flex;flex-wrap:wrap;gap:8px">{chips}<span class="chip">{H(t['season'])}</span></div></div></a>'''
@@ -156,15 +204,20 @@ def calendar_block(root):
     return f'<div class="cal rv" role="table" aria-label="Календарь туров">{head_}{rows}</div>'
 
 # ---------------- pages ----------------
+KW_RU = 'туры по Кыргызстану, джип-тур Кыргызстан, экспедиции на внедорожниках, Иссык-Куль, Сон-Куль, Кель-Суу, Ала-Куль, Тянь-Шань, юрты, небольшие группы'
+KW_EN = 'Kyrgyzstan tours, Kyrgyzstan 4x4 expedition, jeep tour Kyrgyzstan, Central Asia adventure travel, Song-Kul, Kel-Suu, Ala-Kul, Issyk-Kul, Tian Shan, yurt stay, small group tour'
+def kw(): return KW_RU if LANG == 'ru' else KW_EN
+
 def page_home():
-    R = ''
+    R = rootfor(0)
     why = [('1', 'Маленькая группа', 'От 4 до 8 человек. Вы не потеряетесь в толпе и не зависите от большого автобуса.'),
            ('2', 'Два внедорожника', 'Трассы, горные дороги и бездорожье: туда, куда не доедет экскурсионный транспорт.'),
            ('3', 'Маршруты на весь год', 'Весенние каньоны, летние озёра, осенний Сон-Куль и зимний Каракол: у каждого сезона своя поездка.'),
            ('4', 'Честно о нагрузке', 'Рассказываем заранее: где долгие переезды, где конные и пешие участки, что зависит от погоды.')]
     whyh = ''.join(f'<div class="card rv"><div class="ico">{n}</div><h3 class="h3">{a}</h3><p class="body dim" style="font-size:16px">{b}</p></div>' for n, a, b in why)
     others = ''.join(tcard(t, R) for t in TOURS[1:])
-    body = head('VOYZ Travel — туры на внедорожниках по Кыргызстану', 'Авторские экспедиции по Кыргызстану на внедорожниках на весь год: Ала-Куль, Кель-Суу, Сон-Куль, Алай, Сары-Челек, зимний Иссык-Куль.', R) + header(R, 'home') + f'''
+    items = {"@type": "ItemList", "name": tt('Туры VOYZ'), "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": page_url(LANG, 'tours/%s/' % t['slug']), "name": t['title']} for i, t in enumerate(TOURS)]}
+    body = head('VOYZ Travel — туры на внедорожниках по Кыргызстану', 'Авторские экспедиции по Кыргызстану на внедорожниках на весь год: Ала-Куль, Кель-Суу, Сон-Куль, Алай, Сары-Челек, зимний Иссык-Куль.', R, [items, faq_ld(G['faq'][:6])], kw()) + header(R, 'home') + f'''
 <section class="hero">{hero_bg(G['hero'], G['hero_pos'], 'Озеро Кель-Суу между скал', R, VIDEOS['home'])}
 <div class="wrap"><span class="tag">Экспедиции по Кыргызстану</span><h1 class="h1" style="margin-top:22px">Туда, куда не&nbsp;доезжает <span class="hl">автобус</span></h1>
 <p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню и Памиро-Алаю: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа, продуманный маршрут, поездки в любое время года.</p>
@@ -182,7 +235,7 @@ def page_home():
 
 <section class="sec" id="reel"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">В движении</span><h2 class="h2">Дорога, <span class="hl">которую хочется проехать</span></h2></div><p class="body dim">Короткие кадры с маршрутов: вода, скалы, серпантины и юрты. Так выглядит поездка до того, как вы в неё отправились.</p></div>{reel_block(R)}</div></section>
 
-<section class="sec light white" id="year"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Туры на весь год</span><h2 class="h2">Для каждого сезона <span class="hl">своя поездка</span></h2></div><p class="body dim">Весной каньоны без толп, летом высокогорные озёра, осенью золотой свет на Сон-Куле, зимой снег и горячие источники. Выберите время, а маршрут мы подскажем.</p></div>
+<section class="sec light" id="year"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Туры на весь год</span><h2 class="h2">Для каждого сезона <span class="hl">своя поездка</span></h2></div><p class="body dim">Весной каньоны без толп, летом высокогорные озёра, осенью золотой свет на Сон-Куле, зимой снег и горячие источники. Выберите время, а маршрут мы подскажем.</p></div>
 {calendar_block(R)}<div class="grid" style="margin-top:28px">{others}</div></div></section>
 
 <section class="sec light white" id="lakes"><div class="wrap"><span class="tag">Три озера</span><h2 class="h2" style="margin-top:22px;max-width:18ch">Ради таких мест <span class="hl">отправляются в экспедиции</span></h2>{lakes_block(G, R)}</div></section>
@@ -191,40 +244,46 @@ def page_home():
 
 <section class="sec light white" id="how"><div class="wrap"><span class="tag dark">Как это работает</span><h2 class="h2" style="margin-top:22px">От заявки <span class="hl">до выезда</span></h2>{steps_block()}</div></section>
 
-<section class="sec light white" id="faq" style="padding-top:0"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Частые <span class="hl">вопросы</span></h2><p class="body dim" style="margin-top:20px">Если не нашли ответ, напишите нам: расскажем честно, подходит ли вам такой формат.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(G['faq'][:6], schema=False)}</div></div></section>
+<section class="sec light" id="faq"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Частые <span class="hl">вопросы</span></h2><p class="body dim" style="margin-top:20px">Если не нашли ответ, напишите нам: расскажем честно, подходит ли вам такой формат.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(G['faq'][:6])}</div></div></section>
 
 {request_block('Подбор тура', R)}'''
     return body + footer(R, modal(R, 'Подбор тура'), mbar('Подобрать тур'))
 
 def page_tours():
-    R = '../'
+    R = rootfor(1)
     chips = '<div class="filters" role="group" aria-label="Сезон"><button class="fchip on" data-season="all">Все</button>' + ''.join(f'<button class="fchip" data-season="{k}">{v}</button>' for k, v in SEASONS) + '</div>'
     cards = ''.join(tcard(t, R, big=True) for t in TOURS)
-    body = head('Туры по Кыргызстану на внедорожниках — VOYZ Travel', 'Каталог авторских экспедиций VOYZ по Кыргызстану на весь год.', R) + header(R, 'tours') + f'''
+    items = {"@type": "ItemList", "name": tt('Туры VOYZ'), "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": page_url(LANG, 'tours/%s/' % t['slug']), "name": t['title']} for i, t in enumerate(TOURS)]}
+    bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Туры'), page_url(LANG, 'tours/'))])
+    body = head('Туры по Кыргызстану на внедорожниках — VOYZ Travel', 'Каталог авторских экспедиций VOYZ по Кыргызстану на весь год: весна, лето, осень и зима, небольшие группы, юрты, высокогорные озёра.', R, [bc, items], kw()) + header(R, 'tours') + f'''
 <section class="phead ink"><div class="wrap split"><div class="stack"><span class="tag">Каталог</span><h1 class="h1" style="font-size:clamp(40px,calc(6*var(--vw)),96px)">Наши <span class="hl">туры</span></h1></div>
 <p class="body dim">Авторские экспедиции по Кыргызстану: внедорожники, горы, озёра и юрты. Небольшие группы и маршруты на любой сезон.</p></div></section>
-<section class="sec light" style="padding-top:clamp(40px,calc(5*var(--vw)),72px)"><div class="wrap"><div class="cal-wrap">{calendar_block(R)}</div>{chips}<div class="grid" id="tgrid" style="margin-top:20px">{cards}
+<section class="sec light"><div class="wrap"><div class="cal-wrap">{calendar_block(R)}</div>{chips}<div class="grid" id="tgrid" style="margin-top:20px">{cards}
 <div class="tcard custom rv" data-seasons="spring summer autumn winter"><div class="in"><span class="tag dark">Под вас</span><div class="stack"><h2 class="h2" style="font-size:clamp(26px,calc(2.8*var(--vw)),44px)">Свой маршрут на внедорожниках</h2><p class="body" style="font-weight:700">Хотите другую длительность, даты или состав: компания друзей, семья, корпоративная поездка? Соберём маршрут под вас.</p></div><a class="btn dark" href="#request" data-open-form="catalog-custom" style="align-self:flex-start">Обсудить маршрут <span class="arrow">→</span></a></div></div>
-</div></div></section>{request_block('Свой маршрут', R, 'c', 'light white')}'''
+</div></div></section>{request_block('Свой маршрут', R, 'c')}'''
     return body + footer(R, modal(R, 'Свой маршрут'), mbar())
 
 def page_tour(t):
-    R = '../../'
+    R = rootfor(2)
     meta = ''.join(f'<div class="card rv" style="padding:22px 26px"><p class="meta dim">{H(a)}</p><p class="body" style="font-weight:800;margin-top:6px">{H(b)}</p></div>' for a, b in t['meta'])
     diff = ''.join(f'''<div class="card rv"><p class="h3">{H(x['name'])}</p><div class="dots">{''.join(f'<i class="{"on" if i < x["level"] else ""}"></i>' for i in range(5))}</div><p class="meta dim">{H(x['text'])}</p></div>''' for x in t['difficulty'])
     org = ''.join(f'<div class="card rv"><p class="h3">{H(a)}</p><p class="body dim" style="font-size:16px">{H(b)}</p></div>' for a, b in t['organization'])
     yes = ''.join(f'<li>{H(x)}</li>' for x in t['fit_yes']); no = ''.join(f'<li>{H(x)}</li>' for x in t['fit_no'])
-    ld = {"@context": "https://schema.org", "@type": "TouristTrip", "name": "VOYZ " + t['title'], "description": t['summary'], "touristType": "Небольшая группа", "itinerary": [{"@type": "TouristDestination", "name": d['route']} for d in t['days']]}
+    ndays = t['days'][-1]['n']
+    trip = {"@type": "TouristTrip", "name": "VOYZ " + t['title'], "description": t['summary'], "touristType": tt('Небольшая группа'), "inLanguage": LANG,
+            "provider": {"@id": SITE_URL + "/#org"}, "image": '%s/assets/og/%s-%s.jpg' % (SITE_URL, t['slug'], LANG), "url": page_url(LANG, 'tours/%s/' % t['slug']),
+            "itinerary": {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": d['n'], "name": d['title'], "description": d['route']} for d in t['days']]}}
+    bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Туры'), page_url(LANG, 'tours/')), (t['title'], page_url(LANG, 'tours/%s/' % t['slug']))])
     has_map = t.get('map')
     sub = [('lakes', 'Главное')] + ([('route', 'Маршрут')] if has_map else []) + [('days', 'По дням'), ('fit', 'Для кого'), ('org', 'Организация'), ('faq', 'Вопросы')]
     subnav = ''.join(f'<a class="l" href="#{i}">{n}</a>' for i, n in sub)
-    title_html = H(t['title'])
     first, _, rest = t['title'].partition(' ')
-    h1 = f'{H(first)} <span class="hl">{H(rest)}</span>' if rest else f'<span class="hl">{title_html}</span>'
+    h1 = f'{H(first)} <span class="hl">{H(rest)}</span>' if rest else f'<span class="hl">{H(t["title"])}</span>'
     photo_note = f'<p class="meta dim" style="margin-top:14px;max-width:46em">{H(t["photo_note"])}</p>' if t.get('photo_note') else ''
     related = ''.join(tcard(x, R) for x in TOURS if x is not t)
     map_sec = f'<section class="sec light" id="route"><div class="wrap"><span class="tag">Маршрут</span><h2 class="h2" style="margin-top:22px">Один маршрут. <span class="hl">Разные миры</span></h2>{map_block(R)}</div></section>' if has_map else ''
-    body = head(f'{t["title"]} — {t["days"][-1]["n"]} дней на внедорожниках по Кыргызстану · VOYZ', t['summary'], R, og=img(t['hero'], 'm', R), extra='<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>') + header(R, 'tour') + f'''
+    title = f'{t["title"]} — {ndays} дней на внедорожниках по Кыргызстану · VOYZ'
+    body = head(title, t['summary'], R, [bc, trip, faq_ld(t['faq'])], kw()) + header(R, 'tour') + f'''
 <section class="hero">{hero_bg(t['hero'], t['hero_pos'], t['title'], R, VIDEOS.get(t['slug']))}
 <div class="wrap"><span class="tag">{H(t['badge'])}</span><h1 class="h1" style="margin-top:22px;font-size:clamp(34px,calc(6.4*var(--vw)),104px)">{h1}</h1>
 <p class="body lead">{H(t['headline'])}.</p>
@@ -234,7 +293,7 @@ def page_tour(t):
 <section class="sec light {'white' if has_map else ''}" id="lakes"><div class="wrap"><div class="split"><div class="stack"><span class="tag">Главное</span><h2 class="h2">Что вы <span class="hl">увидите</span></h2></div><p class="body dim">{H(t['summary'])}</p></div>{lakes_block(t, R)}
 <div class="metas">{meta}</div>{photo_note}</div></section>
 {map_sec}
-<section class="sec light white" id="days"><div class="wrap"><span class="tag">Программа</span><h2 class="h2" style="margin-top:22px">{t['days'][-1]['n']} дней <span class="hl">по порядку</span></h2><p class="body dim" style="max-width:38em;margin-top:20px">Мы не привязываем день к минутам: в горах ритм задают погода и дорога. Зато точно знаем, где вы окажетесь и что увидите.</p>{days_block(t, R)}</div></section>
+<section class="sec light white" id="days"><div class="wrap"><span class="tag">Программа</span><h2 class="h2" style="margin-top:22px">{ndays} дней <span class="hl">по порядку</span></h2><p class="body dim" style="max-width:38em;margin-top:20px">Мы не привязываем день к минутам: в горах ритм задают погода и дорога. Зато точно знаем, где вы окажетесь и что увидите.</p>{days_block(t, R)}</div></section>
 
 <section class="sec light" id="fit"><div class="wrap"><span class="tag dark">Для кого</span><h2 class="h2" style="margin-top:22px">Это путешествие <span class="hl">не для всех</span></h2><p class="body dim" style="max-width:38em;margin-top:20px">Важно честно понимать, что вас ждёт: дороги, высота, условия ночёвок и погода.</p>
 <div class="diff">{diff}</div><p class="meta dim" style="margin-top:14px">{H(t['difficulty_note'])}</p>
@@ -247,12 +306,13 @@ def page_tour(t):
 
 <section class="sec light" id="more"><div class="wrap"><span class="tag">Другие маршруты</span><h2 class="h2" style="margin:22px 0 32px">Ещё <span class="hl">поездки</span></h2><div class="grid">{related}</div></div></section>
 
-{request_block(t['title'], R, 'r', 'light white')}'''
+{request_block(t['title'], R)}'''
     return body + footer(R, modal(R, t['title']), mbar('Узнать стоимость и даты'))
 
 def page_privacy():
-    R = '../'
-    return head('Политика конфиденциальности — VOYZ Travel', 'Как мы обрабатываем данные из формы заявки.', R) + header(R) + f'''<section class="phead ink"><div class="wrap prose"><h1 class="h2">Политика конфиденциальности</h1>
+    R = rootfor(1)
+    bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Политика конфиденциальности'), page_url(LANG, 'privacy/'))])
+    return head('Политика конфиденциальности — VOYZ Travel', 'Как мы обрабатываем данные из формы заявки.', R, [bc]) + header(R) + f'''<section class="phead ink"><div class="wrap prose"><h1 class="h2">Политика конфиденциальности</h1>
 <p class="body dim" style="margin-top:18px">Краткая редакция для работы формы заявки. Перед запуском сайта её нужно согласовать с юристом и дополнить реквизитами компании.</p>
 <h2 class="h3">Какие данные мы собираем</h2><p class="body">Имя, контакт для связи (Telegram, WhatsApp, телефон или почта), желаемый сезон поездки, число путешественников и комментарий — только то, что вы сами указали в форме заявки.</p>
 <h2 class="h3">Зачем</h2><p class="body">Чтобы связаться с вами, ответить на вопросы и подготовить программу и расчёт тура.</p>
@@ -260,7 +320,7 @@ def page_privacy():
 <h2 class="h3">Как отозвать согласие</h2><p class="body">Напишите нам любым удобным способом — мы удалим ваши данные.</p></div></section>''' + footer(R)
 
 def page_credits():
-    R = '../'
+    R = rootfor(1)
     used = []
     for t in TOURS:
         for k in [t['hero'], t['card_img']] + [l['img'] for l in t['lakes']] + [d[x] for d in t['days'] for x in ('img', 'img2') if d.get(x)]:
@@ -272,9 +332,90 @@ def page_credits():
         rows += f'<p class="body" style="font-size:16px"><b>{H(nm)}</b> — {H(CR[k]["artist"] or "автор не указан")}, {H(CR[k]["lic"])}, <a href="{H(CR[k]["page"])}" rel="noopener" target="_blank">источник</a></p>'
     rows += '<p class="body" style="font-size:16px"><b>Видео</b> — Pexels (свободная лицензия Pexels), подборка VOYZ по маршруту</p>'
     rows += '<p class="body" style="font-size:16px"><b>Кок-Мойнок, Ак-Сай</b> — фотографии из архива VOYZ Travel</p><p class="body" style="font-size:16px"><b>Карта</b> — рельеф SRTM / AWS Terrain Tiles; границы Natural Earth; озёра © участники OpenStreetMap (ODbL)</p>'
-    return head('Авторы фотографий — VOYZ Travel', 'Благодарим авторов фотографий и данных.', R) + header(R) + f'<section class="phead ink"><div class="wrap"><span class="tag">Благодарим</span><h1 class="h2" style="margin:22px 0 40px">Авторы фотографий</h1><div class="credits">{rows}</div></div></section>' + footer(R)
+    bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Авторы фотографий'), page_url(LANG, 'credits/'))])
+    return head('Авторы фотографий — VOYZ Travel', 'Благодарим авторов фотографий и данных.', R, [bc]) + header(R) + f'<section class="phead ink"><div class="wrap"><span class="tag">Благодарим</span><h1 class="h2" style="margin:22px 0 40px">Авторы фотографий</h1><div class="credits">{rows}</div></div></section>' + footer(R)
 
-pages = [('index.html', page_home()), ('tours/index.html', page_tours()), ('privacy/index.html', page_privacy()), ('credits/index.html', page_credits())]
-pages += [('tours/%s/index.html' % t['slug'], page_tour(t)) for t in TOURS]
-for path, content in pages: write(path, content)
-print('built', len(pages), 'pages,', len(TOURS), 'tours')
+# ---------------- translation pass (RU -> EN) ----------------
+CYR = re.compile('[А-Яа-яЁё]')
+MISSING = set()
+
+def tr_str(s):
+    k = html.unescape(s).strip()
+    if not CYR.search(k): return s
+    if k in EN:
+        lead = s[:len(s) - len(s.lstrip())]; trail = s[len(s.rstrip()):]
+        return lead + html.escape(EN[k], quote=False) + trail
+    MISSING.add(k); return s
+
+def tr_json(o):
+    if isinstance(o, str):
+        if CYR.search(o) and o not in EN: MISSING.add(o)
+        return EN.get(o, o) if CYR.search(o) else o
+    if isinstance(o, list): return [tr_json(x) for x in o]
+    if isinstance(o, dict): return {k: tr_json(v) for k, v in o.items()}
+    return o
+
+def translate(doc):
+    blocks = []
+    def stash(m):
+        blocks.append(m.group(0)); return '\x00%d\x00' % (len(blocks) - 1)
+    doc = re.sub(r'<script[\s\S]*?</script>|<style[\s\S]*?</style>', stash, doc)
+    doc = re.sub(r'>([^<>]+)<', lambda m: '>' + tr_str(m.group(1)) + '<', doc)
+    def attr(m):
+        v = html.unescape(m.group(2))
+        if not CYR.search(v): return m.group(0)
+        if v in EN: return m.group(1) + html.escape(EN[v], quote=True) + '"'
+        MISSING.add(v); return m.group(0)
+    doc = re.sub(r'(\b(?:alt|placeholder|title|aria-label|content|data-tour|data-topic)=")([^"]*)"', attr, doc)
+    def back(m):
+        b = blocks[int(m.group(1))]
+        if 'application/ld+json' in b[:80]:
+            mm = re.match(r'(<script[^>]*>)([\s\S]*)(</script>)', b)
+            return mm.group(1) + json.dumps(tr_json(json.loads(mm.group(2))), ensure_ascii=False) + mm.group(3)
+        return b
+    return re.sub(r'\x00(\d+)\x00', back, doc)
+
+# ---------------- build ----------------
+def write(path, content):
+    p = os.path.join(ROOT, path); os.makedirs(os.path.dirname(p), exist_ok=True)
+    open(p, 'w', encoding='utf-8').write(content)
+
+PAGES = [('', 'home', lambda: page_home()), ('tours/', 'tours', lambda: page_tours()), ('privacy/', 'home', lambda: page_privacy()), ('credits/', 'home', lambda: page_credits())]
+
+def build(lang):
+    global LANG, PFX
+    LANG, PFX = lang, ('en/' if lang == 'en' else '')
+    pages = list(PAGES) + [('tours/%s/' % t['slug'], t['slug'], (lambda t=t: page_tour(t))) for t in TOURS]
+    out = []
+    for path, og, fn in pages:
+        CUR.update(path=path, og=og)
+        doc = fn()
+        if lang == 'en': doc = translate(doc)
+        write(PFX + path + 'index.html', doc); out.append(path)
+    return out
+
+paths = build('ru')
+if HAS_EN:
+    MISSING.clear(); build('en')
+    if MISSING:
+        json.dump(sorted(MISSING), open(os.path.join(ROOT, 'data/en_missing.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+        print('WARNING: %d untranslated strings -> data/en_missing.json' % len(MISSING))
+else:
+    LANG = 'ru'
+
+# sitemap, robots, manifest, 404
+def sm_url(path):
+    alts = ''.join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{page_url(l, path)}"/>' for l in ('ru', 'en')) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{page_url("en", path)}"/>'
+    pr = '1.0' if path == '' else ('0.9' if path in ('tours/',) else ('0.8' if path.startswith('tours/') else '0.3'))
+    return ''.join(f'<url><loc>{page_url(l, path)}</loc><lastmod>{TODAY}</lastmod><changefreq>weekly</changefreq><priority>{pr}</priority>{alts}</url>' for l in ('ru', 'en'))
+write('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">' + ''.join(sm_url(p) for p in paths) + '</urlset>')
+write('robots.txt', 'User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n' % SITE_URL)
+write('site.webmanifest', json.dumps({"name": "VOYZ Travel", "short_name": "VOYZ", "description": "Туры на внедорожниках по Кыргызстану / 4x4 tours in Kyrgyzstan",
+      "lang": "ru", "start_url": "./", "scope": "./", "display": "browser", "background_color": "#0B0B0B", "theme_color": "#0B0B0B",
+      "icons": [{"src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png"}, {"src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
+                {"src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}]}, ensure_ascii=False, indent=1))
+write('404.html', f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>404 — VOYZ Travel</title><link rel="icon" href="{SITE_URL}/favicon.ico"><style>body{{margin:0;min-height:100vh;display:grid;place-items:center;background:#0B0B0B;color:#fff;font-family:system-ui,sans-serif;text-align:center;padding:24px}}
+h1{{font-size:clamp(64px,16vw,160px);margin:0;color:#D8FC00;letter-spacing:-.04em}}p{{opacity:.8;font-size:18px}}a{{display:inline-block;margin:8px;padding:16px 28px;border-radius:99px;background:#D8FC00;color:#000;font-weight:800;text-decoration:none}}</style></head>
+<body><main><h1>404</h1><p>Такой страницы нет. / Page not found.</p><a href="{SITE_URL}/">На главную</a><a href="{SITE_URL}/en/">Home (EN)</a></main></body></html>''')
+print('built', len(paths), 'pages x 2 languages,', len(TOURS), 'tours' + ('' if HAS_EN else ' (no en.json yet)'))

@@ -136,3 +136,20 @@ html,body{overflow-x:clip}
 .cal-bar i{height:16px}
 
 .light .cal-bar i:not(.on){background:rgba(0,0,0,.06)}
+
+/* ===== v3: one vertical rhythm for every screen ===== */
+.sec{padding:clamp(56px,calc(6.5*var(--vw)),112px) 0}
+.sec.ctaband{padding:clamp(64px,calc(7*var(--vw)),120px) 0!important}
+.phead{padding:clamp(120px,calc(11*var(--vw)),170px) 0 clamp(36px,calc(4.5*var(--vw)),64px)}
+.split{margin-bottom:0}
+.sec .wrap>.split{margin-bottom:clamp(28px,calc(3.2*var(--vw)),52px)!important}
+.lakes,.days,.org,.diff,.why,.steps,.metas,.cal,.grid,.reel,.fit{margin-top:clamp(24px,calc(3*var(--vw)),48px)}
+.days{gap:clamp(48px,calc(6*var(--vw)),104px)}
+.sec .wrap>.grid:last-child,.sec .wrap>*:last-child{margin-bottom:0}
+.sec.ink,.sec:not(.light){background:#0B0B0B}
+/* language switch */
+.lang{display:inline-flex;border:1.5px solid rgba(255,255,255,.35);border-radius:99px;padding:3px;gap:2px;margin-left:4px}
+.lang a{padding:6px 12px;border-radius:99px;font-size:13px!important;font-weight:800!important;letter-spacing:.04em;opacity:.8}
+.lang a[aria-current]{background:#fff;color:#000!important;opacity:1}
+.mnav .lang{align-self:flex-start;margin:14px 0}
+.mnav .lang a{font-family:'Mulish';font-size:15px!important;text-transform:none;border:0;padding:8px 16px}

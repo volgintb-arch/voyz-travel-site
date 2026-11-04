@@ -1,0 +1,81 @@
+0|January
+1|February
+2|March
+3|April
+4|June
+5|July
+6|August
+7|September
+8|October
+9|November
+10|December
+11|Save
+12|You leave your contacts, season and number of people
+13|We send it for your group and dates
+14|We agree the services and permits
+15|We meet you and set off: 4x4 vehicles, mountains
+16|Kyrgyzstan · by 4x4
+17|Go where no
+18|Small groups, carefully designed routes and trips in every season.
+19|See the expedition
+20|months
+21|4x4s
+22|people
+23|In season now
+24|Frequently asked questions
+25|Full website
+26|Authentic expeditions all year round
+27|There are no routes in this season yet.
+28|Didn’t find yours?
+29|We will build a route for you
+30|Other dates, company, length
+31|tour
+32|tours
+33|Calendar
+34|Choose a month and see where to go
+35|There are no routes this month, but we can put a trip together for you.
+36|We will come back with a program and a quote for your group and dates
+37|You liked
+38|Contact
+39|Telegram, phone, email
+40|People
+41|Wishes: experience, children, dates, questions
+42|I agree to data processing
+43|By tapping “Send”, you accept the
+44|privacy policy
+45|Send request
+46|Overnight:
+47|Route map
+48|━ Drives
+49|┅ Return
+50|┅ On horseback and on foot
+51|Back
+52|Share
+53|What you’ll see
+54|days
+55|Difficulty
+56|More trips
+57|Home
+58|We’ll tell you everything and work out the cost
+59|Tour:
+60|Leave your contacts and we will come back with a program and a quote.
+61|Data processing consent is required
+62|VOYZ request (app)
+63|not chosen
+64|Name:
+65|Contact:
+66|Season:
+67|People:
+68|Comment:
+69|Request sent.
+70|We will come back with a program and a quote.
+71|Request prepared.
+72|The form is in demo mode: copy the text and send it to us.
+73|Copy request
+74|Copied
+75|Select the text manually
+76|Could not send, please try again
+77|Email
+78|Write directly
+79|Added to “Request → You liked”
+80|Link copied
