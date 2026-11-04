@@ -90,7 +90,7 @@
     var g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'jeep'); g.style.opacity = '0';
     g.innerHTML = '<g class="jb"><ellipse cx="0" cy="2" rx="25" ry="3.5" fill="#000" opacity=".3"/>' +
       '<circle cx="-16" cy="-6" r="7" fill="#0B0B0B"/><circle cx="-16" cy="-6" r="3" fill="#BDBDBD"/><circle cx="16" cy="-6" r="7" fill="#0B0B0B"/><circle cx="16" cy="-6" r="3" fill="#BDBDBD"/>' +
-      '<rect x="-27" y="-22" width="54" height="14" rx="5" fill="#D8FC00" stroke="#0B0B0B" stroke-width="2"/>' +
+      '<rect x="-27" y="-22" width="54" height="14" rx="5" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="2.4"/><rect x="-27" y="-15" width="54" height="3.5" fill="#FF4B4B"/>' +
       '<circle cx="-7" cy="-28" r="5.2" fill="#F2C29B"/><path d="M-12.6 -28.5a5.6 5.6 0 0 1 11.2 0z" fill="#FF4B4B"/>' +
       '<circle cx="5" cy="-28" r="5.2" fill="#F2C29B"/><path d="M-0.6 -28.5a5.6 5.6 0 0 1 11.2 0z" fill="#8FD3FF"/>' +
       '<path d="M-19 -22V-34H13L16 -22" fill="none" stroke="#0B0B0B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' +
@@ -111,7 +111,7 @@
       var dt = last ? Math.min(64, t - last) : 0; last = t;
       var w = svg.getBoundingClientRect().width;
       if (w > 0) {
-        var k = w / vb.width, px = Math.max(34, Math.min(58, w * .05)), sc = px / 54 / k;
+        var k = w / vb.width, px = Math.max(46, Math.min(100, w * .08)), sc = px / 54 / k;
         if (hold > 0) { hold -= dt; if (hold <= 0) { at = 0; g.style.opacity = '0'; } }
         else {
           at += dt / 24000 * total; if (at >= total) { at = total; hold = 1800; }

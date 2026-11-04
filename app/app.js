@@ -69,7 +69,6 @@
     var m = nowMonth(), now = inSeason(m), g = T[0];
     var lakes = g.lakes.map(function (l) { return '<div class="tcard lakecard"><img src="' + img(l.img, 'm') + '" alt="" loading="lazy" style="object-position:' + l.pos + '"><div class="in"><span class="badge">' + esc(l.alt) + '</span><h3>' + esc(l.name) + '</h3></div></div>'; }).join('');
     var reel = [['issyk', 'Иссык-Куль'], ['bars', 'Барскоон'], ['aksai', 'Ак-Сай'], ['serp', '«33 попугая»'], ['song', 'Сон-Куль'], ['jeti', 'Джети-Огуз']].map(function (v) { return '<div class="vcard"><video muted loop playsinline preload="none" poster="' + V + v[0] + '.jpg"><source src="' + V + v[0] + '.mp4" type="video/mp4"></video><span>' + v[1] + '</span></div>'; }).join('');
-    var how = [['1', 'Заявка', 'Оставляете контакты, сезон и число людей'], ['2', 'Программа и расчёт', 'Присылаем под вашу группу и даты'], ['3', 'Подтверждение', 'Согласуем услуги и разрешения'], ['4', 'Выезд', 'Встречаем и едем: внедорожники, горы']].map(function (r) { return '<div class="row"><span class="ico">' + r[0] + '</span><div class="t"><b>' + r[1] + '</b><span>' + r[2] + '</span></div></div>'; }).join('');
     return '<div class="topline"><img class="logo" src="../assets/logo.svg" alt="VOYZ"><span class="glassbtn" data-sheet="request" role="button" aria-label="Заявка">' + I.send + '</span></div>' +
       '<div class="hero"><img src="' + img(g.hero, 'l') + '" alt="" style="object-position:' + g.hero_pos + '"><video muted loop playsinline preload="auto" poster="' + V + 'hero.jpg"><source src="' + V + 'hero.mp4" type="video/mp4"></video>' +
       '<div class="in"><span class="eyebrow">Кыргызстан · на внедорожниках</span><h1>Туда, куда не доезжает <em>автобус</em></h1><p>Небольшие группы, продуманные маршруты и поездки в любое время года.</p><a class="btn" href="#/tour/grand-expedition">Смотреть экспедицию</a></div></div>' +
@@ -77,7 +76,6 @@
       '<h2 class="h2">Сейчас в сезоне<small>' + MFULL[m - 1] + '</small></h2><div class="hscroll">' + (now.length ? now : T.slice(0, 3)).map(function (t) { return tcard(t); }).join('') + '</div>' +
       '<h2 class="h2">Три озера</h2><div class="hscroll">' + lakes + '</div>' +
       '<h2 class="h2">В движении</h2><div class="hscroll">' + reel + '</div>' +
-      '<div class="grouplabel">Как это работает</div><div class="group">' + how + '</div>' +
       '<div class="grouplabel">Частые вопросы</div>' + g.faq.slice(0, 5).map(faq).join('') +
       '<p class="footnote"><a href="../index.html?full=1" data-full>Полная версия сайта</a></p>';
   }
@@ -171,7 +169,7 @@
     var g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'jeep'); g.style.opacity = '0';
     g.innerHTML = '<g class="jb"><ellipse cx="0" cy="2" rx="25" ry="3.5" fill="#000" opacity=".3"/>' +
       '<circle cx="-16" cy="-6" r="7" fill="#0B0B0B"/><circle cx="-16" cy="-6" r="3" fill="#BDBDBD"/><circle cx="16" cy="-6" r="7" fill="#0B0B0B"/><circle cx="16" cy="-6" r="3" fill="#BDBDBD"/>' +
-      '<rect x="-27" y="-22" width="54" height="14" rx="5" fill="#D8FC00" stroke="#0B0B0B" stroke-width="2"/>' +
+      '<rect x="-27" y="-22" width="54" height="14" rx="5" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="2.4"/><rect x="-27" y="-15" width="54" height="3.5" fill="#FF4B4B"/>' +
       '<circle cx="-7" cy="-28" r="5.2" fill="#F2C29B"/><path d="M-12.6 -28.5a5.6 5.6 0 0 1 11.2 0z" fill="#FF4B4B"/>' +
       '<circle cx="5" cy="-28" r="5.2" fill="#F2C29B"/><path d="M-0.6 -28.5a5.6 5.6 0 0 1 11.2 0z" fill="#8FD3FF"/>' +
       '<path d="M-19 -22V-34H13L16 -22" fill="none" stroke="#0B0B0B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' +
@@ -192,7 +190,7 @@
       var dt = last ? Math.min(64, t - last) : 0; last = t;
       var w = svg.getBoundingClientRect().width;
       if (w > 0) {
-        var k = w / vb.width, px = Math.max(34, Math.min(58, w * .05)), sc = px / 54 / k;
+        var k = w / vb.width, px = Math.max(46, Math.min(100, w * .08)), sc = px / 54 / k;
         if (hold > 0) { hold -= dt; if (hold <= 0) { at = 0; g.style.opacity = '0'; } }
         else {
           at += dt / 24000 * total; if (at >= total) { at = total; hold = 1800; }

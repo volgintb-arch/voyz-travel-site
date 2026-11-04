@@ -15,7 +15,7 @@ INDEXABLE = False        # False = preview: pages carry noindex. Set True when t
 VERIFY = {'google-site-verification': '', 'yandex-verification': '', 'msvalidate.01': ''}   # paste verification codes here
 BRAND = 'VOYZ Travel'
 TODAY = datetime.date.today().isoformat()
-VER = '1793795000'       # cache-busting suffix for css/js (bumped by the build)
+VER = str(int(__import__('time').time()))   # cache-busting suffix for css/js, new on every build
 
 def load(p): return json.load(open(os.path.join(ROOT, p), encoding='utf-8'))
 BASE, EXTRA, CR = load('data/tours.json'), load('data/tours_extra.json'), load('data/credits.json')
@@ -85,7 +85,7 @@ def lang_switch(root):
     return f'<span class="lang" role="group" aria-label="Language"><a href="{ru or "./"}" hreflang="ru" lang="ru"{" aria-current=true" if LANG == "ru" else ""}>RU</a><a href="{en}" hreflang="en" lang="en"{" aria-current=true" if LANG == "en" else ""}>EN</a></span>'
 
 def header(root, cur=''):
-    nav = [('tours/', 'Туры'), ('#year', 'Туры на весь год'), ('#how', 'Как это работает'), ('#faq', 'Вопросы')]
+    nav = [('tours/', 'Туры'), ('#year', 'Туры на весь год'), ('#faq', 'Вопросы')]
     def href(h): return root + PFX + h if h == 'tours/' else (h if cur == 'home' else root + PFX + 'index.html' + h)
     links = ''.join(f'<a href="{href(h)}"{" aria-current=page" if (cur == "tours" and h == "tours/") else ""}>{t}</a>' for h, t in nav)
     sw = lang_switch(root)
@@ -258,9 +258,7 @@ def page_home():
 
 <section class="sec light white" id="route"><div class="wrap"><span class="tag">Маршрут флагмана</span><h2 class="h2" style="margin-top:22px">Один маршрут. <span class="hl">Разные миры</span></h2>{map_block(R)}</div></section>
 
-<section class="sec light" id="how"><div class="wrap"><span class="tag dark">Как это работает</span><h2 class="h2" style="margin-top:22px">От заявки <span class="hl">до выезда</span></h2>{steps_block()}</div></section>
-
-<section class="sec light white" id="faq"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Частые <span class="hl">вопросы</span></h2><p class="body dim" style="margin-top:20px">Если не нашли ответ, напишите нам: расскажем честно, подходит ли вам такой формат.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(G['faq'][:6])}</div></div></section>
+<section class="sec light" id="faq"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Частые <span class="hl">вопросы</span></h2><p class="body dim" style="margin-top:20px">Если не нашли ответ, напишите нам: расскажем честно, подходит ли вам такой формат.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(G['faq'][:6])}</div></div></section>
 
 {request_block('Подбор тура', R)}'''
     return body + footer(R, modal(R, 'Подбор тура'), mbar('Подобрать тур'))
