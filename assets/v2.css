@@ -113,3 +113,20 @@ html,body{overflow-x:clip}
 .ctaband .h2{font-size:clamp(26px,calc(3.2*var(--vw)),52px);max-width:22ch}
 .ctaband .btn{flex:none;min-height:64px;padding:0 40px;font-size:16px}
 @media(max-width:600px){.ctaband .btn{width:100%}}
+
+/* ===== no lime fills: lime is only for buttons, tags and thin markers ===== */
+.marquee{background:#fff;color:#0B0B0B;border-color:#0B0B0B}
+.marquee i{width:.55em;height:.55em;padding:0;margin:0 .6em;border-radius:50%;background:var(--lime);border:2px solid #0B0B0B;font-size:0;display:inline-block;vertical-align:middle}
+.ctaband{position:relative;isolation:isolate;background-size:cover;background-position:50% 60%;color:#fff;padding:clamp(72px,9vw,150px) 0!important}
+.ctaband:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(0,0,0,.78),rgba(0,0,0,.35))}
+.ctaband .h2{color:#fff}
+.ctaband .hl{background:none;color:var(--lime);text-decoration:none}
+.ctaband .btn{background:var(--lime);color:#000}
+.orgnote{background:#fff;color:#0B0B0B}
+.orgnote .btn.dark{background:var(--lime);color:#000}
+.tcard.custom{background:#fff;color:#0B0B0B}
+.tcard.custom .btn.dark{background:#0B0B0B;color:var(--lime)}
+.faqwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:clamp(28px,5vw,110px);align-items:start}
+.faqwrap .faqhead{position:sticky;top:120px}
+.faqwrap .faq{max-width:none;margin-top:0}
+@media(max-width:900px){.faqwrap{grid-template-columns:1fr}.faqwrap .faqhead{position:static}}

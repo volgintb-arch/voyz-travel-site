@@ -28,7 +28,7 @@ def head(title, desc, root, og=None, extra=''):
 <meta name="theme-color" content="#0B0B0B">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/site.css?v=1793788474"><link rel="stylesheet" href="{root}assets/v2.css?v=1793788474">{extra}</head><body>'''
+<link rel="stylesheet" href="{root}assets/site.css?v=1793789075"><link rel="stylesheet" href="{root}assets/v2.css?v=1793789075">{extra}</head><body>'''
 
 def header(root, cur=''):
     nav = [('tours/', 'Туры'), ('#year', 'Туры на весь год'), ('#how', 'Как это работает'), ('#faq', 'Вопросы')]
@@ -70,7 +70,7 @@ def footer(root, modal_html='', mbar_html=''):
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
 <div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}privacy/">Политика конфиденциальности</a> · <a href="{root}credits/">Авторы фотографий</a></span></div></div></footer>
-{modal_html}{mbar_html}<script src="{root}assets/config.js?v=1793788474"></script><script src="{root}assets/site.js?v=1793788474"></script><script src="{root}assets/scale.js?v=1793788474"></script><script src="{root}assets/v2.js?v=1793788474"></script></body></html>'''
+{modal_html}{mbar_html}<script src="{root}assets/config.js?v=1793789075"></script><script src="{root}assets/site.js?v=1793789075"></script><script src="{root}assets/scale.js?v=1793789075"></script><script src="{root}assets/v2.js?v=1793789075"></script></body></html>'''
 
 def write(path, content):
     p = os.path.join(ROOT, path); os.makedirs(os.path.dirname(p), exist_ok=True)
@@ -115,11 +115,11 @@ def faq_block(items, schema=True):
         h += '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>'
     return h
 
-def ctaband():
-    return '''<section class="sec light lime ctaband"><div class="wrap"><h2 class="h2">Выберите сезон. <span class="hl">Остальное мы подскажем.</span></h2><a class="btn" href="#request" data-open-form="cta-band">Подобрать тур <span class="arrow">→</span></a></div></section>'''
+def ctaband(root=''):
+    return f'''<section class="sec ctaband" style="background-image:url({root}assets/img/song_sunset-l.webp)"><div class="wrap"><h2 class="h2">Выберите сезон. <span class="hl">Остальное мы подскажем.</span></h2><a class="btn" href="#request" data-open-form="cta-band">Подобрать тур <span class="arrow">→</span></a></div></section>'''
 
 def request_block(tour_name, root, idp='r', cls='light'):
-    return ctaband() + f'''<section class="sec {cls}" id="request"><div class="wrap req"><div class="side stack" style="--gap:22px"><span class="tag">Заявка</span>
+    return ctaband(root) + f'''<section class="sec {cls}" id="request"><div class="wrap req"><div class="side stack" style="--gap:22px"><span class="tag">Заявка</span>
 <h2 class="h2">Хотите поехать? <span class="hl">Давайте поговорим</span></h2>
 <p class="body dim">Оставьте контакты — вернёмся с программой и расчётом под вашу группу и даты. Если пока сомневаетесь, тоже напишите: расскажем, подходит ли вам такой формат.</p>
 <div class="card"><p class="h3" style="margin-bottom:8px">Что будет дальше</p><p class="body dim" style="font-size:16px">Мы свяжемся с вами, ответим на вопросы и пришлём программу с расчётом. Состав услуг и стоимость согласовываем отдельно.</p></div>
@@ -191,7 +191,7 @@ def page_home():
 
 <section class="sec light white" id="how"><div class="wrap"><span class="tag dark">Как это работает</span><h2 class="h2" style="margin-top:22px">От заявки <span class="hl">до выезда</span></h2>{steps_block()}</div></section>
 
-<section class="sec light white" id="faq" style="padding-top:0"><div class="wrap"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Частые <span class="hl">вопросы</span></h2>{faq_block(G['faq'][:6], schema=False)}</div></section>
+<section class="sec light white" id="faq" style="padding-top:0"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Частые <span class="hl">вопросы</span></h2><p class="body dim" style="margin-top:20px">Если не нашли ответ, напишите нам: расскажем честно, подходит ли вам такой формат.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(G['faq'][:6], schema=False)}</div></div></section>
 
 {request_block('Подбор тура', R)}'''
     return body + footer(R, modal(R, 'Подбор тура'), mbar('Подобрать тур'))
@@ -243,7 +243,7 @@ def page_tour(t):
 <section class="sec" id="org"><div class="wrap"><span class="tag">Организация</span><h2 class="h2" style="margin-top:22px">Как мы <span class="hl">всё устроим</span></h2><div class="org">{org}</div>
 <div class="orgnote rv"><p>{H(t['organization_note'])}</p><a class="btn dark" href="#request" data-open-form="org">Получить расчёт <span class="arrow">→</span></a></div></div></section>
 
-<section class="sec light white" id="faq"><div class="wrap"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Что обычно <span class="hl">спрашивают</span></h2>{faq_block(t['faq'])}</div></section>
+<section class="sec light white" id="faq"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Что обычно <span class="hl">спрашивают</span></h2><p class="body dim" style="margin-top:20px">Не нашли свой вопрос? Напишите нам, мы ответим и подскажем, подойдёт ли вам этот маршрут.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(t['faq'])}</div></div></section>
 
 <section class="sec light" id="more"><div class="wrap"><span class="tag">Другие маршруты</span><h2 class="h2" style="margin:22px 0 32px">Ещё <span class="hl">поездки</span></h2><div class="grid">{related}</div></div></section>
 
