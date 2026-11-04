@@ -226,3 +226,5 @@ a{color:inherit;text-decoration:none}
 .sp-spring,.tcard .meta .sp-spring{background:#FF9CCB;color:#0B0B0B;-webkit-backdrop-filter:none;backdrop-filter:none}
 .sp-summer,.tcard .meta .sp-summer{background:#FF4B4B;color:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
 .tcard .meta .sp{padding:5px 9px;font-size:11px}
+
+h1,h2,h3,.tt{text-wrap:balance}

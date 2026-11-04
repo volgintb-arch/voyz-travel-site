@@ -79,7 +79,7 @@
       '<h2 class="h2">В движении</h2><div class="hscroll">' + reel + '</div>' +
       '<div class="grouplabel">Как это работает</div><div class="group">' + how + '</div>' +
       '<div class="grouplabel">Частые вопросы</div>' + g.faq.slice(0, 5).map(faq).join('') +
-      '<p class="footnote"><a href="../index.html?full=1" data-full>Полная версия сайта</a> · <a href="../credits/">Авторы фотографий</a></p>';
+      '<p class="footnote"><a href="../index.html?full=1" data-full>Полная версия сайта</a></p>';
   }
   function faq(f) { return '<div class="faq"><button>' + esc(f[0]) + I.chev + '</button><div class="a"><div><p>' + esc(f[1]) + '</p></div></div></div>'; }
 

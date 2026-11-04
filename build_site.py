@@ -124,7 +124,7 @@ def footer(root, modal_html='', mbar_html=''):
 <div><p class="meta dim">Связаться</p><ul><li><a href="#request" data-open-form="footer">Оставить заявку</a></li>
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
-<div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}{PFX}privacy/">Политика конфиденциальности</a> · <a href="{root}{PFX}credits/">Авторы фотографий</a></span></div></div></footer>
+<div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}{PFX}privacy/">Политика конфиденциальности</a></span></div></div></footer>
 {modal_html}{mbar_html}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
 
 # ---------------- blocks ----------------

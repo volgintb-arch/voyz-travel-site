@@ -165,3 +165,14 @@ html,body{overflow-x:clip}
 #nowgrid .tcard[hidden]{display:none}
 #nowgrid.n1{grid-template-columns:minmax(0,1fr)!important}#nowgrid.n1 .tcard{min-height:clamp(380px,calc(30*var(--vw)),560px)}
 #nowgrid.n2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+
+/* v5: button shine under the label, balanced headings, readable step numbers */
+.btn:after{display:none!important}
+.btn{background-image:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.4) 50%,transparent 65%);background-size:260% 100%;background-position:130% 0;background-repeat:no-repeat;transition:transform .3s var(--ease),box-shadow .3s var(--ease),background-position .8s var(--ease)}
+.btn:hover{background-position:-30% 0}
+.btn.ghost,.btn.dark{background-image:none}
+.h1,.h2,.h3,h1,h2,h3{text-wrap:balance}
+.body,.lead,p{text-wrap:pretty}
+.step .num{width:60px;height:60px;border-radius:50%;background:var(--lime);color:#000;display:grid;place-items:center;font-size:24px;line-height:1;margin-bottom:24px}
+.nav a.btn,.nav a.btn:hover,.ftr a.btn,.ftr a.btn:hover,.hdr a.btn:hover{color:#000;opacity:1}
+.nav a.btn.ghost:hover,.hdr a.btn.ghost:hover{color:#fff}
