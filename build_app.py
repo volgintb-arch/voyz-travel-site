@@ -32,7 +32,7 @@ UI = dict(EN); UI.update(app_ui)
 
 PAGE = '''<!doctype html><html lang="%(lang)s"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<script>(function(){try{if(/[?&]preview/.test(location.search)||matchMedia("(max-width:1024px)").matches)return;var h=location.hash,m=h.match(/^#\\/tour\\/([\\w-]+)/);location.replace(m?"../tours/"+m[1]+"/":/^#\\/tours/.test(h)?"../tours/":"../")}catch(e){}})()</script>
+<script>(function(){try{if(/[?&]preview/.test(location.search))return;var mq=matchMedia("(min-width:1025px)"),bounce=function(){var h=location.hash,m=h.match(/^#\\/tour\\/([\\w-]+)/);location.replace(m?"../tours/"+m[1]+"/":/^#\\/tours/.test(h)?"../tours/":"../")};if(mq.matches){bounce();return}mq.addEventListener?mq.addEventListener("change",function(e){if(e.matches)bounce()}):0}catch(e){}})()</script>
 <meta name="robots" content="noindex,follow"><link rel="canonical" href="%(canon)s">
 <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="VOYZ"><meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -57,8 +57,9 @@ write('en/app/index.html', PAGE % dict(lang='en', canon=SITE_URL + '/en/', title
 BOT = 'bot|crawl|spider|slurp|yandex|bing|duckduck|baidu|facebookexternalhit|twitter|telegram|whatsapp|vkshare|viber|skype|preview|lighthouse'
 def redirect(depth, en, hash_):
     tgt = '../' * depth + ('en/' if en else '') + 'app/' + hash_
-    return ('<script>(function(){try{if(sessionStorage.getItem("voyz_full")||/[?&]full=1/.test(location.search))return;'
-            'if(/%s/i.test(navigator.userAgent))return;if(matchMedia("(max-width:1024px)").matches)location.replace("%s")}catch(e){}})()</script>' % (BOT, tgt))
+    return ('<script>(function(){try{if(/%s/i.test(navigator.userAgent))return;var mq=matchMedia("(max-width:1024px)"),go=function(){location.replace("%s")};'
+            'if(mq.matches&&!(sessionStorage.getItem("voyz_full")||/[?&]full=1/.test(location.search))){go();return}'
+            'var f=function(e){if(e.matches){try{sessionStorage.removeItem("voyz_full")}catch(x){}go()}};mq.addEventListener?mq.addEventListener("change",f):mq.addListener(f)}catch(e){}})()</script>' % (BOT, tgt))
 pages = [('index.html', 0, ''), ('tours/index.html', 1, '#/tours')] + [('tours/%s/index.html' % t['slug'], 2, '#/tour/' + t['slug']) for t in tours]
 for rel, depth, h in pages:
     for en in (False, True):

@@ -33,7 +33,7 @@
     var vb = svg.viewBox.baseVal;
     var seq = [[2, 1], [4, 1], [6, 1], [8, 1], [10, 1], [12, 1], [12, -1], [14, 1], [14, -1], [16, 1], [18, 1], [18, -1], [20, 1]];
     var legs = seq.map(function (q) { var p = P[q[0]]; return { p: p, dir: q[1], len: p.getTotalLength() }; });
-    var total = legs.reduce(function (a, l) { return a + l.len; }, 0), gap = total * .05;
+    var total = legs.reduce(function (a, l) { return a + l.len; }, 0), gap = 0;
     var cars = [car('#F4F2EC', '#3E5A3C', '#B5651D'), car('#E4572E', '#2F4B6E', '#C9A227')].map(function (m) {
       var g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'jeep'); g.style.opacity = '0'; g.innerHTML = m; svg.appendChild(g);
       return { g: g, jb: g.firstChild, flip: 1 };
@@ -55,7 +55,7 @@
       var dt = last ? Math.min(64, t - last) : 0; last = t;
       var w = svg.getBoundingClientRect().width;
       if (w > 0) {
-        var k = w / vb.width, px = Math.max(58, Math.min(112, w * .085)), sc = px / 94 / k;
+        var k = w / vb.width, px = Math.max(38, Math.min(66, w * .05)), sc = px / 94 / k; gap = 94 * sc * 1.12;
         at += dt / 27000 * total; if (at >= total + gap + hold * total / 27000) at = 0;
         cars.forEach(function (c, i) {
           var s = at - i * gap;
