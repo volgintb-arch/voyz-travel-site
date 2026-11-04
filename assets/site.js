@@ -116,3 +116,14 @@
     var lbl = document.getElementById('nowm'); if (lbl) { if (hit.length) lbl.textContent = MON[m - 1]; else lbl.parentNode.removeChild(lbl); }
     var show = hit.length ? hit : cards.slice(0, 3); show.forEach(function (c) { c.hidden = false; }); g.className += ' n' + Math.min(show.length, 3);
   })();
+
+// tour row: arrow buttons scroll by one card
+(function () {
+  var row = document.getElementById('trow'); if (!row) return;
+  Array.prototype.slice.call(document.querySelectorAll('[data-hnav]')).forEach(function (b) {
+    b.addEventListener('click', function () {
+      var c = row.querySelector('.tcard'), w = c ? c.getBoundingClientRect().width + 16 : 320;
+      row.scrollBy({ left: w * Number(b.getAttribute('data-hnav')), behavior: 'smooth' });
+    });
+  });
+})();

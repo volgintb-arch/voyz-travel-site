@@ -176,3 +176,22 @@ html,body{overflow-x:clip}
 .step .num{width:60px;height:60px;border-radius:50%;background:var(--lime);color:#000;display:grid;place-items:center;font-size:24px;line-height:1;margin-bottom:24px}
 .nav a.btn,.nav a.btn:hover,.ftr a.btn,.ftr a.btn:hover,.hdr a.btn:hover{color:#000;opacity:1}
 .nav a.btn.ghost:hover,.hdr a.btn.ghost:hover{color:#fff}
+
+/* v6: season plate instead of the marquee, scrolling tour row, jeep */
+.yplate{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,4fr);background:#0B0B0B;position:relative;z-index:2}
+.ylab{display:flex;align-items:center;padding:0 clamp(20px,calc(3*var(--vw)),56px);color:#fff;font-family:'Unbounded',var(--font);font-weight:900;text-transform:uppercase;font-size:clamp(14px,calc(1.3*var(--vw)),22px);line-height:1.15}
+.yrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.yp{display:flex;flex-direction:column;justify-content:center;gap:6px;padding:clamp(20px,calc(2.4*var(--vw)),40px) clamp(18px,calc(2*var(--vw)),36px);text-decoration:none;color:#0B0B0B;transition:filter .3s,transform .3s var(--ease);min-height:clamp(96px,calc(8*var(--vw)),150px)}
+.yp b{font-family:'Unbounded',var(--font);font-weight:900;text-transform:uppercase;font-size:clamp(20px,calc(2.2*var(--vw)),36px);line-height:1}
+.yp span{font-weight:700;font-size:clamp(13px,calc(1.05*var(--vw)),17px);line-height:1.25}
+.yp:hover{filter:brightness(1.07);transform:translateY(-3px)}
+.yp-spring{background:#FF9CCB}.yp-summer{background:#FF4B4B;color:#fff}.yp-autumn{background:#FFC93C}.yp-winter{background:#8FD3FF}
+@media(max-width:900px){.yplate{grid-template-columns:1fr}.ylab{padding:18px 20px}.yrow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hhead{display:flex;align-items:center;justify-content:space-between;margin:clamp(28px,calc(3.5*var(--vw)),52px) 0 14px}
+.hnav{display:flex;gap:10px}.hnav button{width:48px;height:48px;border-radius:50%;border:1px solid rgba(0,0,0,.28);background:#fff;color:#0B0B0B;font-size:20px;cursor:pointer;transition:background .2s,transform .2s}
+.hnav button:hover{background:#0B0B0B;color:#fff;transform:translateY(-2px)}
+.hrow{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 0 18px;scrollbar-width:thin;scrollbar-color:#0B0B0B transparent;-webkit-overflow-scrolling:touch;outline:none}
+.hrow .tcard{flex:0 0 clamp(270px,calc(25*var(--vw)),430px);min-height:clamp(420px,calc(34*var(--vw)),560px);scroll-snap-align:start}
+.jeep{pointer-events:none;transition:opacity .5s}
+.hrow .tcard::before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(to top,rgba(0,0,0,.86) 0%,rgba(0,0,0,.55) 50%,rgba(0,0,0,0) 82%)}
+.hrow .tcard .in{position:relative;z-index:1}
