@@ -170,7 +170,7 @@ def ctaband(root=''):
 
 def request_block(tour_name, root, idp='r', cls='light white'):
     return ctaband(root) + f'''<section class="sec {cls}" id="request"><div class="wrap req"><div class="side stack" style="--gap:22px"><span class="tag">Заявка</span>
-<h2 class="h2">Хотите поехать? <span class="hl">Давайте поговорим</span></h2>
+<h2 class="h2">Хотите поехать? <br class="dbr"><span class="hl">Давайте поговорим</span></h2>
 <p class="body dim">Оставьте контакты — вернёмся с программой и расчётом под вашу группу и даты. Если пока сомневаетесь, тоже напишите: расскажем, подходит ли вам такой формат.</p>
 <div class="card"><p class="h3" style="margin-bottom:8px">Что будет дальше</p><p class="body dim" style="font-size:16px">Мы свяжемся с вами, ответим на вопросы и пришлём программу с расчётом. Состав услуг и стоимость согласовываем отдельно.</p></div>
 <div class="contact-btns" data-if-contacts><a class="btn ghost sm" data-contact="telegram" data-topic="{H(tour_name)}" hidden>Telegram</a><a class="btn ghost sm" data-contact="whatsapp" data-topic="{H(tour_name)}" hidden>WhatsApp</a><a class="btn ghost sm" data-contact="phone" hidden>Позвонить</a><a class="btn ghost sm" data-contact="email" data-topic="{H(tour_name)}" hidden>Написать</a></div></div>
@@ -224,6 +224,22 @@ def why_block(why, root):
 
 def places_block(root):
     return '<div class="places">' + ''.join(f'''<div class="lake pl pl-{p[3]} rv" role="button" tabindex="0" {gal(p, root)}><img src="{img(p[0], 'm', root)}" alt="{H(p[1])}" loading="lazy"><div class="in"><span class="tag">{H(p[2])}</span><h3 class="h2">{H(p[1])}</h3></div></div>''' for p in PLACES) + '</div>'
+
+ORG_ICONS = {
+    'Транспорт': '<path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/>',
+    'Группа': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+    'Ночёвки': '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+    'Разрешения': '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M9 15l2 2 4-4"/>',
+    'Аэропорт': '<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',
+    'Погода': '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+    'Тёплые вещи': '<path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>',
+    'Заповедник': '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>',
+    'Лошади': '<path d="M6 21C4 17 4 13 4 11a8 8 0 0 1 16 0c0 2 0 6-2 10"/><path d="M6.5 17H9M15 17h2.5M5 13h2.4M16.6 13H19"/>',
+}
+ORG_DEFAULT = '<circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.4 2.4 4.6-5"/>'
+def org_block(t, root):
+    cards = ''.join(f'''<div class="oc rv"><span class="oi"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ORG_ICONS.get(a, ORG_DEFAULT)}</svg></span><span class="on">{i + 1:02d}</span><h3 class="h3">{H(a)}</h3><p>{H(b)}</p></div>''' for i, (a, b) in enumerate(t['organization']))
+    return f'''<div class="orgx"><div class="orgph rv"><img src="{img(t['card_img'], 'l', root)}" alt="" loading="lazy"><span class="tag">{H(t['title'])}</span></div><div class="orgl">{cards}</div></div>'''
 
 def reel_block(root):
     clips = [('issyk', 'Иссык-Куль'), ('bars', 'Водопады Барскоона'), ('aksai', 'Каньоны Ак-Сай'), ('serp', 'Серпантин «33 попугая»'), ('song', 'Юрты Сон-Куля'), ('jeti', 'Джети-Огуз')]
@@ -346,7 +362,7 @@ def page_tour(t):
 <div class="diff">{diff}</div><p class="meta dim" style="margin-top:14px">{H(t['difficulty_note'])}</p>
 <div class="fit"><div class="card"><p class="h3">Вам подойдёт, если</p><ul>{yes}</ul></div><div class="card no"><p class="h3">Лучше выбрать другое, если</p><ul>{no}</ul></div></div></div></section>
 
-<section class="sec" id="org"><div class="wrap"><span class="tag">Организация</span><h2 class="h2" style="margin-top:22px">Как мы <span class="hl">всё устроим</span></h2><div class="org">{org}</div>
+<section class="sec" id="org"><div class="wrap"><span class="tag">Организация</span><h2 class="h2" style="margin-top:22px">Как мы <span class="hl">всё устроим</span></h2>{org_block(t, R)}
 <div class="orgnote rv"><p>{H(t['organization_note'])}</p><a class="btn dark" href="#request" data-open-form="org">Получить расчёт <span class="arrow">→</span></a></div></div></section>
 
 <section class="sec light white" id="faq"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Что обычно <span class="hl">спрашивают</span></h2><p class="body dim" style="margin-top:20px">Не нашли свой вопрос? Напишите нам, мы ответим и подскажем, подойдёт ли вам этот маршрут.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(t['faq'])}</div></div></section>
