@@ -1,0 +1,94 @@
+/* ===== v2: light rhythm (sections alternate light / white / lime / dark) ===== */
+.sec.light.white{background:#fff}
+.sec.light.lime{background:var(--lime);color:#000}
+.phead.ink{background:#0B0B0B;padding-bottom:clamp(40px,5vw,72px)}
+.white .card{background:var(--mist)}
+.light .chip,.light .moments li{border-color:rgba(0,0,0,.2)}
+.light .route,.light .day .route{color:#000;font-weight:800}
+.light .day .dn{-webkit-text-stroke-color:#0B0B0B}
+.light .stay{border-color:rgba(0,0,0,.15)} .light .stay b{color:var(--muted-l)}
+.light .pics .sub{border-color:var(--mist)} .white .pics .sub{border-color:#fff}
+.light .btn.ghost{color:#000;border-color:rgba(0,0,0,.4)} .light .btn.ghost:hover{border-color:#000}
+.light .consent{color:var(--muted-l)} .light .consent a{color:#000;text-decoration:underline}
+.light .fchip{color:#000;border-color:rgba(0,0,0,.25)} .light .fchip:hover{border-color:#000}
+.light .fchip.on{background:#000;color:var(--lime);border-color:#000}
+.light .cal,.white .cal,.lime .cal{background:#fff}
+.light .cal-head{color:var(--muted-l)} .light .cal-row{border-color:rgba(0,0,0,.1)}
+.light .cal-name small{color:var(--muted-l)} .light .cal-row:hover .cal-name{color:#000;text-decoration:underline}
+.light .cal-bar i{background:rgba(0,0,0,.07)} .light .cal-bar i.on{background:#0B0B0B}
+.light .feat{background:#0B0B0B;color:#fff} .light .feat .dim{color:var(--muted)} .light .feat .chip{border-color:rgba(255,255,255,.25)}
+.light .step{background:#fff} .white .step{background:var(--mist)}
+.light .why .card{background:#fff}
+.lime .tag{background:#000;color:var(--lime)} .lime .feat .tag{background:var(--lime);color:#000}
+.lime .btn{background:#000;color:var(--lime)}
+.lime .hl{background:#000;color:var(--lime);padding:0 .14em;border-radius:.14em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.lime .dim{color:#1c1c1c} .lime .card,.lime .diff .card{background:#fff}
+.lime .dots i.on{background:#000}
+.lime .fit li:before{background:#000} .lime .fit .no li:before{background:transparent;border-color:#000}
+.tcard.custom .tag{background:#000;color:var(--lime)}
+.light .tcard .tag{background:var(--lime);color:#000}
+
+/* ===== v2: motion ===== */
+.hero .bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
+.hero .bg video.on{opacity:1}
+.hero:after{background:linear-gradient(180deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 26%,rgba(0,0,0,.05) 40%,rgba(0,0,0,.72) 100%)}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.w>span{display:inline-block;transform:translateY(112%) rotate(3deg);animation:wup .95s var(--ease) forwards;animation-delay:calc(var(--i)*75ms + 250ms)}
+@keyframes wup{to{transform:none}}
+.hero .tag,.hero .lead,.hero .cta,.hero .facts{opacity:0;transform:translateY(22px);animation:fup .9s var(--ease) forwards}
+.hero .tag{animation-delay:.1s}.hero .lead{animation-delay:.9s}.hero .cta{animation-delay:1.05s}.hero .facts{animation-delay:1.25s}
+@keyframes fup{to{opacity:1;transform:none}}
+.progress{position:fixed;left:0;top:0;height:4px;width:0;background:var(--lime);z-index:200;box-shadow:0 0 12px rgba(216,252,0,.6)}
+.marquee{background:var(--lime);color:#000;overflow:hidden;padding:18px 0;border-top:2px solid #000;border-bottom:2px solid #000;transform:rotate(-1.2deg) scale(1.02);margin:-14px 0;position:relative;z-index:3}
+.marquee .track{display:flex;width:max-content;animation:mq 38s linear infinite}
+.marquee span,.marquee i{font-family:'Unbounded';font-weight:900;font-size:clamp(22px,2.6vw,40px);text-transform:uppercase;white-space:nowrap;padding:0 .35em;font-style:normal}
+@keyframes mq{to{transform:translateX(-50%)}}
+.rv{transition-delay:var(--d,0s)}
+.rv.l{transform:translateX(-40px)}.rv.r{transform:translateX(40px)}.rv.l.in,.rv.r.in{transform:none}
+.day .pics .main{clip-path:inset(0 0 100% 0 round 32px);transition:clip-path 1.1s var(--ease)}
+.day.in .pics .main{clip-path:inset(0 round 32px)}
+.pics .main img,.lake img{transform:scale(1.14);will-change:transform}
+.pics:hover .main img,.lake:hover img{transform:scale(1.14)}
+.day .pics .sub{opacity:0;transform:translateY(30px) rotate(4deg);transition:all .9s var(--ease) .5s}
+.day.in .pics .sub{opacity:1;transform:rotate(-2deg)}
+.cal-bar i.on{transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease);transition-delay:calc(var(--c,0)*60ms + var(--r,0)*140ms)}
+.cal.in .cal-bar i.on{transform:scaleX(1)}
+.reel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.vcard{position:relative;margin:0;border-radius:28px;overflow:hidden;aspect-ratio:3/4;background:#161616}
+.vcard:nth-child(3n+2){margin-top:clamp(0px,4vw,56px)}
+.vcard video{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s var(--ease)}
+.vcard:hover video{transform:scale(1.05)}
+.vcard .cap{position:absolute;left:18px;bottom:18px}
+@media(max-width:800px){.reel{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.vcard{border-radius:20px}.vcard:nth-child(3n+2){margin-top:0}.vcard:nth-child(even){margin-top:28px}.vcard .cap{left:10px;bottom:10px;font-size:12px;padding:7px 12px}.marquee{transform:rotate(-1.6deg) scale(1.04)}}
+.mapbox svg .draw{transition:stroke-dashoffset 2.6s cubic-bezier(.4,.1,.2,1)}
+.mapbox svg .pop{opacity:0;transition:opacity .6s ease}
+.mapbox svg.go .pop{opacity:1}
+.btn{position:relative;overflow:hidden}
+.btn:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-130%);transition:transform .7s var(--ease)}
+.btn:hover:after{transform:translateX(130%)}
+.btn.ghost:after,.btn.dark:after{display:none}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(216,252,0,.55)}50%{box-shadow:0 0 0 14px rgba(216,252,0,0)}}
+.hero .cta .btn:first-child{animation:fup .9s var(--ease) 1.05s forwards,pulse 2.6s ease-in-out 2.4s infinite}
+@media(prefers-reduced-motion:reduce){
+  .w>span,.hero .tag,.hero .lead,.hero .cta,.hero .facts,.hero .cta .btn:first-child{animation:none;opacity:1;transform:none}
+  .marquee .track{animation:none}.day .pics .main{clip-path:none;transition:none}.day .pics .sub{opacity:1;transform:none;transition:none}
+  .cal-bar i.on{transform:none;transition:none}.pics .main img,.lake img{transform:none}.mapbox svg .pop{opacity:1}.hero .bg video{display:none}
+}
+
+html,body{overflow-x:clip}
+.marquee{max-width:100vw}
+
+/* text on photos stays white inside light sections */
+.light .lake,.light .tcard,.light .feat .ph,.light .vcard{color:#fff}
+.light .lake .in .body,.light .tcard .in .body{color:rgba(255,255,255,.92)}
+.light .feat .h2{color:#fff}
+.feat .h2{font-size:clamp(20px,1.9vw,30px)!important;hyphens:manual}
+
+/* day text slides in from alternating sides when the day scrolls into view */
+.day .stack{opacity:0;transform:translateX(-44px);transition:opacity .9s var(--ease) .25s,transform .9s var(--ease) .25s}
+.day:nth-child(even) .stack{transform:translateX(44px)}
+.day.in .stack{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.day .stack{opacity:1;transform:none;transition:none}}
+
+.light .note{color:#2a2a2a}
+.lime .note{color:#000}

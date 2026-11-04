@@ -1,6 +1,7 @@
 shots/
-shot.py
+shot*.py
 over.py
 flow.py
+patch*.py
 __pycache__/
 *.pyc
