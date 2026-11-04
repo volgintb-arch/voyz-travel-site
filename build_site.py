@@ -55,7 +55,7 @@ def form(tour_name='', idp='f', source='page', root=''):
 
 def modal(root, tour=''):
     return f'''<div class="modal" role="dialog" aria-modal="true" aria-label="Заявка"><div class="box"><button class="close" aria-label="Закрыть">×</button>
-<p class="tag" style="margin-bottom:18px">Заявка</p><h2 class="h2" style="font-size:clamp(26px,3.4vw,40px);margin-bottom:12px">Расскажем всё <span class="hl">и посчитаем</span></h2>
+<p class="tag" style="margin-bottom:18px">Заявка</p><h2 class="h2" style="font-size:clamp(26px,calc(3.4*var(--vw)),40px);margin-bottom:12px">Расскажем всё <span class="hl">и посчитаем</span></h2>
 <p class="body dim" style="margin-bottom:24px">Оставьте контакты — вернёмся с программой и расчётом под вашу группу и даты.</p>{form(tour, 'm', 'modal', root)}</div></div>'''
 
 def mbar(label='Оставить заявку'): return f'<div class="mbar"><a class="btn" href="#request" data-open-form="mobile-bar">{label}</a></div>'
@@ -70,7 +70,7 @@ def footer(root, modal_html='', mbar_html=''):
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
 <div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}privacy/">Политика конфиденциальности</a> · <a href="{root}credits/">Авторы фотографий</a></span></div></div></footer>
-{modal_html}{mbar_html}<script src="{root}assets/config.js"></script><script src="{root}assets/site.js"></script><script src="{root}assets/v2.js"></script></body></html>'''
+{modal_html}{mbar_html}<script src="{root}assets/config.js"></script><script src="{root}assets/site.js"></script><script src="{root}assets/scale.js"></script><script src="{root}assets/v2.js"></script></body></html>'''
 
 def write(path, content):
     p = os.path.join(ROOT, path); os.makedirs(os.path.dirname(p), exist_ok=True)
@@ -89,7 +89,7 @@ def map_block(root):
 
 def lakes_block(t, root):
     n = len(t['lakes'])
-    return f'<div class="lakes n{n}">' + ''.join(f'''<div class="lake rv"><img src="{img(l['img'], 'm', root)}" alt="{H(l['name'])}" style="object-position:{l['pos']}" loading="lazy" width="900" height="1200"><div class="in"><span class="tag">{H(l['alt'])}</span><h3 class="h2" style="font-size:clamp(24px,2.6vw,40px)">{H(l['name'])}</h3><p class="body" style="font-size:16px;color:rgba(255,255,255,.9)">{H(l['text'])}</p></div></div>''' for l in t['lakes']) + '</div>'
+    return f'<div class="lakes n{n}">' + ''.join(f'''<div class="lake rv"><img src="{img(l['img'], 'm', root)}" alt="{H(l['name'])}" style="object-position:{l['pos']}" loading="lazy" width="900" height="1200"><div class="in"><span class="tag">{H(l['alt'])}</span><h3 class="h2" style="font-size:clamp(24px,calc(2.6*var(--vw)),40px)">{H(l['name'])}</h3><p class="body" style="font-size:16px;color:rgba(255,255,255,.9)">{H(l['text'])}</p></div></div>''' for l in t['lakes']) + '</div>'
 
 def days_block(t, root):
     out = []
@@ -97,8 +97,8 @@ def days_block(t, root):
         sub = f'<div class="sub"><img src="{img(d["img2"], "m", root)}" alt="" loading="lazy"></div>' if d.get('img2') else ''
         note = f'<p class="note">{H(d["note"])}</p>' if d.get('note') else ''
         moments = ''.join(f'<li>{H(m)}</li>' for m in d['moments'])
-        out.append(f'''<article class="day rv" id="day-{d['n']}"><div class="pics"><div class="main"><img src="{img(d['img'], 'm', root)}" srcset="{img(d['img'], 'm', root)} 900w, {img(d['img'], 'l', root)} 1900w" sizes="(max-width:900px) 100vw, 55vw" alt="{H(d['caption'])}" style="object-position:{d['pos']}" loading="lazy"></div>{sub}<span class="cap">{H(d['caption'])}</span></div>
-<div class="stack" style="--gap:22px"><div class="dn" aria-hidden="true">{d['n']:02d}</div><p class="tag">День {d['n']}</p><h3 class="h2" style="font-size:clamp(24px,2.8vw,42px)">{H(d['title'])}</h3><p class="meta route">{H(d['route'])}</p><p class="body">{H(d['text'])}</p><ul class="moments">{moments}</ul>{note}<div class="stay"><b>Ночёвка</b><span>{H(d['stay'])}</span></div></div></article>''')
+        out.append(f'''<article class="day rv" id="day-{d['n']}"><div class="pics"><div class="main"><img src="{img(d['img'], 'm', root)}" srcset="{img(d['img'], 'm', root)} 900w, {img(d['img'], 'l', root)} 1900w" sizes="(max-width:900px) 100vw, calc(55*var(--vw))" alt="{H(d['caption'])}" style="object-position:{d['pos']}" loading="lazy"></div>{sub}<span class="cap">{H(d['caption'])}</span></div>
+<div class="stack" style="--gap:22px"><div class="dn" aria-hidden="true">{d['n']:02d}</div><p class="tag">День {d['n']}</p><h3 class="h2" style="font-size:clamp(24px,calc(2.8*var(--vw)),42px)">{H(d['title'])}</h3><p class="meta route">{H(d['route'])}</p><p class="body">{H(d['text'])}</p><ul class="moments">{moments}</ul>{note}<div class="stay"><b>Ночёвка</b><span>{H(d['stay'])}</span></div></div></article>''')
     return '<div class="days">' + ''.join(out) + '</div>'
 
 def steps_block():
@@ -142,7 +142,7 @@ def season_labels(t): return ' · '.join(dict(SEASONS)[s] for s in t['seasons'])
 
 def tcard(t, root, big=False):
     chips = ''.join(f'<span class="chip">{H(a)} {H(b)}</span>' for a, b in t['facts'][:3])
-    return f'''<a class="tcard rv" href="{tour_url(t, root)}" data-seasons="{' '.join(t['seasons'])}"><img src="{img(t['card_img'], 'l' if big else 'm', root)}" alt="{H(t['title'])}" loading="lazy"><div class="in"><span class="tag">{H(t['badge'])}</span><h2 class="h2" style="font-size:clamp(26px,2.8vw,44px)">{H(t['title'])}</h2><p class="body" style="font-size:16px;color:rgba(255,255,255,.9)">{H(t['card_title'])}</p><div style="display:flex;flex-wrap:wrap;gap:8px">{chips}<span class="chip">{H(t['season'])}</span></div></div></a>'''
+    return f'''<a class="tcard rv" href="{tour_url(t, root)}" data-seasons="{' '.join(t['seasons'])}"><img src="{img(t['card_img'], 'l' if big else 'm', root)}" alt="{H(t['title'])}" loading="lazy"><div class="in"><span class="tag">{H(t['badge'])}</span><h2 class="h2" style="font-size:clamp(26px,calc(2.8*var(--vw)),44px)">{H(t['title'])}</h2><p class="body" style="font-size:16px;color:rgba(255,255,255,.9)">{H(t['card_title'])}</p><div style="display:flex;flex-wrap:wrap;gap:8px">{chips}<span class="chip">{H(t['season'])}</span></div></div></a>'''
 
 def calendar_block(root):
     head_ = '<div class="cal-head"><span></span><span class="months">' + ''.join(f'<span>{m}</span>' for m in MONTHS) + '</span></div>'
@@ -171,15 +171,15 @@ def page_home():
 <section class="sec light" id="why"><div class="wrap"><span class="tag">Почему VOYZ</span><h2 class="h2" style="margin-top:22px;max-width:16ch">Не просто посмотреть. <span class="hl">Почувствовать.</span></h2>
 <p class="body dim" style="max-width:36em;margin-top:22px">Дороги за горизонт, озёра между скал, ночи под звёздным небом. Каждая поездка открывает другой Кыргызстан.</p><div class="why">{whyh}</div></div></section>
 
-<section class="sec light white" id="tours"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,4vw,48px)"><div class="stack"><span class="tag">Флагман</span><h2 class="h2">{G['title']}</h2></div><p class="body dim">{H(G['summary'])}</p></div>
+<section class="sec light white" id="tours"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Флагман</span><h2 class="h2">{G['title']}</h2></div><p class="body dim">{H(G['summary'])}</p></div>
 <a class="feat rv" href="{tour_url(G, R)}"><div class="ph"><img src="{img(G['card_img'], 'l', R)}" alt="Кель-Суу" loading="lazy"><span class="tag">{H(G['badge'])}</span></div>
-<div class="tx"><p class="meta dim">{H(G['kicker'])}</p><h3 class="h2" style="font-size:clamp(24px,2.5vw,38px)">{H(G['card_title'])}</h3><p class="body dim" style="font-size:16px">{H(G['summary'])}</p>
+<div class="tx"><p class="meta dim">{H(G['kicker'])}</p><h3 class="h2" style="font-size:clamp(24px,calc(2.5*var(--vw)),38px)">{H(G['card_title'])}</h3><p class="body dim" style="font-size:16px">{H(G['summary'])}</p>
 <div class="row">{''.join(f'<span class="chip">{H(a)} {H(b)}</span>' for a, b in G['facts'])}</div>
 <p class="body dim" style="font-size:16px">Сезон: {H(G['season'])}. Старт и финиш — Бишкек.</p><span class="btn" style="align-self:flex-start">Подробнее о туре <span class="arrow">→</span></span></div></a></div></section>
 
-<section class="sec" id="reel"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,4vw,48px)"><div class="stack"><span class="tag">В движении</span><h2 class="h2">Дорога, <span class="hl">которую хочется проехать</span></h2></div><p class="body dim">Короткие кадры с маршрутов: вода, скалы, серпантины и юрты. Так выглядит поездка до того, как вы в неё отправились.</p></div>{reel_block(R)}</div></section>
+<section class="sec" id="reel"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">В движении</span><h2 class="h2">Дорога, <span class="hl">которую хочется проехать</span></h2></div><p class="body dim">Короткие кадры с маршрутов: вода, скалы, серпантины и юрты. Так выглядит поездка до того, как вы в неё отправились.</p></div>{reel_block(R)}</div></section>
 
-<section class="sec light lime" id="year"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,4vw,48px)"><div class="stack"><span class="tag">Туры на весь год</span><h2 class="h2">Для каждого сезона <span class="hl">своя поездка</span></h2></div><p class="body dim">Весной каньоны без толп, летом высокогорные озёра, осенью золотой свет на Сон-Куле, зимой снег и горячие источники. Выберите время, а маршрут мы подскажем.</p></div>
+<section class="sec light lime" id="year"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Туры на весь год</span><h2 class="h2">Для каждого сезона <span class="hl">своя поездка</span></h2></div><p class="body dim">Весной каньоны без толп, летом высокогорные озёра, осенью золотой свет на Сон-Куле, зимой снег и горячие источники. Выберите время, а маршрут мы подскажем.</p></div>
 {calendar_block(R)}<div class="grid" style="margin-top:28px">{others}</div></div></section>
 
 <section class="sec light white" id="lakes"><div class="wrap"><span class="tag">Три озера</span><h2 class="h2" style="margin-top:22px;max-width:18ch">Ради таких мест <span class="hl">отправляются в экспедиции</span></h2>{lakes_block(G, R)}</div></section>
@@ -198,10 +198,10 @@ def page_tours():
     chips = '<div class="filters" role="group" aria-label="Сезон"><button class="fchip on" data-season="all">Все</button>' + ''.join(f'<button class="fchip" data-season="{k}">{v}</button>' for k, v in SEASONS) + '</div>'
     cards = ''.join(tcard(t, R, big=True) for t in TOURS)
     body = head('Туры по Кыргызстану на внедорожниках — VOYZ Travel', 'Каталог авторских экспедиций VOYZ по Кыргызстану на весь год.', R) + header(R, 'tours') + f'''
-<section class="phead ink"><div class="wrap split"><div class="stack"><span class="tag">Каталог</span><h1 class="h1" style="font-size:clamp(40px,6vw,96px)">Наши <span class="hl">туры</span></h1></div>
+<section class="phead ink"><div class="wrap split"><div class="stack"><span class="tag">Каталог</span><h1 class="h1" style="font-size:clamp(40px,calc(6*var(--vw)),96px)">Наши <span class="hl">туры</span></h1></div>
 <p class="body dim">Авторские экспедиции по Кыргызстану: внедорожники, горы, озёра и юрты. Небольшие группы и маршруты на любой сезон.</p></div></section>
-<section class="sec light" style="padding-top:clamp(40px,5vw,72px)"><div class="wrap"><div class="cal-wrap">{calendar_block(R)}</div>{chips}<div class="grid" id="tgrid" style="margin-top:20px">{cards}
-<div class="tcard custom rv" data-seasons="spring summer autumn winter"><div class="in"><span class="tag dark">Под вас</span><div class="stack"><h2 class="h2" style="font-size:clamp(26px,2.8vw,44px)">Свой маршрут на внедорожниках</h2><p class="body" style="font-weight:700">Хотите другую длительность, даты или состав: компания друзей, семья, корпоративная поездка? Соберём маршрут под вас.</p></div><a class="btn dark" href="#request" data-open-form="catalog-custom" style="align-self:flex-start">Обсудить маршрут <span class="arrow">→</span></a></div></div>
+<section class="sec light" style="padding-top:clamp(40px,calc(5*var(--vw)),72px)"><div class="wrap"><div class="cal-wrap">{calendar_block(R)}</div>{chips}<div class="grid" id="tgrid" style="margin-top:20px">{cards}
+<div class="tcard custom rv" data-seasons="spring summer autumn winter"><div class="in"><span class="tag dark">Под вас</span><div class="stack"><h2 class="h2" style="font-size:clamp(26px,calc(2.8*var(--vw)),44px)">Свой маршрут на внедорожниках</h2><p class="body" style="font-weight:700">Хотите другую длительность, даты или состав: компания друзей, семья, корпоративная поездка? Соберём маршрут под вас.</p></div><a class="btn dark" href="#request" data-open-form="catalog-custom" style="align-self:flex-start">Обсудить маршрут <span class="arrow">→</span></a></div></div>
 </div></div></section>{request_block('Свой маршрут', R, 'c', 'light white')}'''
     return body + footer(R, modal(R, 'Свой маршрут'), mbar())
 
@@ -223,7 +223,7 @@ def page_tour(t):
     map_sec = f'<section class="sec light" id="route"><div class="wrap"><span class="tag">Маршрут</span><h2 class="h2" style="margin-top:22px">Один маршрут. <span class="hl">Разные миры</span></h2>{map_block(R)}</div></section>' if has_map else ''
     body = head(f'{t["title"]} — {t["days"][-1]["n"]} дней на внедорожниках по Кыргызстану · VOYZ', t['summary'], R, og=img(t['hero'], 'm', R), extra='<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>') + header(R, 'tour') + f'''
 <section class="hero">{hero_bg(t['hero'], t['hero_pos'], t['title'], R, VIDEOS.get(t['slug']))}
-<div class="wrap"><span class="tag">{H(t['badge'])}</span><h1 class="h1" style="margin-top:22px;font-size:clamp(34px,6.4vw,104px)">{h1}</h1>
+<div class="wrap"><span class="tag">{H(t['badge'])}</span><h1 class="h1" style="margin-top:22px;font-size:clamp(34px,calc(6.4*var(--vw)),104px)">{h1}</h1>
 <p class="body lead">{H(t['headline'])}.</p>
 <div class="cta"><a class="btn" href="#request" data-open-form="tour-hero">Узнать стоимость и даты <span class="arrow">→</span></a><a class="btn ghost" href="#days">Смотреть программу</a></div>{facts_bar(t)}</div></section>
 <nav class="subnav" aria-label="Разделы тура"><div class="wrap">{subnav}<a class="btn sm" href="#request" data-open-form="subnav">Оставить заявку</a></div></nav>

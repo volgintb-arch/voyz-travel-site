@@ -1,7 +1,7 @@
 /* ===== v2: light rhythm (sections alternate light / white / lime / dark) ===== */
 .sec.light.white{background:#fff}
 .sec.light.lime{background:var(--lime);color:#000}
-.phead.ink{background:#0B0B0B;padding-bottom:clamp(40px,5vw,72px)}
+.phead.ink{background:#0B0B0B;padding-bottom:clamp(40px,calc(5*var(--vw)),72px)}
 .white .card{background:var(--mist)}
 .light .chip,.light .moments li{border-color:rgba(0,0,0,.2)}
 .light .route,.light .day .route{color:#000;font-weight:800}
@@ -41,7 +41,7 @@
 .progress{position:fixed;left:0;top:0;height:4px;width:0;background:var(--lime);z-index:200;box-shadow:0 0 12px rgba(216,252,0,.6)}
 .marquee{background:var(--lime);color:#000;overflow:hidden;padding:18px 0;border-top:2px solid #000;border-bottom:2px solid #000;transform:rotate(-1.2deg) scale(1.02);margin:-14px 0;position:relative;z-index:3}
 .marquee .track{display:flex;width:max-content;animation:mq 38s linear infinite}
-.marquee span,.marquee i{font-family:'Unbounded';font-weight:900;font-size:clamp(22px,2.6vw,40px);text-transform:uppercase;white-space:nowrap;padding:0 .35em;font-style:normal}
+.marquee span,.marquee i{font-family:'Unbounded';font-weight:900;font-size:clamp(22px,calc(2.6*var(--vw)),40px);text-transform:uppercase;white-space:nowrap;padding:0 .35em;font-style:normal}
 @keyframes mq{to{transform:translateX(-50%)}}
 .rv{transition-delay:var(--d,0s)}
 .rv.l{transform:translateX(-40px)}.rv.r{transform:translateX(40px)}.rv.l.in,.rv.r.in{transform:none}
@@ -55,7 +55,7 @@
 .cal.in .cal-bar i.on{transform:scaleX(1)}
 .reel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .vcard{position:relative;margin:0;border-radius:28px;overflow:hidden;aspect-ratio:3/4;background:#161616}
-.vcard:nth-child(3n+2){margin-top:clamp(0px,4vw,56px)}
+.vcard:nth-child(3n+2){margin-top:clamp(0px,calc(4*var(--vw)),56px)}
 .vcard video{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s var(--ease)}
 .vcard:hover video{transform:scale(1.05)}
 .vcard .cap{position:absolute;left:18px;bottom:18px}
@@ -82,7 +82,7 @@ html,body{overflow-x:clip}
 .light .lake,.light .tcard,.light .feat .ph,.light .vcard{color:#fff}
 .light .lake .in .body,.light .tcard .in .body{color:rgba(255,255,255,.92)}
 .light .feat .h2{color:#fff}
-.feat .h2{font-size:clamp(20px,1.9vw,30px)!important;hyphens:manual}
+.feat .h2{font-size:clamp(20px,calc(1.9*var(--vw)),30px)!important;hyphens:manual}
 
 /* day text slides in from alternating sides when the day scrolls into view */
 .day .stack{opacity:0;transform:translateX(-44px);transition:opacity .9s var(--ease) .25s,transform .9s var(--ease) .25s}
@@ -92,3 +92,13 @@ html,body{overflow-x:clip}
 
 .light .note{color:#2a2a2a}
 .lime .note{color:#000}
+
+/* ===== desktop: fill the screen, scale up on large monitors (zoom is set by scale.js) ===== */
+.hero{min-height:calc(100svh / var(--z,1))}
+.modal .box{max-height:calc(92vh / var(--z,1))}
+@media(min-width:1025px){
+  .wrap{max-width:none}
+  .grid:not(#tgrid){grid-template-columns:repeat(3,minmax(0,1fr))}
+  .lakes.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .why{grid-template-columns:repeat(4,minmax(0,1fr))}
+}

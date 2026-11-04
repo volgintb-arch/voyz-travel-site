@@ -16,6 +16,7 @@ html = '''<!doctype html><html lang="ru"><head><meta charset="utf-8">
 <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="VOYZ"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>VOYZ — туры по Кыргызстану</title><meta name="description" content="Приложение VOYZ: туры на внедорожниках по Кыргызстану на весь год.">
+<script>(function(){try{if(/[?&]preview/.test(location.search)||matchMedia("(max-width:1024px)").matches)return;var h=location.hash,m=h.match(/^#\\/tour\\/([\\w-]+)/);location.replace(m?"../tours/"+m[1]+"/":/^#\\/tours/.test(h)?"../tours/":"../")}catch(e){}})()</script>
 <link rel="stylesheet" href="app.css"></head><body><div class="phone"></div>
 <script>window.VOYZ={tours:%s}</script><script src="../assets/config.js"></script><script src="app.js"></script></body></html>''' % json.dumps(data, ensure_ascii=False, separators=(',', ':'))
 os.makedirs(os.path.join(ROOT, 'app'), exist_ok=True)
@@ -23,7 +24,7 @@ open(os.path.join(ROOT, 'app/index.html'), 'w', encoding='utf-8').write(html)
 
 # phones opening the website are sent to the app (they can opt out with "Полная версия")
 redirect = ('<script>(function(){try{if(sessionStorage.getItem("voyz_full")||/[?&]full=1/.test(location.search))return;'
-            'if(matchMedia("(max-width:700px)").matches){var p=location.pathname.replace(/index\\.html$/,""),m=p.match(/tours\\/([^\\/]+)\\/$/),'
+            'if(matchMedia("(max-width:1024px)").matches){var p=location.pathname.replace(/index\\.html$/,""),m=p.match(/tours\\/([^\\/]+)\\/$/),'
             'h=m&&m[1]!=="privacy"?"#/tour/"+m[1]:/tours\\/$/.test(p)?"#/tours":"";'
             'if(/privacy|credits/.test(p))return;'
             'var base=m?"../../":/tours\\/$/.test(p)?"../":"";location.replace(base+"app/"+h)}}catch(e){}})()</script>')
