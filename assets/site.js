@@ -117,13 +117,21 @@
     var show = hit.length ? hit : cards.slice(0, 3); show.forEach(function (c) { c.hidden = false; }); g.className += ' n' + Math.min(show.length, 3);
   })();
 
-// tour row: arrow buttons scroll by one card
+// tour row: arrows, drag with the mouse (grab cursor) and a hand hint that goes away after the first interaction
 (function () {
   var row = document.getElementById('trow'); if (!row) return;
+  var wrap = row.parentNode, down = false, sx = 0, sl = 0, moved = 0;
+  function used() { wrap.classList.add('used'); }
   Array.prototype.slice.call(document.querySelectorAll('[data-hnav]')).forEach(function (b) {
     b.addEventListener('click', function () {
-      var c = row.querySelector('.tcard'), w = c ? c.getBoundingClientRect().width + 16 : 320;
+      used(); var c = row.querySelector('.tcard'), w = c ? c.getBoundingClientRect().width + 16 : 320;
       row.scrollBy({ left: w * Number(b.getAttribute('data-hnav')), behavior: 'smooth' });
     });
   });
+  row.addEventListener('scroll', function () { if (row.scrollLeft > 20) used(); }, { passive: true });
+  row.addEventListener('mousedown', function (e) { down = true; moved = 0; sx = e.pageX; sl = row.scrollLeft; row.classList.add('drag'); });
+  window.addEventListener('mouseup', function () { if (!down) return; down = false; row.classList.remove('drag'); });
+  window.addEventListener('mousemove', function (e) { if (!down) return; var dx = e.pageX - sx; moved = Math.max(moved, Math.abs(dx)); row.scrollLeft = sl - dx; if (moved > 6) used(); });
+  row.addEventListener('click', function (e) { if (moved > 6) { e.preventDefault(); e.stopPropagation(); moved = 0; } }, true);
+  row.addEventListener('dragstart', function (e) { e.preventDefault(); });
 })();

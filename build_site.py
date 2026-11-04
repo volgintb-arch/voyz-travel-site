@@ -125,7 +125,7 @@ def footer(root, modal_html='', mbar_html=''):
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
 <div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}{PFX}privacy/">Политика конфиденциальности</a></span></div></div></footer>
-{modal_html}{mbar_html}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
+{modal_html}{mbar_html}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/jeep.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
 
 # ---------------- blocks ----------------
 def facts_bar(t): return '<div class="facts rv">' + ''.join(f'<div><div class="num">{H(a)}</div><p class="meta">{H(b)}</p></div>' for a, b in t['facts']) + '</div>'
@@ -192,6 +192,27 @@ def yplate(root):
     cells = ''.join(f'<a class="yp yp-{k}" href="{root}{PFX}tours/"><b>{n}</b><span>{d}</span></a>' for k, n, d in SEAS_TXT)
     return f'<section class="yplate" aria-label="Сезоны"><div class="ylab"><span>Туры на весь год</span></div><div class="yrow">{cells}</div></section>'
 
+DEST = [('alakul', 'Ала-Куль'), ('kel_v', 'Кель-Суу'), ('song_sunset', 'Сон-Куль'), ('issyk', 'Иссык-Куль'), ('tash', 'Таш-Рабат'), ('alai', 'Алай'), ('sary', 'Сары-Челек'), ('jeti_horses', 'Джети-Огуз')]
+def dest_strip(root):
+    chips = ''.join(f'<a class="dc" href="{root}{PFX}tours/"><img src="{img(k, "m", root)}" alt="" loading="lazy" width="56" height="56"><span>{n}</span></a>' for k, n in DEST)
+    return f'<section class="dstrip" aria-label="Направления"><div class="wrap dwrap"><span class="dlab">Куда едем</span><div class="drow">{chips}</div></div></section>'
+
+def why_block(why, root):
+    (_, t1, p1), (_, t2, p2), (_, t3, p3), (_, t4, p4) = why
+    seasons = ''.join(f'<span class="sp sp-{k}"><b>{n}</b></span>' for k, n, _ in SEAS_TXT)
+    chips = ''.join(f'<span class="wc">{x}</span>' for x in ('Долгие переезды', 'Конные участки', 'Пешие участки', 'Погода'))
+    return f'''<div class="bento">
+<div class="bx b1 rv"><img src="{img('altyn_yurts', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">4–8</div><span class="lab">человек в группе</span><h3 class="h3">{t1}</h3><p>{p1}</p></div></div>
+<div class="bx b2 rv"><img src="{img('serp', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">2</div><h3 class="h3">{t2}</h3><p>{p2}</p></div></div>
+<div class="bx b3 rv"><div class="in"><div class="big">12</div><h3 class="h3">{t3}</h3><p>{p3}</p><div class="sps">{seasons}</div></div></div>
+<div class="bx b4 rv"><div class="in"><h3 class="h3">{t4}</h3><p>{p4}</p><div class="wcs">{chips}</div></div></div></div>'''
+
+PLACES = [('alakul', 'Ала-Куль', '≈ 3500 м', 'a'), ('kel_v', 'Кель-Суу', 'пограничная зона', 't'), ('song_sunset', 'Сон-Куль', 'юрты и жайлоо', 'w'), ('tash', 'Таш-Рабат', 'караван-сарай', 's'),
+          ('chatyr', 'Чатыр-Куль', 'высокогорное озеро', 's'), ('sary', 'Сары-Челек', 'биосферный заповедник', 't'), ('jeti_horses', 'Джети-Огуз', 'красные скалы', 'w'), ('lenin', 'Пик Ленина', '7134 м', 's'),
+          ('alai', 'Алайская долина', 'высокогорная долина', 's'), ('arslanbob', 'Арсланбоб', 'ореховые леса', 's'), ('bars_fall', 'Барскоон', 'водопад со льдом', 's'), ('serp', 'Перевал 33 попугая', 'серпантин', 's'), ('skazka', 'Каньон Сказка', 'красные скалы', 's')]
+def places_block(root):
+    return '<div class="places">' + ''.join(f'''<div class="lake pl pl-{c} rv"><img src="{img(k, 'm', root)}" alt="{H(n)}" loading="lazy"><div class="in"><span class="tag">{H(a)}</span><h3 class="h2">{H(n)}</h3></div></div>''' for k, n, a, c in PLACES) + '</div>'
+
 def reel_block(root):
     clips = [('issyk', 'Иссык-Куль'), ('bars', 'Водопады Барскоона'), ('aksai', 'Каньоны Ак-Сай'), ('serp', 'Серпантин «33 попугая»'), ('song', 'Юрты Сон-Куля'), ('jeti', 'Джети-Огуз')]
     return '<div class="reel">' + ''.join(f'<figure class="vcard rv"><video muted loop playsinline preload="none" poster="{root}assets/video/{k}.jpg"><source src="{root}assets/video/{k}.mp4" type="video/mp4"></video><figcaption class="cap">{n}</figcaption></figure>' for k, n in clips) + '</div>'
@@ -235,9 +256,9 @@ def page_home():
 <p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню и Памиро-Алаю: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа, продуманный маршрут, поездки в любое время года.</p>
 <div class="cta"><a class="btn" href="tours/">Смотреть все туры <span class="arrow">→</span></a><a class="btn ghost" href="#request" data-open-form="hero">Подобрать тур</a></div>
 <div class="facts rv"><div><div class="num">{len(TOURS)}</div><p class="meta">маршрутов</p></div><div><div class="num">12</div><p class="meta">месяцев в году</p></div><div><div class="num">2</div><p class="meta">внедорожника</p></div><div><div class="num">4–8</div><p class="meta">человек в группе</p></div></div></div></section>
-{yplate(R)}
+{dest_strip(R)}
 <section class="sec light" id="why"><div class="wrap"><span class="tag">Почему VOYZ</span><h2 class="h2" style="margin-top:22px;max-width:16ch">Не просто посмотреть. <span class="hl">Почувствовать.</span></h2>
-<p class="body dim" style="max-width:36em;margin-top:22px">Дороги за горизонт, озёра между скал, ночи под звёздным небом. Каждая поездка открывает другой Кыргызстан.</p><div class="why">{whyh}</div></div></section>
+<p class="body dim" style="max-width:36em;margin-top:22px">Дороги за горизонт, озёра между скал, ночи под звёздным небом. Каждая поездка открывает другой Кыргызстан.</p>{why_block(why, R)}</div></section>
 
 <section class="sec" id="reel"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">В движении</span><h2 class="h2">Дорога, <span class="hl">которую хочется проехать</span></h2></div><p class="body dim">Короткие кадры с маршрутов: вода, скалы, серпантины и юрты. Так выглядит поездка до того, как вы в неё отправились.</p></div>{reel_block(R)}</div></section>
 
@@ -246,15 +267,15 @@ def page_home():
 <div class="tx"><p class="meta dim">{H(G['kicker'])}</p><ul class="pts">{''.join(f'<li>{H(x)}</li>' for x in G['points'])}</ul><p class="body dim" style="font-size:16px">{H(G['summary'])}</p>
 <div class="row">{''.join(f'<span class="chip">{H(a)} {H(b)}</span>' for a, b in G['facts'])}</div>
 <div class="sline">{splates(G)}<span class="body dim" style="font-size:16px">Старт и финиш — Бишкек.</span></div><span class="btn" style="align-self:flex-start">Подробнее о туре <span class="arrow">→</span></span></div></a><div class="hhead"><span class="meta dim">Все маршруты</span><span class="hnav"><button type="button" data-hnav="-1" aria-label="Назад">←</button><button type="button" data-hnav="1" aria-label="Вперёд">→</button></span></div>
-<div class="hrow" id="trow" tabindex="0">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard"', 1) for t in TOURS)}</div></div></section>
+<div class="hwrap"><div class="hrow" id="trow" tabindex="0">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard"', 1) for t in TOURS)}</div><div class="hhand" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg><span>Листайте</span></div></div></div></section>
 
-<section class="sec light" id="year"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Туры на весь год</span><h2 class="h2">Для каждого сезона <span class="hl">своя поездка</span></h2></div><p class="body dim">Весной каньоны без толп, летом высокогорные озёра, осенью золотой свет на Сон-Куле, зимой снег и горячие источники. Выберите время, а маршрут мы подскажем.</p></div>
+<section class="sec light" id="year"><div class="wrap"><div class="split col1" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Туры на весь год</span><h2 class="h2">Для каждого сезона <br class="dbr"><span class="hl">своя поездка</span></h2></div><p class="body dim">Весной каньоны без толп, летом высокогорные озёра, осенью золотой свет на Сон-Куле, зимой снег и горячие источники. Выберите время, а маршрут мы подскажем.</p></div>
 {calendar_block(R)}</div></section>
 
 <section class="sec light white" id="now"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">По сезону</span><h2 class="h2">Сейчас в сезоне <span class="hl" id="nowm"></span></h2></div><p class="body dim">Эти маршруты можно проехать в ближайшие недели. Остальные ждут своего сезона: весь год в каталоге.</p></div>
 <div class="grid" id="nowgrid">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard rv" hidden', 1) for t in TOURS)}</div><noscript><style>#nowgrid [hidden]{{display:block!important}}</style></noscript></div></section>
 
-<section class="sec light" id="lakes"><div class="wrap"><span class="tag">Три озера</span><h2 class="h2" style="margin-top:22px;max-width:18ch">Ради таких мест <span class="hl">отправляются в экспедиции</span></h2>{lakes_block(G, R)}</div></section>
+<section class="sec light" id="lakes"><div class="wrap"><span class="tag">Места</span><h2 class="h2" style="margin-top:22px;max-width:18ch">Ради таких мест <span class="hl">отправляются в экспедиции</span></h2>{places_block(R)}</div></section>
 
 <section class="sec light white" id="route"><div class="wrap"><span class="tag">Маршрут флагмана</span><h2 class="h2" style="margin-top:22px">Один маршрут. <span class="hl">Разные миры</span></h2>{map_block(R)}</div></section>
 
