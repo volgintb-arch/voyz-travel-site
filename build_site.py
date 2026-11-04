@@ -28,7 +28,7 @@ def head(title, desc, root, og=None, extra=''):
 <meta name="theme-color" content="#0B0B0B">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/site.css?v=1793789075"><link rel="stylesheet" href="{root}assets/v2.css?v=1793789075">{extra}</head><body>'''
+<link rel="stylesheet" href="{root}assets/site.css?v=1793789432"><link rel="stylesheet" href="{root}assets/v2.css?v=1793789432">{extra}</head><body>'''
 
 def header(root, cur=''):
     nav = [('tours/', 'Туры'), ('#year', 'Туры на весь год'), ('#how', 'Как это работает'), ('#faq', 'Вопросы')]
@@ -70,7 +70,7 @@ def footer(root, modal_html='', mbar_html=''):
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
 <div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}privacy/">Политика конфиденциальности</a> · <a href="{root}credits/">Авторы фотографий</a></span></div></div></footer>
-{modal_html}{mbar_html}<script src="{root}assets/config.js?v=1793789075"></script><script src="{root}assets/site.js?v=1793789075"></script><script src="{root}assets/scale.js?v=1793789075"></script><script src="{root}assets/v2.js?v=1793789075"></script></body></html>'''
+{modal_html}{mbar_html}<script src="{root}assets/config.js?v=1793789432"></script><script src="{root}assets/site.js?v=1793789432"></script><script src="{root}assets/scale.js?v=1793789432"></script><script src="{root}assets/v2.js?v=1793789432"></script></body></html>'''
 
 def write(path, content):
     p = os.path.join(ROOT, path); os.makedirs(os.path.dirname(p), exist_ok=True)

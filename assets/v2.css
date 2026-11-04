@@ -130,3 +130,7 @@ html,body{overflow-x:clip}
 .faqwrap .faqhead{position:sticky;top:120px}
 .faqwrap .faq{max-width:none;margin-top:0}
 @media(max-width:900px){.faqwrap{grid-template-columns:1fr}.faqwrap .faqhead{position:static}}
+
+/* calendar: lime months with a thin dark outline so they stay readable on light cards */
+.light .cal-bar i.on,.cal-bar i.on{background:var(--lime);box-shadow:inset 0 0 0 2px #0B0B0B}
+.cal-bar i{height:16px}
