@@ -191,9 +191,16 @@ def reel_block(root):
     clips = [('issyk', 'Иссык-Куль'), ('bars', 'Водопады Барскоона'), ('aksai', 'Каньоны Ак-Сай'), ('serp', 'Серпантин «33 попугая»'), ('song', 'Юрты Сон-Куля'), ('jeti', 'Джети-Огуз')]
     return '<div class="reel">' + ''.join(f'<figure class="vcard rv"><video muted loop playsinline preload="none" poster="{root}assets/video/{k}.jpg"><source src="{root}assets/video/{k}.mp4" type="video/mp4"></video><figcaption class="cap">{n}</figcaption></figure>' for k, n in clips) + '</div>'
 
+SPN = dict(SEASONS)
+def splates(t):
+    ks = t['seasons']
+    if len(ks) == 1: return f'<span class="sp sp-{ks[0]}"><b>{SPN[ks[0]]}</b> {H(t["season"])}</span>'
+    return ''.join(f'<span class="sp sp-{k}"><b>{SPN[k]}</b></span>' for k in ks) + f'<span class="chip">{H(t["season"])}</span>'
+def ctitle(t): return ' · '.join(t['points']) if t.get('points') else t['card_title']
+
 def tcard(t, root, big=False):
     chips = ''.join(f'<span class="chip">{H(a)} {H(b)}</span>' for a, b in t['facts'][:3])
-    return f'''<a class="tcard rv" href="{tour_url(t, root)}" data-seasons="{' '.join(t['seasons'])}"><img src="{img(t['card_img'], 'l' if big else 'm', root)}" alt="{H(t['title'])}" loading="lazy"><div class="in"><span class="tag">{H(t['badge'])}</span><h2 class="h2" style="font-size:clamp(26px,calc(2.8*var(--vw)),44px)">{H(t['title'])}</h2><p class="body" style="font-size:16px;color:rgba(255,255,255,.9)">{H(t['card_title'])}</p><div style="display:flex;flex-wrap:wrap;gap:8px">{chips}<span class="chip">{H(t['season'])}</span></div></div></a>'''
+    return f'''<a class="tcard rv" href="{tour_url(t, root)}" data-seasons="{' '.join(t['seasons'])}" data-months="{' '.join(str(m) for m in t['months'])}"><img src="{img(t['card_img'], 'l' if big else 'm', root)}" alt="{H(t['title'])}" loading="lazy"><div class="in"><span class="tag">{H(t['badge'])}</span><h2 class="h2" style="font-size:clamp(26px,calc(2.8*var(--vw)),44px)">{H(t['title'])}</h2><p class="body" style="font-size:16px;color:rgba(255,255,255,.9)">{H(ctitle(t))}</p><div style="display:flex;flex-wrap:wrap;gap:8px">{chips}{splates(t)}</div></div></a>'''
 
 def calendar_block(root):
     head_ = '<div class="cal-head"><span></span><span class="months">' + ''.join(f'<span>{m}</span>' for m in MONTHS) + '</span></div>'
@@ -227,11 +234,14 @@ def page_home():
 <section class="sec light" id="why"><div class="wrap"><span class="tag">Почему VOYZ</span><h2 class="h2" style="margin-top:22px;max-width:16ch">Не просто посмотреть. <span class="hl">Почувствовать.</span></h2>
 <p class="body dim" style="max-width:36em;margin-top:22px">Дороги за горизонт, озёра между скал, ночи под звёздным небом. Каждая поездка открывает другой Кыргызстан.</p><div class="why">{whyh}</div></div></section>
 
-<section class="sec light white" id="tours"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Флагман</span><h2 class="h2">{G['title']}</h2></div><p class="body dim">{H(G['summary'])}</p></div>
+<section class="sec light white" id="now"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">По сезону</span><h2 class="h2">Сейчас в сезоне <span class="hl" id="nowm"></span></h2></div><p class="body dim">Эти маршруты можно проехать в ближайшие недели. Остальные ждут своего сезона: весь год в каталоге.</p></div>
+<div class="grid" id="nowgrid">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard rv" hidden', 1) for t in TOURS)}</div><noscript><style>#nowgrid [hidden]{{display:block!important}}</style></noscript></div></section>
+
+<section class="sec light" id="tours"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Флагман</span><h2 class="h2">{G['title']}</h2></div><p class="body dim">{H(G['summary'])}</p></div>
 <a class="feat rv" href="{tour_url(G, R)}"><div class="ph"><img src="{img(G['card_img'], 'l', R)}" alt="Кель-Суу" loading="lazy"><span class="tag">{H(G['badge'])}</span></div>
-<div class="tx"><p class="meta dim">{H(G['kicker'])}</p><h3 class="h2" style="font-size:clamp(24px,calc(2.5*var(--vw)),38px)">{H(G['card_title'])}</h3><p class="body dim" style="font-size:16px">{H(G['summary'])}</p>
+<div class="tx"><p class="meta dim">{H(G['kicker'])}</p><ul class="pts">{''.join(f'<li>{H(x)}</li>' for x in G['points'])}</ul><p class="body dim" style="font-size:16px">{H(G['summary'])}</p>
 <div class="row">{''.join(f'<span class="chip">{H(a)} {H(b)}</span>' for a, b in G['facts'])}</div>
-<p class="body dim" style="font-size:16px">Сезон: {H(G['season'])}. Старт и финиш — Бишкек.</p><span class="btn" style="align-self:flex-start">Подробнее о туре <span class="arrow">→</span></span></div></a></div></section>
+<div class="sline">{splates(G)}<span class="body dim" style="font-size:16px">Старт и финиш — Бишкек.</span></div><span class="btn" style="align-self:flex-start">Подробнее о туре <span class="arrow">→</span></span></div></a></div></section>
 
 <section class="sec" id="reel"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">В движении</span><h2 class="h2">Дорога, <span class="hl">которую хочется проехать</span></h2></div><p class="body dim">Короткие кадры с маршрутов: вода, скалы, серпантины и юрты. Так выглядит поездка до того, как вы в неё отправились.</p></div>{reel_block(R)}</div></section>
 

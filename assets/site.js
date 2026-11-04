@@ -13,6 +13,7 @@
     demo: '<strong>Заявка собрана.</strong> Форма сейчас в демо-режиме: скопируйте текст и отправьте нам.<br><button type="button" class="btn sm dark" data-copy style="margin-top:14px">Скопировать заявку</button>',
     copied: 'Скопировано', manual: 'Выделите текст вручную', fail: 'Не удалось отправить. Попробуйте ещё раз или свяжитесь с нами напрямую.'
   };
+  var MON = EN ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] : ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
   var C = window.VOYZ_CONFIG || {};
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -105,3 +106,13 @@
     });
   });});
 })();
+
+// "in season now": show the tours that run in the current month (first three if none do)
+  (function () {
+    var g = document.getElementById('nowgrid'); if (!g) return;
+    var MON = document.documentElement.lang === 'en' ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] : ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    var m = new Date().getMonth() + 1, cards = Array.prototype.slice.call(g.children).filter(function (c) { return c.classList.contains('tcard'); });
+    var hit = cards.filter(function (c) { return (' ' + c.dataset.months + ' ').indexOf(' ' + m + ' ') > -1; });
+    var lbl = document.getElementById('nowm'); if (lbl) { if (hit.length) lbl.textContent = MON[m - 1]; else lbl.parentNode.removeChild(lbl); }
+    var show = hit.length ? hit : cards.slice(0, 3); show.forEach(function (c) { c.hidden = false; }); g.className += ' n' + Math.min(show.length, 3);
+  })();

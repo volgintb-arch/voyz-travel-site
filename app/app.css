@@ -217,3 +217,12 @@ a{color:inherit;text-decoration:none}
   .lakecard{width:300px;height:380px}.vcard{width:260px;height:360px}
   .body,.row .t b{font-size:18px}
 }
+
+/* season plates */
+.sp{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:99px;font-size:12px;font-weight:700;color:#0B0B0B;line-height:1.2}
+.sp b{font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.sp-winter,.tcard .meta .sp-winter{background:#8FD3FF;color:#0B0B0B;-webkit-backdrop-filter:none;backdrop-filter:none}
+.sp-autumn,.tcard .meta .sp-autumn{background:#FFC93C;color:#0B0B0B;-webkit-backdrop-filter:none;backdrop-filter:none}
+.sp-spring,.tcard .meta .sp-spring{background:#FF9CCB;color:#0B0B0B;-webkit-backdrop-filter:none;backdrop-filter:none}
+.sp-summer,.tcard .meta .sp-summer{background:#FF4B4B;color:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+.tcard .meta .sp{padding:5px 9px;font-size:11px}

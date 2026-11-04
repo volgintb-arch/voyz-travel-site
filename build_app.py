@@ -14,7 +14,7 @@ for t in tours:
     t.setdefault('organization_note', extra['defaults']['organization_note'])
     if t['slug'] != 'grand-expedition': t['faq'] = t['faq'] + extra['defaults']['faq_common']
 keep = ['slug', 'badge', 'title', 'headline', 'card_title', 'summary', 'hero', 'hero_pos', 'card_img', 'season', 'months', 'seasons', 'facts', 'lakes', 'days',
-        'fit_yes', 'fit_no', 'difficulty', 'difficulty_note', 'organization', 'organization_note', 'faq', 'map']
+        'points', 'fit_yes', 'fit_no', 'difficulty', 'difficulty_note', 'organization', 'organization_note', 'faq', 'map']
 data = [{k: t[k] for k in keep if k in t} for t in tours]
 CYR = re.compile('[А-Яа-яЁё]')
 def tr(o):

@@ -48,9 +48,15 @@
     return '<div class="seg" data-seg="' + id + '"><span class="thumb" style="width:calc((100% - 6px)/' + items.length + ');transform:translateX(' + i * 100 + '%)"></span>' + items.map(function (x) { return '<button data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
   }
   function favBtn(slug, cls) { return '<span class="glassbtn fav ' + (cls || '') + (favs.indexOf(slug) > -1 ? ' on' : '') + '" data-fav="' + slug + '" role="button" aria-label="В избранное">' + (favs.indexOf(slug) > -1 ? I.heartf : I.heart) + '</span>'; }
+  var SPN = { spring: 'Весна', summer: 'Лето', autumn: 'Осень', winter: 'Зима' };
+  function plates(t) {
+    var k = t.seasons;
+    return k.length === 1 ? '<span class="sp sp-' + k[0] + '"><b>' + SPN[k[0]] + '</b> ' + esc(t.season) + '</span>'
+      : k.map(function (s) { return '<span class="sp sp-' + s + '"><b>' + SPN[s] + '</b></span>'; }).join('') + '<span>' + esc(t.season) + '</span>';
+  }
   function tcard(t, wide) {
     return '<a class="tcard' + (wide ? ' wide' : '') + '" href="#/tour/' + t.slug + '"><img src="' + img(t.card_img, wide ? 'l' : 'm') + '" alt="" loading="lazy">' + favBtn(t.slug) +
-      '<div class="in"><span class="badge">' + esc(t.badge) + '</span><h3>' + esc(t.title) + '</h3><p>' + esc(t.card_title) + '</p><div class="meta"><span>' + esc(t.facts[0][0]) + ' ' + esc(t.facts[0][1]) + '</span><span>' + esc(t.season) + '</span></div></div></a>';
+      '<div class="in"><span class="badge">' + esc(t.badge) + '</span><h3>' + esc(t.title) + '</h3><p>' + esc(t.points ? t.points.join(' · ') : t.card_title) + '</p><div class="meta"><span>' + esc(t.facts[0][0]) + ' ' + esc(t.facts[0][1]) + '</span>' + plates(t) + '</div></div></a>';
   }
   function toast(msg) { var t = $('.toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(function () { t.classList.remove('on'); }, 2000); }
   function buzz() { try { navigator.vibrate && navigator.vibrate(8); } catch (e) { } }
@@ -119,7 +125,7 @@
     var map = t.map ? '<h2 class="h2">Маршрут</h2><div class="mapcard"><img src="../../assets/map/map-m.webp" alt="Карта маршрута"><div data-overlay></div></div><div class="legend"><span>━ Переезды</span><span>┅ Возвращение</span><span>┅ Верхом и пешком</span></div><p class="small" style="margin:8px 20px 0">Схема показывает порядок маршрута, это не дорожная карта.</p>' : '';
     return '<div class="floating"><span class="glassbtn" data-back role="button" aria-label="Назад">' + I.back + '</span><span style="display:flex;gap:10px"><span class="glassbtn" data-share role="button" aria-label="Поделиться">' + I.share + '</span>' + favBtn(t.slug) + '</span></div>' +
       '<div class="thero"><img src="' + img(t.hero, 'l') + '" alt="" style="object-position:' + t.hero_pos + '">' + hero + '</div>' +
-      '<div class="sheetbody"><div class="metaline" style="margin-bottom:0"><span class="chip lime">' + esc(t.badge) + '</span><span class="chip">' + esc(t.season) + '</span></div><h1 class="tt">' + esc(t.title) + '</h1><p class="lead">' + esc(t.headline) + '.</p>' +
+      '<div class="sheetbody"><div class="metaline" style="margin-bottom:0"><span class="chip lime">' + esc(t.badge) + '</span>' + plates(t) + '</div><h1 class="tt">' + esc(t.title) + '</h1><p class="lead">' + esc(t.headline) + '.</p>' +
       '<div class="statrow" style="margin-top:0">' + t.facts.map(function (f) { return '<div class="stat"><b>' + esc(f[0]) + '</b><span>' + esc(f[1]) + '</span></div>'; }).join('') + '</div>' +
       '<h2 class="h2">Что увидите</h2><div class="hscroll">' + lakes + '</div>' + map +
       '<h2 class="h2">Программа<small>' + t.days.length + ' дней</small></h2>' + days +

@@ -153,3 +153,15 @@ html,body{overflow-x:clip}
 .lang a[aria-current]{background:#fff;color:#000!important;opacity:1}
 .mnav .lang{align-self:flex-start;margin:14px 0}
 .mnav .lang a{font-family:'Mulish';font-size:15px!important;text-transform:none;border:0;padding:8px 16px}
+
+/* v4: season plates, flagship points */
+.sp{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:999px;font-size:var(--t-meta);font-weight:700;color:#0B0B0B;line-height:1.2}
+.sp b{font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.sp-winter{background:#8FD3FF}.sp-autumn{background:#FFC93C}.sp-spring{background:#FF9CCB}.sp-summer{background:#FF4B4B;color:#fff}
+.sline{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.pts{list-style:none;margin:0;padding:0;display:grid;gap:clamp(8px,calc(.9*var(--vw)),14px)}
+.pts li{display:flex;align-items:center;gap:16px;font-family:'Unbounded',var(--font);font-weight:900;text-transform:uppercase;line-height:1.1;font-size:clamp(22px,calc(2.4*var(--vw)),38px);color:#fff}
+.pts li::before{content:"";flex:none;width:.42em;height:.42em;border-radius:50%;background:var(--lime,#D4FF00)}
+#nowgrid .tcard[hidden]{display:none}
+#nowgrid.n1{grid-template-columns:minmax(0,1fr)!important}#nowgrid.n1 .tcard{min-height:clamp(380px,calc(30*var(--vw)),560px)}
+#nowgrid.n2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
