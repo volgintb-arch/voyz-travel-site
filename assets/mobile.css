@@ -1,0 +1,95 @@
+/* Phone and tablet (up to 1024px): the same website, dressed like an app.
+   Bottom tab bar instead of a burger, a compact top bar, a calm mobile type scale, tags and tiles that never clip. */
+.tabbar,.hlang{display:none}
+.nb{white-space:nowrap}
+
+/* ============ navigation: top bar + bottom tab bar ============ */
+@media(max-width:1024px){
+  .nav,.burger,.mnav{display:none!important}
+  .hlang{display:flex;margin-left:auto;align-items:center}
+  .hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .hdr .logo-link img{height:15px;width:auto}
+  .hdr{background:rgba(11,11,11,.55);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%)}
+  .subnav .btn{display:none}
+  body{padding-bottom:calc(98px + env(safe-area-inset-bottom))}
+  .tabbar{display:flex;position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:70;gap:4px;padding:6px;border-radius:30px;max-width:520px;margin-inline:auto;
+    background:rgba(22,22,24,.74);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);box-shadow:0 12px 40px rgba(0,0,0,.4),inset 0 0 0 .5px rgba(255,255,255,.2)}
+  .tb{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:54px;border-radius:24px;color:rgba(255,255,255,.74);text-decoration:none;font-weight:700;font-size:11px;line-height:1;transition:background .25s,color .25s,transform .2s}
+  .tb:active{transform:scale(.94)}
+  .tb.on{background:var(--lime,#D8FC00);color:#000}
+}
+
+/* ============ layout rules shared by phones and tablets ============ */
+@media(max-width:1024px){
+  .tag{white-space:normal;max-width:100%;line-height:1.15}
+  .chip{white-space:normal}
+  .faqwrap{grid-template-columns:minmax(0,1fr)}
+  .facts{grid-template-columns:1fr 1fr}.facts>div{padding:18px}
+  .diff{grid-template-columns:1fr 1fr}.diff .h3{font-size:16px}
+  .hrow .tcard{flex:0 0 clamp(290px,42vw,380px);min-height:440px}
+  .hrow .tcard .h2{font-size:clamp(20px,3vw,24px)!important}
+  .hrow .tcard .in{padding:22px}
+  .lake .in{max-width:100%}
+  .tcard:after{background:linear-gradient(0deg,rgba(0,0,0,.93) 0%,rgba(0,0,0,.74) 46%,rgba(0,0,0,.22) 80%,rgba(0,0,0,0) 100%)}
+  @keyframes hswipe2{0%,100%{transform:translateX(3px) rotate(6deg)}50%{transform:translateX(-3px) rotate(-6deg)}}
+  .hhand svg{animation-name:hswipe2;flex:none}
+  .hhand{top:auto;bottom:22px;right:14px;flex-direction:row;gap:8px;padding:9px 13px;border-radius:18px}.hhand svg{width:22px;height:22px}
+  /* places mosaic: two columns */
+  .places{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:clamp(170px,30vw,300px);gap:10px}
+  .places .pl-a,.places .pl-w{grid-column:span 2}.places .pl-a{grid-row:auto}.places .pl-t{grid-row:span 2}
+  .places .lake .in{padding:14px;gap:8px;max-width:100%}
+  .places .lake .tag{font-size:11px;padding:6px 11px}
+  .places .lake .h2,.places .pl-a .h2{font-size:clamp(15px,3vw,22px)!important;line-height:1.1}
+  .bento{grid-template-columns:1fr;grid-template-rows:none}.b1,.b2{grid-row:auto;grid-column:auto;min-height:340px}.b3,.b4{min-height:300px}
+  .orgx{grid-template-columns:1fr}.orgph{min-height:280px}
+  .stories{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:6px 2px 10px}.stories::-webkit-scrollbar{display:none}
+  .story{flex:0 0 clamp(130px,26vw,200px);scroll-snap-align:start}
+}
+
+/* ============ tablet type (701–1024) ============ */
+@media(min-width:701px) and (max-width:1024px){
+  :root{--t-h1:clamp(40px,6.2vw,60px);--t-h2:clamp(26px,4vw,38px);--t-h3:clamp(16px,2.2vw,20px);--t-body:17px;--t-meta:13.5px}
+  .h2.long{font-size:clamp(20px,4vw,32px)}
+  .tcard .h2{font-size:clamp(24px,4vw,34px)!important}
+}
+
+/* ============ phone type and spacing (up to 700) ============ */
+@media(max-width:700px){
+  :root{--pad:18px;--r:24px;--t-h1:clamp(29px,8.4vw,40px);--t-h2:clamp(21px,6vw,30px);--t-h3:clamp(15px,4.2vw,18px);--t-body:16px;--t-meta:13px}
+  .lead{font-size:17px;line-height:1.5}
+  .h1,.h2{overflow-wrap:break-word;hyphens:manual}
+  .h2.long{font-size:clamp(15px,4.5vw,20px)}
+  .tag{padding:8px 14px;font-size:12px}
+  .chip{padding:8px 13px;font-size:12.5px}
+  .btn{font-size:14px}
+  .sec{padding:clamp(44px,12vw,64px) 0}
+  #tgrid .tcard .h2{font-size:clamp(19px,5.6vw,26px)!important}
+  .tcard{min-height:430px}.tcard .in{padding:22px}.tcard .h2{font-size:clamp(20px,5.8vw,26px)!important}.tcard .body{font-size:15px}
+  .feat .tx{padding:22px}.pts li{font-size:clamp(19px,5.6vw,26px)}
+  .hrow .tcard{flex:0 0 min(84vw,340px)}
+  .hrow .tcard .h2{font-size:clamp(20px,5.6vw,23px)!important}
+  .diff{grid-template-columns:1fr}.diff .card{padding:20px}.facts{grid-template-columns:1fr 1fr}.diff .h3,.fit .h3{font-size:15px}
+  .org .card,.oc{padding:20px}.oc .h3{font-size:16px}
+  .orgph{min-height:260px}
+  .steps{gap:12px}
+  .bento{gap:12px}.bx{border-radius:24px}.bx .big{font-size:clamp(54px,18vw,84px)}.bx .h3{font-size:clamp(16px,4.6vw,20px)}.bx p{font-size:14.5px}
+  .places{grid-auto-rows:clamp(170px,46vw,230px)}
+  .places .lake .in{padding:12px}
+  .places .lake .tag{font-size:10.5px;padding:6px 10px}
+  .places .lake .h2,.places .pl-a .h2{font-size:clamp(14px,4.2vw,19px)!important}
+  .stories{gap:10px}.story{flex:0 0 clamp(128px,36vw,170px)}.sname{font-size:12px}
+  .faq summary{font-size:15px;padding:20px 0;gap:14px}
+  .facts .num{font-size:clamp(26px,8vw,36px)}
+  .moments li{font-size:12.5px;padding:8px 13px}
+  .cap{font-size:12px!important;padding:7px 13px!important}
+  .stay b{min-width:84px}
+  .ftr .cols{gap:28px}
+  .ctaband .h2{font-size:clamp(21px,6.2vw,30px)}
+  .req .h2{font-size:clamp(21px,6vw,28px)}
+}
+@media(max-width:380px){
+  :root{--t-h1:28px;--t-h2:21px}
+  .tcard .h2,.hrow .tcard .h2{font-size:clamp(18px,5.4vw,21px)!important}
+  .places .lake .h2{font-size:13px!important}
+}
+@media(max-width:700px){.places .lake .tag{padding:5px 8px;letter-spacing:-.01em}.places .lake .in{padding:10px}}

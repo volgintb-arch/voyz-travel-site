@@ -75,7 +75,7 @@ def head(title, desc, root, extra_ld=None, keywords=''):
 <link rel="apple-touch-icon" href="{root}assets/icons/apple-touch-icon.png"><link rel="manifest" href="{root}site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/site.css?v={VER}"><link rel="stylesheet" href="{root}assets/v2.css?v={VER}">
+<link rel="stylesheet" href="{root}assets/site.css?v={VER}"><link rel="stylesheet" href="{root}assets/v2.css?v={VER}"><link rel="stylesheet" href="{root}assets/mobile.css?v={VER}">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script></head><body>'''
 
 def lang_switch(root):
@@ -91,8 +91,7 @@ def header(root, cur=''):
     sw = lang_switch(root)
     return f'''<header class="hdr"><div class="wrap"><a class="logo-link" href="{root}{PFX}index.html" aria-label="VOYZ Travel"><img src="{root}assets/logo.svg" alt="VOYZ" width="118" height="16"></a>
 <nav class="nav" aria-label="Основное">{links}{sw}<a class="btn sm" href="#request" data-open-form="header">Подобрать тур</a></nav>
-<button class="burger" data-menu aria-label="Меню"><span></span></button></div></header>
-<div class="mnav" role="dialog" aria-label="Меню"><button class="x" data-menu aria-label="Закрыть">×</button>{links}{sw}<a href="#request" data-open-form="menu" style="color:var(--lime)">Оставить заявку</a></div>'''
+<div class="hlang">{sw}</div></div></header>'''
 
 def form(tour_name='', idp='f', source='page', root=''):
     months = ''.join(f'<option>{m}</option>' for m in ['Весна', 'Лето', 'Осень', 'Зима', 'Пока не знаю'])
@@ -113,7 +112,22 @@ def modal(root, tour=''):
 <p class="tag" style="margin-bottom:18px">Заявка</p><h2 class="h2" style="font-size:clamp(26px,calc(3.4*var(--vw)),40px);margin-bottom:12px">Расскажем всё <span class="hl">и посчитаем</span></h2>
 <p class="body dim" style="margin-bottom:24px">Оставьте контакты — вернёмся с программой и расчётом под вашу группу и даты.</p>{form(tour, 'm', 'modal', root)}</div></div>'''
 
-def mbar(label='Оставить заявку'): return f'<div class="mbar"><a class="btn" href="#request" data-open-form="mobile-bar">{label}</a></div>'
+TAB_ICONS = {
+    'home': '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    'tours': '<circle cx="12" cy="12" r="9"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/>',
+    'seasons': '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/>',
+    'request': '<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>',
+}
+def tabbar(root):
+    p = CUR['path']
+    cur = 'home' if p == '' else ('tours' if p.startswith('tours/') else '')
+    base = root + PFX
+    items = [('home', 'Главная', base + 'index.html', ''), ('tours', 'Туры', base + 'tours/', ''), ('seasons', 'Сезоны', ('#year' if p == '' else base + 'index.html#year'), ''), ('request', 'Заявка', '#request', ' data-open-form="tabbar"')]
+    html = ''.join(f'<a class="tb{" on" if k == cur else ""}" href="{h}"{extra}{" aria-current=page" if k == cur else ""}><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{TAB_ICONS[k]}</svg><span>{n}</span></a>' for k, n, h, extra in items)
+    return f'<nav class="tabbar" aria-label="Навигация">{html}</nav>'
+
+def mbar(label='Оставить заявку'): return ''
+def _old_mbar(label='Оставить заявку'): return f'<div class="mbar"><a class="btn" href="#request" data-open-form="mobile-bar">{label}</a></div>'
 
 def footer(root, modal_html='', mbar_html=''):
     links = ''.join(f'<li><a href="{tour_url(t, root)}">{H(t["title"])}</a></li>' for t in TOURS)
@@ -125,7 +139,7 @@ def footer(root, modal_html='', mbar_html=''):
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
 <div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}{PFX}privacy/">Политика конфиденциальности</a></span></div></div></footer>
-{modal_html}{mbar_html}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/jeep.js?v={VER}"></script><script src="{root}assets/stories.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
+{modal_html}{tabbar(root)}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/jeep.js?v={VER}"></script><script src="{root}assets/stories.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
 
 # ---------------- blocks ----------------
 def facts_bar(t): return '<div class="facts rv">' + ''.join(f'<div><div class="num">{H(a)}</div><p class="meta">{H(b)}</p></div>' for a, b in t['facts']) + '</div>'
@@ -163,7 +177,7 @@ def faq_ld(items):
     return {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in items]}
 
 def faq_block(items):
-    return '<div class="faq">' + ''.join(f'<details><summary>{H(q)}</summary><p>{H(a)}</p></details>' for q, a in items) + '</div>'
+    return '<div class="faq">' + ''.join(f'<details><summary><span class="q">{H(q)}</span></summary><p>{H(a)}</p></details>' for q, a in items) + '</div>'
 
 def ctaband(root=''):
     return f'''<section class="sec ctaband" style="background-image:url({root}assets/img/song_sunset-l.webp)"><div class="wrap"><h2 class="h2">Выберите сезон. <span class="hl">Остальное мы подскажем.</span></h2><a class="btn" href="#request" data-open-form="cta-band">Подобрать тур <span class="arrow">→</span></a></div></section>'''
@@ -196,7 +210,7 @@ PLACES = [
     ('alakul', 'Ала-Куль', '≈ 3500 м', 'a', ['alakul', 'alakul2', 'ala_trail']),
     ('kel_v', 'Кель-Суу', 'пограничная зона', 't', ['kel_v', 'kel_lake', 'kel_arch']),
     ('song_sunset', 'Сон-Куль', 'юрты и жайлоо', 'w', ['song_sunset', 'songkul', 'song_riders', 'song_rider']),
-    ('issyk', 'Иссык-Куль', 'озеро Тянь-Шаня', 's', ['issyk', 'issyk_n']),
+    ('issyk', 'Иссык-Куль', 'Тянь-Шань', 's', ['issyk', 'issyk_n']),
     ('tash', 'Таш-Рабат', 'караван-сарай', 's', ['tash', 'tash2', 'tash_valley']),
     ('chatyr', 'Чатыр-Куль', 'высокогорное озеро', 's', ['chatyr']),
     ('sary', 'Сары-Челек', 'биосферный заповедник', 's', ['sary', 'sary_aram', 'sary_may', 'sary_res']),
@@ -375,7 +389,7 @@ def page_tour(t):
 def page_privacy():
     R = rootfor(1)
     bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Политика конфиденциальности'), page_url(LANG, 'privacy/'))])
-    return head('Политика конфиденциальности — VOYZ Travel', 'Как мы обрабатываем данные из формы заявки.', R, [bc]) + header(R) + f'''<section class="phead ink"><div class="wrap prose"><h1 class="h2">Политика конфиденциальности</h1>
+    return head('Политика конфиденциальности — VOYZ Travel', 'Как мы обрабатываем данные из формы заявки.', R, [bc]) + header(R) + f'''<section class="phead ink"><div class="wrap prose"><h1 class="h2 long">Политика конфиденциальности</h1>
 <p class="body dim" style="margin-top:18px">Краткая редакция для работы формы заявки. Перед запуском сайта её нужно согласовать с юристом и дополнить реквизитами компании.</p>
 <h2 class="h3">Какие данные мы собираем</h2><p class="body">Имя, контакт для связи (Telegram, WhatsApp, телефон или почта), желаемый сезон поездки, число путешественников и комментарий — только то, что вы сами указали в форме заявки.</p>
 <h2 class="h3">Зачем</h2><p class="body">Чтобы связаться с вами, ответить на вопросы и подготовить программу и расчёт тура.</p>
@@ -445,6 +459,18 @@ def write(path, content):
 
 PAGES = [('', 'home', lambda: page_home()), ('tours/', 'tours', lambda: page_tours()), ('privacy/', 'home', lambda: page_privacy()), ('credits/', 'home', lambda: page_credits())]
 
+_NB_SKIP = {'script', 'style', 'title', 'textarea', 'option', 'noscript', 'svg'}
+def nobreak(doc):
+    out, skip = [], 0
+    for p in re.split(r'(<[^>]+>)', doc):
+        if p.startswith('<'):
+            m = re.match(r'<(/?)([A-Za-z0-9]+)', p)
+            if m and m.group(2).lower() in _NB_SKIP and not p.endswith('/>'): skip += -1 if m.group(1) else 1
+            out.append(p)
+        elif skip > 0 or '-' not in p: out.append(p)
+        else: out.append(re.sub(r'(?<![\w-])([^\W_]+(?:-[^\W_]+)+)(?![\w-])', r'<span class="nb">\1</span>', p))
+    return ''.join(out)
+
 def build(lang):
     global LANG, PFX
     LANG, PFX = lang, ('en/' if lang == 'en' else '')
@@ -454,6 +480,7 @@ def build(lang):
         CUR.update(path=path, og=og)
         doc = fn()
         if lang == 'en': doc = translate(doc)
+        doc = nobreak(doc)
         write(PFX + path + 'index.html', doc); out.append(path)
     return out
 

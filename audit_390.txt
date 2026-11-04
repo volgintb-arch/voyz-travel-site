@@ -1,0 +1,39 @@
+ 390 /                                  
+        - over (7): img -15..405 || img -4..395 || div.in 202..419 || span.tag 230..391 || div.in 202..436 || span.tag 230..408 || h3.h2 230..408
+        - clip (22): img in section.hero 15px |  || span.tag in a.tcard 61px | Флагманская экспедиция || img in div.lake.pl 25px |  || img in div.lake.pl 12px |  || div.in in div.lake.pl 53px | пограничная зонаКель-Суу || span.tag in div.lake.pl 25px | пограничная зона || div.in in div.lake.pl 12px | караван-сарайТаш-Рабат || div.in in div.lake.pl 66px | высокогорное озероЧатыр-Куль
+        - broken (8): p.body.dim "Кок-Мойнок" 16px || h2.h2 "Сары-Челек" 24px || h2.h2 "Иссык-Куле" 24px || h2.h2 "Иссык-Куль" 24px || span.tag "Тянь-Шаня" 13px || h3.h2 "Иссык-Куль" 18px || span.tag "караван-сарай" 13px || h3.h2 "Таш-Рабат" 18px
+ 390 /tours/                            
+        - broken (1): h2.h2 "внедорожниках" 24px
+ 390 /tours/grand-expedition/           
+        - over (2): img -22..412 || img -4..395
+        - clip (3): img in section.hero 22px |  || img in div.lake.rv 25px |  || img in div.main 25px | 
+        - broken (4): span "Иссык-Куля" 17px || span "Иссык-Куля," 17px || p.meta.dim "Ала-Куль," 13px || p.meta.dim "Джети-Огуз," 13px
+        - wide (4): p.h3 "Переезды" 17px right=168 || p.h3 "Физическая" 17px right=388 || p.h3 "нагрузка" 17px right=347 || p.h3 "Комфорт" 17px right=347
+ 390 /tours/sary-chelek/                
+        - over (2): img -18..408 || img -4..395
+        - clip (3): img in section.hero 18px |  || img in div.lake.rv 25px |  || img in div.main 25px | 
+        - broken (2): p.body.dim "Сары-Челек" 17px || p.body "Джалал-Абад." 17px
+        - wide (4): p.h3 "Переезды" 17px right=168 || p.h3 "Физическая" 17px right=388 || p.h3 "нагрузка" 17px right=347 || p.h3 "Комфорт" 17px right=347
+ 390 /tours/zima-issyk-kul/             
+        - over (2): img -17..407 || img -4..395
+        - clip (3): img in section.hero 17px |  || img in div.lake.rv 25px |  || img in div.main 25px | 
+        - broken (1): span "Иссык-Куля" 17px
+        - wide (4): p.h3 "Переезды" 17px right=168 || p.h3 "Физическая" 17px right=388 || p.h3 "нагрузка" 17px right=347 || p.h3 "Комфорт" 17px right=347
+ 390 /tours/krysha-mira/                
+        - over (2): img -19..409 || img -4..395
+        - clip (3): img in section.hero 19px |  || img in div.lake.rv 25px |  || img in div.main 25px | 
+        - wide (4): p.h3 "Переезды" 17px right=168 || p.h3 "Физическая" 17px right=388 || p.h3 "нагрузка" 17px right=347 || p.h3 "Комфорт" 17px right=347
+ 390 /privacy/                          
+        - broken (1): h1.h2 "конфиденциальности" 28px
+ 390 /credits/                          
+        - broken (1): p.body "BY-SA" 16px
+ 390 /en/                               
+        - over (5): img -13..403 || img -4..395 || div.in 202..424 || span.tag 230..396 || div.in 202..395
+        - clip (14): img in section.hero 13px |  || img in div.lake.pl 25px |  || img in div.lake.pl 12px |  || div.in in div.lake.pl 54px | caravanseraiTash-Rabat || span.tag in div.lake.pl 26px | caravanserai || h3.h2 in div.lake.pl 8px | Tash-Rabat || div.in in div.lake.pl 4px | high-altitude lakeChatyr-Kul || div.in in div.lake.pl 18px | biosphere reserveSary-Chelek
+        - broken (10): p "Song-Kul" 14px || p.body.dim "Kok-Moynok" 16px || p.body "high-altitude" 16px || h2.h2 "Sary-Chelek" 24px || p.body.dim "high-altitude" 17px || h3.h2 "Issyk-Kul" 18px || span.tag "high-altitude" 13px || h3.h2 "Chatyr-Kul" 18px
+ 390 /en/tours/grand-expedition/        
+        - over (2): img -21..411 || img -4..395
+        - clip (3): img in section.hero 21px |  || img in div.lake.rv 25px |  || img in div.main 25px | 
+        - broken (2): p.body "Altyn-Arashan" 17px || summary "Kel-Suu?" 17px
+
+PAGES WITH ISSUES: 27
