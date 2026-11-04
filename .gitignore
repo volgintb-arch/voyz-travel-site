@@ -1,0 +1,6 @@
+shots/
+shot.py
+over.py
+flow.py
+__pycache__/
+*.pyc
