@@ -12,3 +12,4 @@ t[0-9].py
 app_frags.py
 t[0-9].py
 patch*.py
+t[0-9][0-9].py
