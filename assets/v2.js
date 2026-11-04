@@ -37,7 +37,7 @@
     var vo = new IntersectionObserver(function (es) {
       es.forEach(function (e) { var v = e.target; if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(function () {}); } else v.pause(); });
     }, { threshold: .25 });
-    $$('.vcard video').forEach(function (v) { vo.observe(v); });
+    $$('.vcard video,.story video').forEach(function (v) { vo.observe(v); });
   }
 
   // count-up for plain numbers in hero facts

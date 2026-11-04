@@ -125,7 +125,7 @@ def footer(root, modal_html='', mbar_html=''):
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
 <div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}{PFX}privacy/">Политика конфиденциальности</a></span></div></div></footer>
-{modal_html}{mbar_html}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/jeep.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
+{modal_html}{mbar_html}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/jeep.js?v={VER}"></script><script src="{root}assets/stories.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
 
 # ---------------- blocks ----------------
 def facts_bar(t): return '<div class="facts rv">' + ''.join(f'<div><div class="num">{H(a)}</div><p class="meta">{H(b)}</p></div>' for a, b in t['facts']) + '</div>'
@@ -192,10 +192,25 @@ def yplate(root):
     cells = ''.join(f'<a class="yp yp-{k}" href="{root}{PFX}tours/"><b>{n}</b><span>{d}</span></a>' for k, n, d in SEAS_TXT)
     return f'<section class="yplate" aria-label="Сезоны"><div class="ylab"><span>Туры на весь год</span></div><div class="yrow">{cells}</div></section>'
 
-DEST = [('alakul', 'Ала-Куль'), ('kel_v', 'Кель-Суу'), ('song_sunset', 'Сон-Куль'), ('issyk', 'Иссык-Куль'), ('tash', 'Таш-Рабат'), ('alai', 'Алай'), ('sary', 'Сары-Челек'), ('jeti_horses', 'Джети-Огуз')]
-def dest_strip(root):
-    chips = ''.join(f'<a class="dc" href="{root}{PFX}tours/"><img src="{img(k, "m", root)}" alt="" loading="lazy" width="56" height="56"><span>{n}</span></a>' for k, n in DEST)
-    return f'<section class="dstrip" aria-label="Направления"><div class="wrap dwrap"><span class="dlab">Куда едем</span><div class="drow">{chips}</div></div></section>'
+PLACES = [
+    ('alakul', 'Ала-Куль', '≈ 3500 м', 'a', ['alakul', 'alakul2', 'ala_trail']),
+    ('kel_v', 'Кель-Суу', 'пограничная зона', 't', ['kel_v', 'kel_lake', 'kel_arch']),
+    ('song_sunset', 'Сон-Куль', 'юрты и жайлоо', 'w', ['song_sunset', 'songkul', 'song_riders', 'song_rider']),
+    ('issyk', 'Иссык-Куль', 'озеро Тянь-Шаня', 's', ['issyk', 'issyk_n']),
+    ('tash', 'Таш-Рабат', 'караван-сарай', 's', ['tash', 'tash2', 'tash_valley']),
+    ('chatyr', 'Чатыр-Куль', 'высокогорное озеро', 's', ['chatyr']),
+    ('sary', 'Сары-Челек', 'биосферный заповедник', 's', ['sary', 'sary_aram', 'sary_may', 'sary_res']),
+    ('jeti_horses', 'Джети-Огуз', 'красные скалы', 'w', ['jeti_horses', 'jeti']),
+    ('lenin', 'Пик Ленина', '7134 м', 's', ['lenin', 'lenin_lakes']),
+    ('alai', 'Алайская долина', 'высокогорная долина', 's', ['alai', 'alay_nura', 'alay_red']),
+    ('arslanbob', 'Арсланбоб', 'ореховые леса', 's', ['arslanbob']),
+    ('bars_fall', 'Барскоон', 'водопад со льдом', 's', ['bars_fall', 'bars']),
+    ('serp', 'Перевал 33 попугая', 'серпантин', 's', ['serp']),
+    ('skazka', 'Каньон Сказка', 'красные скалы', 's', ['skazka']),
+]
+def gal(p, root):
+    k, n, a, c, imgs = p
+    return f'data-gal="{"|".join(img(x, "l", root) for x in imgs)}" data-name="{H(n)}" data-tag="{H(a)}"'
 
 def why_block(why, root):
     (_, t1, p1), (_, t2, p2), (_, t3, p3), (_, t4, p4) = why
@@ -204,18 +219,16 @@ def why_block(why, root):
     return f'''<div class="bento">
 <div class="bx b1 rv"><img src="{img('altyn_yurts', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">4–8</div><span class="lab">человек в группе</span><h3 class="h3">{t1}</h3><p>{p1}</p></div></div>
 <div class="bx b2 rv"><img src="{img('serp', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">2</div><h3 class="h3">{t2}</h3><p>{p2}</p></div></div>
-<div class="bx b3 rv"><div class="in"><div class="big">12</div><h3 class="h3">{t3}</h3><p>{p3}</p><div class="sps">{seasons}</div></div></div>
-<div class="bx b4 rv"><div class="in"><h3 class="h3">{t4}</h3><p>{p4}</p><div class="wcs">{chips}</div></div></div></div>'''
+<div class="bx b3 rv"><div class="collage"><img src="{img('tulip', 'm', root)}" alt="" loading="lazy"><img src="{img('alakul2', 'm', root)}" alt="" loading="lazy"><img src="{img('songkul', 'm', root)}" alt="" loading="lazy"><img src="{img('bars_fall', 'm', root)}" alt="" loading="lazy"></div><div class="in"><div class="big">12</div><h3 class="h3">{t3}</h3><p>{p3}</p><div class="sps">{seasons}</div></div></div>
+<div class="bx b4 rv"><img src="{img('ala_trail', 'l', root)}" alt="" loading="lazy"><div class="in"><h3 class="h3">{t4}</h3><p>{p4}</p><div class="wcs">{chips}</div></div></div></div>'''
 
-PLACES = [('alakul', 'Ала-Куль', '≈ 3500 м', 'a'), ('kel_v', 'Кель-Суу', 'пограничная зона', 't'), ('song_sunset', 'Сон-Куль', 'юрты и жайлоо', 'w'), ('tash', 'Таш-Рабат', 'караван-сарай', 's'),
-          ('chatyr', 'Чатыр-Куль', 'высокогорное озеро', 's'), ('sary', 'Сары-Челек', 'биосферный заповедник', 't'), ('jeti_horses', 'Джети-Огуз', 'красные скалы', 'w'), ('lenin', 'Пик Ленина', '7134 м', 's'),
-          ('alai', 'Алайская долина', 'высокогорная долина', 's'), ('arslanbob', 'Арсланбоб', 'ореховые леса', 's'), ('bars_fall', 'Барскоон', 'водопад со льдом', 's'), ('serp', 'Перевал 33 попугая', 'серпантин', 's'), ('skazka', 'Каньон Сказка', 'красные скалы', 's')]
 def places_block(root):
-    return '<div class="places">' + ''.join(f'''<div class="lake pl pl-{c} rv"><img src="{img(k, 'm', root)}" alt="{H(n)}" loading="lazy"><div class="in"><span class="tag">{H(a)}</span><h3 class="h2">{H(n)}</h3></div></div>''' for k, n, a, c in PLACES) + '</div>'
+    return '<div class="places">' + ''.join(f'''<div class="lake pl pl-{p[3]} rv" role="button" tabindex="0" {gal(p, root)}><img src="{img(p[0], 'm', root)}" alt="{H(p[1])}" loading="lazy"><div class="in"><span class="tag">{H(p[2])}</span><h3 class="h2">{H(p[1])}</h3></div></div>''' for p in PLACES) + '</div>'
 
 def reel_block(root):
     clips = [('issyk', 'Иссык-Куль'), ('bars', 'Водопады Барскоона'), ('aksai', 'Каньоны Ак-Сай'), ('serp', 'Серпантин «33 попугая»'), ('song', 'Юрты Сон-Куля'), ('jeti', 'Джети-Огуз')]
-    return '<div class="reel">' + ''.join(f'<figure class="vcard rv"><video muted loop playsinline preload="none" poster="{root}assets/video/{k}.jpg"><source src="{root}assets/video/{k}.mp4" type="video/mp4"></video><figcaption class="cap">{n}</figcaption></figure>' for k, n in clips) + '</div>'
+    cards = ''.join(f'''<div class="story rv" role="button" tabindex="0" data-story data-video="{root}assets/video/{k}.mp4" data-poster="{root}assets/video/{k}.jpg" data-name="{n}"><span class="ring"><video muted loop playsinline preload="none" poster="{root}assets/video/{k}.jpg"><source src="{root}assets/video/{k}.mp4" type="video/mp4"></video><span class="vplay" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span></span><span class="sname">{n}</span></div>''' for k, n in clips)
+    return f'<div class="stories">{cards}</div>'
 
 SPN = dict(SEASONS)
 def splates(t):
@@ -256,7 +269,6 @@ def page_home():
 <p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню и Памиро-Алаю: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа, продуманный маршрут, поездки в любое время года.</p>
 <div class="cta"><a class="btn" href="tours/">Смотреть все туры <span class="arrow">→</span></a><a class="btn ghost" href="#request" data-open-form="hero">Подобрать тур</a></div>
 <div class="facts rv"><div><div class="num">{len(TOURS)}</div><p class="meta">маршрутов</p></div><div><div class="num">12</div><p class="meta">месяцев в году</p></div><div><div class="num">2</div><p class="meta">внедорожника</p></div><div><div class="num">4–8</div><p class="meta">человек в группе</p></div></div></div></section>
-{dest_strip(R)}
 <section class="sec light" id="why"><div class="wrap"><span class="tag">Почему VOYZ</span><h2 class="h2" style="margin-top:22px;max-width:16ch">Не просто посмотреть. <span class="hl">Почувствовать.</span></h2>
 <p class="body dim" style="max-width:36em;margin-top:22px">Дороги за горизонт, озёра между скал, ночи под звёздным небом. Каждая поездка открывает другой Кыргызстан.</p>{why_block(why, R)}</div></section>
 

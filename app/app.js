@@ -48,6 +48,7 @@
     return '<div class="seg" data-seg="' + id + '"><span class="thumb" style="width:calc((100% - 6px)/' + items.length + ');transform:translateX(' + i * 100 + '%)"></span>' + items.map(function (x) { return '<button data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
   }
   function favBtn(slug, cls) { return '<span class="glassbtn fav ' + (cls || '') + (favs.indexOf(slug) > -1 ? ' on' : '') + '" data-fav="' + slug + '" role="button" aria-label="В избранное">' + (favs.indexOf(slug) > -1 ? I.heartf : I.heart) + '</span>'; }
+  function langPill(cls) { return '<a class="langpill ' + (cls || '') + '" data-lang-switch href="#" aria-label="Language"><b' + (EN ? '' : ' class="on"') + '>RU</b><b' + (EN ? ' class="on"' : '') + '>EN</b></a>'; }
   var SPN = { spring: 'Весна', summer: 'Лето', autumn: 'Осень', winter: 'Зима' };
   function plates(t) {
     var k = t.seasons;
@@ -68,8 +69,8 @@
   function viewHome() {
     var m = nowMonth(), now = inSeason(m), g = T[0];
     var lakes = g.lakes.map(function (l) { return '<div class="tcard lakecard"><img src="' + img(l.img, 'm') + '" alt="" loading="lazy" style="object-position:' + l.pos + '"><div class="in"><span class="badge">' + esc(l.alt) + '</span><h3>' + esc(l.name) + '</h3></div></div>'; }).join('');
-    var reel = [['issyk', 'Иссык-Куль'], ['bars', 'Барскоон'], ['aksai', 'Ак-Сай'], ['serp', '«33 попугая»'], ['song', 'Сон-Куль'], ['jeti', 'Джети-Огуз']].map(function (v) { return '<div class="vcard"><video muted loop playsinline preload="none" poster="' + V + v[0] + '.jpg"><source src="' + V + v[0] + '.mp4" type="video/mp4"></video><span>' + v[1] + '</span></div>'; }).join('');
-    return '<div class="topline"><img class="logo" src="../assets/logo.svg" alt="VOYZ"><span class="glassbtn" data-sheet="request" role="button" aria-label="Заявка">' + I.send + '</span></div>' +
+    var reel = [['issyk', 'Иссык-Куль'], ['bars', 'Барскоон'], ['aksai', 'Ак-Сай'], ['serp', '«33 попугая»'], ['song', 'Сон-Куль'], ['jeti', 'Джети-Огуз']].map(function (v) { return '<div class="vcard" data-story data-video="' + V + v[0] + '.mp4" data-poster="' + V + v[0] + '.jpg" data-name="' + v[1] + '"><video muted loop playsinline preload="none" poster="' + V + v[0] + '.jpg"><source src="' + V + v[0] + '.mp4" type="video/mp4"></video><span>' + v[1] + '</span></div>'; }).join('');
+    return '<div class="topline"><img class="logo" src="../assets/logo.svg" alt="VOYZ"><span class="toprt">' + langPill() + '<span class="glassbtn" data-sheet="request" role="button" aria-label="Заявка">' + I.send + '</span></span></div>' +
       '<div class="hero"><img src="' + img(g.hero, 'l') + '" alt="" style="object-position:' + g.hero_pos + '"><video muted loop playsinline preload="auto" poster="' + V + 'hero.jpg"><source src="' + V + 'hero.mp4" type="video/mp4"></video>' +
       '<div class="in"><span class="eyebrow">Кыргызстан · на внедорожниках</span><h1>Туда, куда не доезжает <em>автобус</em></h1><p>Небольшие группы, продуманные маршруты и поездки в любое время года.</p><a class="btn" href="#/tour/grand-expedition">Смотреть экспедицию</a></div></div>' +
       '<div class="statrow"><div class="stat"><b>' + T.length + '</b><span>маршрутов</span></div><div class="stat"><b>12</b><span>месяцев</span></div><div class="stat"><b>2</b><span>внедорож.</span></div><div class="stat"><b>4–8</b><span>человек</span></div></div>' +
@@ -84,14 +85,14 @@
   var tourSeason = 'all';
   function viewTours() {
     var list = T.filter(function (t) { return tourSeason === 'all' || t.seasons.indexOf(tourSeason) > -1; });
-    return '<h1 class="largetitle">Туры</h1><p class="sub">Авторские экспедиции на весь год</p>' + seg(SEASONS, tourSeason, 'season') +
+    return langPill('abs') + '<h1 class="largetitle">Туры</h1><p class="sub">Авторские экспедиции на весь год</p>' + seg(SEASONS, tourSeason, 'season') +
       '<div id="tourlist">' + (list.length ? list.map(function (t) { return tcard(t, true); }).join('') : '<p class="sub">В этом сезоне пока нет маршрутов.</p>') + '</div>' +
       '<div class="grouplabel">Не нашли свой?</div><div class="group"><a class="row" data-sheet="request" data-tour="Свой маршрут"><span class="ico">+</span><div class="t"><b>Соберём маршрут под вас</b><span>Другие даты, компания, длительность</span></div>' + I.chev + '</a></div>';
   }
   var selMonth = nowMonth();
   function viewCal() {
     var mon = MONTHS.map(function (n, i) { var m = i + 1, c = inSeason(m).length; return '<button class="mon' + (c ? ' has' : '') + (m === selMonth ? ' sel' : '') + '" data-m="' + m + '">' + n + '<small>' + c + ' ' + (c === 1 ? 'тур' : 'тура') + '</small></button>'; }).join('');
-    return '<h1 class="largetitle">Календарь</h1><p class="sub">Выберите месяц и посмотрите, куда поехать</p><div class="months">' + mon + '</div><div id="calres">' + calRes() + '</div>';
+    return langPill('abs') + '<h1 class="largetitle">Календарь</h1><p class="sub">Выберите месяц и посмотрите, куда поехать</p><div class="months">' + mon + '</div><div id="calres">' + calRes() + '</div>';
   }
   function calRes() {
     var l = inSeason(selMonth);
@@ -99,7 +100,7 @@
   }
   function viewReq() {
     var fl = favs.map(by).filter(Boolean);
-    return '<h1 class="largetitle">Заявка</h1><p class="sub">Вернёмся с программой и расчётом под вашу группу и даты</p>' + formHTML('') +
+    return langPill('abs') + '<h1 class="largetitle">Заявка</h1><p class="sub">Вернёмся с программой и расчётом под вашу группу и даты</p>' + formHTML('') +
       (fl.length ? '<div class="grouplabel">Вам понравилось</div><div class="group">' + fl.map(function (t) { return '<a class="row" href="#/tour/' + t.slug + '"><div class="t"><b>' + esc(t.title) + '</b><span>' + esc(t.season) + '</span></div>' + I.chev + '</a>'; }).join('') + '</div>' : '') +
       '<div class="contacts"></div>';
   }
@@ -263,6 +264,7 @@
   if (EN) {
     new MutationObserver(function (ms) { ms.forEach(function (m) { [].slice.call(m.addedNodes).forEach(function (n) { trTree(n); }); if (m.type === 'characterData') trTree(m.target); }); }).observe(phone, { childList: true, subtree: true, characterData: true });
   }
+  document.addEventListener('click', function (e) { var l = e.target.closest && e.target.closest('[data-lang-switch]'); if (!l) return; e.preventDefault(); location.href = (EN ? '../../app/' : '../en/app/') + location.hash; });
   route(); bindForm(screens);
   if (EN) trTree(phone);
 })();

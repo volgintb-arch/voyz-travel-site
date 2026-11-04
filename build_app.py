@@ -40,7 +40,7 @@ PAGE = '''<!doctype html><html lang="%(lang)s"><head><meta charset="utf-8">
 <meta property="og:title" content="%(title)s"><meta property="og:description" content="%(desc)s"><meta property="og:type" content="website"><meta property="og:image" content="%(site)s/assets/og/home-%(lang)s.jpg">
 <link rel="icon" href="%(up)sfavicon.ico" sizes="48x48"><link rel="icon" href="%(up)sfavicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="%(up)sassets/icons/apple-touch-icon.png"><link rel="manifest" href="%(up)ssite.webmanifest">
 <link rel="stylesheet" href="app.css?v=%(ver)s"></head><body><div class="phone"></div>
-<script>window.VOYZ={tours:%(data)s};window.VOYZ_UI=%(ui)s</script><script src="%(up)sassets/config.js?v=%(ver)s"></script><script src="%(up)sassets/jeep.js?v=%(ver)s"></script><script src="app.js?v=%(ver)s"></script></body></html>'''
+<script>window.VOYZ={tours:%(data)s};window.VOYZ_UI=%(ui)s</script><script src="%(up)sassets/config.js?v=%(ver)s"></script><script src="%(up)sassets/jeep.js?v=%(ver)s"></script><script src="%(up)sassets/stories.js?v=%(ver)s"></script><script src="app.js?v=%(ver)s"></script></body></html>'''
 
 VER = str(int(__import__('time').time()))
 css, js = read('app/app.css'), read('app/app.js')

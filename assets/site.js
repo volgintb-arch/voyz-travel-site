@@ -117,7 +117,7 @@
     var show = hit.length ? hit : cards.slice(0, 3); show.forEach(function (c) { c.hidden = false; }); g.className += ' n' + Math.min(show.length, 3);
   })();
 
-// tour row: arrows, drag with the mouse (grab cursor) and a hand hint that goes away after the first interaction
+// tour row: arrows, mouse drag (grab cursor) and a hand hint that goes away after the first interaction
 (function () {
   var row = document.getElementById('trow'); if (!row) return;
   var wrap = row.parentNode, down = false, sx = 0, sl = 0, moved = 0;
@@ -129,9 +129,68 @@
     });
   });
   row.addEventListener('scroll', function () { if (row.scrollLeft > 20) used(); }, { passive: true });
-  row.addEventListener('mousedown', function (e) { down = true; moved = 0; sx = e.pageX; sl = row.scrollLeft; row.classList.add('drag'); });
-  window.addEventListener('mouseup', function () { if (!down) return; down = false; row.classList.remove('drag'); });
-  window.addEventListener('mousemove', function (e) { if (!down) return; var dx = e.pageX - sx; moved = Math.max(moved, Math.abs(dx)); row.scrollLeft = sl - dx; if (moved > 6) used(); });
-  row.addEventListener('click', function (e) { if (moved > 6) { e.preventDefault(); e.stopPropagation(); moved = 0; } }, true);
+  row.addEventListener('mousedown', function (e) { if (e.button !== 0) return; down = true; moved = 0; sx = e.pageX; sl = row.scrollLeft; });
+  window.addEventListener('mouseup', function () { down = false; row.classList.remove('drag'); });
+  window.addEventListener('mousemove', function (e) {
+    if (!down) return; var dx = e.pageX - sx; moved = Math.max(moved, Math.abs(dx));
+    if (moved > 6) { row.classList.add('drag'); used(); row.scrollLeft = sl - dx; }
+  });
+  // a real click on a card opens it; only a drag is swallowed
+  row.addEventListener('click', function (e) { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } moved = 0; }, true);
   row.addEventListener('dragstart', function (e) { e.preventDefault(); });
+})();
+
+// lightbox: photo slides for a place, or a video
+(function () {
+  var L = EN0() ? { close: 'Close', prev: 'Previous', next: 'Next', of: ' of ' } : { close: 'Закрыть', prev: 'Назад', next: 'Вперёд', of: ' из ' };
+  function EN0() { return document.documentElement.lang === 'en'; }
+  var box = null, st, cap, th, imgs = [], idx = 0, lastFocus = null, startX = 0;
+  function build() {
+    box = document.createElement('div'); box.className = 'lb'; box.hidden = true; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true');
+    box.innerHTML = '<button type="button" class="lb-x" aria-label="' + L.close + '">×</button><button type="button" class="lb-p" aria-label="' + L.prev + '">←</button><button type="button" class="lb-n" aria-label="' + L.next + '">→</button>' +
+      '<div class="lb-stage"></div><div class="lb-cap"><b></b><span></span></div><div class="lb-th"></div>';
+    document.body.appendChild(box); st = box.querySelector('.lb-stage'); cap = box.querySelector('.lb-cap'); th = box.querySelector('.lb-th');
+    box.querySelector('.lb-x').addEventListener('click', close);
+    box.querySelector('.lb-p').addEventListener('click', function () { go(-1); });
+    box.querySelector('.lb-n').addEventListener('click', function () { go(1); });
+    box.addEventListener('click', function (e) { if (e.target === box || e.target === st) close(); });
+    st.addEventListener('pointerdown', function (e) { startX = e.clientX; });
+    st.addEventListener('pointerup', function (e) { var dx = e.clientX - startX; if (imgs.length > 1 && Math.abs(dx) > 50) go(dx < 0 ? 1 : -1); });
+    document.addEventListener('keydown', function (e) {
+      if (box.hidden) return;
+      if (e.key === 'Escape') close(); else if (e.key === 'ArrowLeft') go(-1); else if (e.key === 'ArrowRight') go(1);
+    });
+  }
+  function show() {
+    st.innerHTML = '<img src="' + imgs[idx] + '" alt="">';
+    cap.querySelector('span').textContent = imgs.length > 1 ? (idx + 1) + L.of + imgs.length : '';
+    Array.prototype.forEach.call(th.children, function (b, i) { b.classList.toggle('on', i === idx); });
+    var nx = new Image(); nx.src = imgs[(idx + 1) % imgs.length];
+  }
+  function go(d) { if (imgs.length < 2) return; idx = (idx + d + imgs.length) % imgs.length; show(); }
+  function open(kind) { if (!box) build(); lastFocus = document.activeElement; box.hidden = false; box.className = 'lb ' + kind; document.body.style.overflow = 'hidden'; requestAnimationFrame(function () { box.classList.add('in'); }); box.querySelector('.lb-x').focus(); }
+  function close() {
+    if (!box || box.hidden) return; box.classList.remove('in'); var v = st.querySelector('video'); if (v) v.pause();
+    setTimeout(function () { box.hidden = true; st.innerHTML = ''; document.body.style.overflow = ''; if (lastFocus && lastFocus.focus) lastFocus.focus(); }, 180);
+  }
+  function gallery(el) {
+    imgs = el.getAttribute('data-gal').split('|'); idx = 0; open('is-gal');
+    cap.querySelector('b').textContent = el.getAttribute('data-name') || ''; th.innerHTML = '';
+    imgs.forEach(function (u, i) { var b = document.createElement('button'); b.type = 'button'; b.innerHTML = '<img src="' + u.replace('-l.webp', '-m.webp') + '" alt="">'; b.addEventListener('click', function () { idx = i; show(); }); th.appendChild(b); });
+    th.style.display = imgs.length > 1 ? '' : 'none'; box.querySelector('.lb-p').style.display = box.querySelector('.lb-n').style.display = imgs.length > 1 ? '' : 'none';
+    show();
+  }
+  function video(el) {
+    imgs = []; open('is-vid'); cap.querySelector('b').textContent = el.getAttribute('data-name') || ''; cap.querySelector('span').textContent = ''; th.innerHTML = ''; th.style.display = 'none';
+    box.querySelector('.lb-p').style.display = box.querySelector('.lb-n').style.display = 'none';
+    st.innerHTML = '<video controls autoplay playsinline loop poster="' + (el.getAttribute('data-poster') || '') + '"><source src="' + el.getAttribute('data-video') + '" type="video/mp4"></video>';
+  }
+  function trigger(e) {
+    var g = e.target.closest && e.target.closest('[data-gal]'); if (g) { e.preventDefault(); gallery(g); return; }
+    var v = e.target.closest && e.target.closest('[data-video]'); if (v) { e.preventDefault(); video(v); }
+  }
+  document.addEventListener('click', trigger);
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role=button][data-gal],[role=button][data-video]')) trigger(e);
+  });
 })();

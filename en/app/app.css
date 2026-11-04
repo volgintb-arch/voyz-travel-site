@@ -228,3 +228,14 @@ a{color:inherit;text-decoration:none}
 .tcard .meta .sp{padding:5px 9px;font-size:11px}
 
 h1,h2,h3,.tt{text-wrap:balance}
+
+/* language switch */
+.toprt{display:flex;align-items:center;gap:10px}
+.langpill{display:inline-flex;align-items:center;height:36px;padding:3px;border-radius:99px;background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(190%);backdrop-filter:blur(22px) saturate(190%);box-shadow:inset 0 0 0 .5px var(--glass-b);text-decoration:none}
+.langpill b{min-width:34px;height:30px;display:grid;place-items:center;border-radius:99px;font-size:13px;font-weight:800;color:var(--label2)}
+.langpill b.on{background:var(--label);color:var(--bg)}
+.langpill.abs{position:absolute;top:calc(var(--sat) + 8px);right:20px;z-index:3}
+
+/* stories ring + the title bar must not swallow taps */
+.navbar{pointer-events:none}
+.vcard[data-story]{outline:3px solid var(--lime);outline-offset:2px;cursor:pointer}.vcard[data-story].seen{outline-color:rgba(128,128,128,.45)}
