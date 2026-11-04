@@ -102,3 +102,14 @@ html,body{overflow-x:clip}
   .lakes.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
   .why{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
+
+/* ===== lime is an accent now: short band, no heavy blocks ===== */
+.split{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.white .cal{background:var(--mist)}
+.lime .hl{background:none;color:inherit;padding:0;text-decoration:underline;text-decoration-thickness:.1em;text-underline-offset:.16em;text-decoration-color:#000}
+.ctaband{padding:clamp(40px,5vw,84px) 0!important}
+.ctaband .wrap{display:flex;align-items:center;justify-content:space-between;gap:clamp(20px,3vw,56px);flex-wrap:wrap}
+.ctaband .h2{font-size:clamp(26px,calc(3.2*var(--vw)),52px);max-width:22ch}
+.ctaband .btn{flex:none;min-height:64px;padding:0 40px;font-size:16px}
+@media(max-width:600px){.ctaband .btn{width:100%}}
