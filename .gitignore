@@ -1,7 +1,9 @@
 shots/
 shot*.py
+chk*.py
 over.py
 flow.py
+live*.py
 patch*.py
 __pycache__/
 *.pyc
