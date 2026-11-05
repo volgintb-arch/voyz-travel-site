@@ -93,3 +93,4 @@
   .places .lake .h2{font-size:13px!important}
 }
 @media(max-width:700px){.places .lake .tag{padding:5px 8px;letter-spacing:-.01em}.places .lake .in{padding:10px}}
+@media(max-width:700px){.places .lake .h2,.places .pl-a .h2{font-size:clamp(11.5px,3.45vw,16px)!important}.places .pl-a .h2{font-size:clamp(18px,5.4vw,24px)!important}}
