@@ -201,7 +201,7 @@ def faq_block(items):
     return '<div class="faq">' + ''.join(f'<details><summary><span class="q">{H(q)}</span></summary><p>{H(a)}</p></details>' for q, a in items) + '</div>'
 
 def ctaband(root=''):
-    return f'''<section class="sec ctaband" style="background-image:url({root}assets/img/song_sunset-l.webp)"><div class="wrap"><h2 class="h2">Выберите сезон. <span class="hl">Остальное мы подскажем.</span></h2><a class="btn" href="#request" data-open-form="cta-band">Подобрать тур <span class="arrow">→</span></a></div></section>'''
+    return f'''<section class="sec ctaband" style="background-image:url({root}assets/img/cta-original-sunset.webp);background-size:cover;background-position:50% 85%"><div class="wrap"><h2 class="h2">Выберите сезон. <span class="hl">Остальное мы подскажем.</span></h2><a class="btn" href="#request" data-open-form="cta-band">Подобрать тур <span class="arrow">→</span></a></div></section>'''
 
 def request_block(tour_name, root, idp='r', cls='light white'):
     return ctaband(root) + f'''<section class="sec {cls}" id="request"><div class="wrap req"><div class="side stack" style="--gap:22px"><span class="tag">Заявка</span>
@@ -211,7 +211,10 @@ def request_block(tour_name, root, idp='r', cls='light white'):
 <div class="contact-btns" data-if-contacts><a class="btn ghost sm" data-contact="telegram" data-topic="{H(tour_name)}" hidden>Telegram</a><a class="btn ghost sm" data-contact="whatsapp" data-topic="{H(tour_name)}" hidden>WhatsApp</a><a class="btn ghost sm" data-contact="phone" hidden>Позвонить</a><a class="btn ghost sm" data-contact="email" data-topic="{H(tour_name)}" hidden>Написать</a></div></div>
 <div>{form(tour_name, idp, 'section', root)}</div></div></section>'''
 
-VIDEOS = {'home': 'hero', 'grand-expedition': 'hero', 'put-karavanov': 'song', 'vesna-issyk-kul': 'jeti', 'osen-son-kul': 'serp'}
+VIDEOS = {'home': None, 'grand-expedition': None, 'put-karavanov': 'song', 'vesna-issyk-kul': 'jeti', 'osen-son-kul': 'serp'}
+
+def home_background(root):
+    return f'''<div class="bg photo-motion"><picture><source media="(max-width:700px)" srcset="{root}assets/img/home-valley-mobile.webp"><img src="{root}assets/img/home-valley-2560.webp" srcset="{root}assets/img/home-valley-1920.webp 1920w, {root}assets/img/home-valley-2560.webp 2560w, {root}assets/img/home-valley-3840.webp 3840w" sizes="100vw" width="5712" height="3213" alt="Горная долина и юрты в Кыргызстане" fetchpriority="high" decoding="async"></picture></div>'''
 def hero_bg(img_key, pos, alt, root, vkey=None):
     im = f'<img src="{img(img_key, "l", root)}" alt="{H(alt)}" style="object-position:{pos}" fetchpriority="high">'
     if not vkey: return f'<div class="bg">{im}</div>'
@@ -324,7 +327,7 @@ def page_home():
     others = ''.join(tcard(t, R) for t in TOURS[1:])
     items = {"@type": "ItemList", "name": tt('Туры VOYZ'), "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": page_url(LANG, 'tours/%s/' % t['slug']), "name": t['title']} for i, t in enumerate(TOURS)]}
     body = head('VOYZ Travel — туры на внедорожниках по Кыргызстану', 'Авторская экспедиция по Кыргызстану на внедорожниках: восемь дней, три высокогорных озера (Ала-Куль, Кель-Суу, Сон-Куль), небольшая группа и внедорожники.', R, [items, faq_ld(G['faq'][:6])], kw()) + header(R, 'home') + f'''
-<section class="hero">{hero_bg(G['hero'], G['hero_pos'], 'Озеро Кель-Суу между скал', R, VIDEOS['home'])}
+<section class="hero">{home_background(R)}
 <div class="wrap"><span class="tag">Экспедиции по Кыргызстану</span><h1 class="h1" style="margin-top:22px">Туда, куда не&nbsp;доезжает <span class="hl">автобус</span></h1>
 <p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа и продуманный маршрут.</p>
 <div class="cta"><a class="btn" href="{tour_url(G, R) if not MULTI else 'tours/'}">{'Смотреть все туры' if MULTI else 'Смотреть тур'} <span class="arrow">→</span></a><a class="btn ghost" href="#request" data-open-form="hero">Подобрать тур</a></div>

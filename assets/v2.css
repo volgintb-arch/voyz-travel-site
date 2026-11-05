@@ -295,3 +295,10 @@ html,body{overflow-x:clip}
 @media(max-width:1000px){.orgx{grid-template-columns:1fr}.orgph{min-height:300px}}
 @media(max-width:560px){.orgl{grid-template-columns:1fr}}
 @media(min-width:561px){.req .h2{font-size:clamp(22px,calc(2.2*var(--vw)),40px)}.req .h2 .hl{white-space:nowrap}}
+
+/* Full-resolution still: a subtle camera drift, without video compression. */
+.hero .photo-motion{inset:0}
+.hero .photo-motion picture{display:block;width:100%;height:100%}
+.hero .photo-motion img{object-position:50% 45%;animation:photo-drift 28s ease-in-out infinite alternate}
+@keyframes photo-drift{from{transform:scale(1)}to{transform:scale(1.035) translate3d(-.35%,.2%,0)}}
+@media(prefers-reduced-motion:reduce){.hero .photo-motion img{animation:none;transform:none}}
