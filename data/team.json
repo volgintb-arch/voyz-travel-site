@@ -28,22 +28,44 @@
   ],
   "posts": [
     {
-      "image": "assets/social/yurt.jpg",
-      "title": "Ночёвка в юрте",
-      "url": "https://www.instagram.com/voyz_travel/reel/DfWg45Ctuvf/",
-      "video": "assets/social/yurt.mp4"
+      "image": "assets/social/aerial-canyons.jpg",
+      "title": "Каньоны с высоты",
+      "url": "https://www.instagram.com/voyz_travel/reel/Deeh7wBohms/",
+      "video": "assets/social/aerial-canyons.mp4",
+      "duration": 13.4,
+      "reviewed": true
     },
     {
-      "image": "assets/social/canyon.jpg",
-      "title": "Кыргызстан за пределами асфальта",
-      "url": "https://www.instagram.com/voyz_travel/reel/DfO3Vm4NY_H/",
-      "video": "assets/social/canyon.mp4"
+      "image": "assets/social/mountain-gorge.jpg",
+      "title": "Ущелья и водопады",
+      "url": "https://www.instagram.com/reel/DfEXnodNZy9/",
+      "video": "assets/social/mountain-gorge.mp4",
+      "duration": 10.2,
+      "reviewed": true
     },
     {
-      "image": "assets/social/guests.jpg",
-      "title": "Люди и впечатления",
-      "url": "https://www.instagram.com/voyz_travel/reel/DfE6k_nNfet/",
-      "video": "assets/social/guests.mp4"
+      "image": "assets/social/issyk-kul.jpg",
+      "title": "Прозрачный Иссык-Куль",
+      "url": "https://www.instagram.com/reel/DetlLd9tEb9/",
+      "video": "assets/social/issyk-kul.mp4",
+      "duration": 14.6,
+      "reviewed": true
+    },
+    {
+      "image": "assets/social/horse-river.jpg",
+      "title": "Верхом через горные реки",
+      "url": "https://www.instagram.com/reel/De_HBFLtd0M/",
+      "video": "assets/social/horse-river.mp4",
+      "duration": 11.5,
+      "reviewed": true
+    },
+    {
+      "image": "assets/social/red-rocks.jpg",
+      "title": "Среди красных скал",
+      "url": "https://www.instagram.com/voyz_travel/reel/Deiu981o5P7/",
+      "video": "assets/social/red-rocks.mp4",
+      "duration": 22.8,
+      "reviewed": true
     }
   ]
 }

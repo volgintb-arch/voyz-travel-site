@@ -1,7 +1,10 @@
 """Verify actual local Reel playback, controls, source links, and no forced navigation."""
+import json
 from playwright.sync_api import sync_playwright
 from test_support import site_server,settle,ROOT
 (ROOT/"shots").mkdir(exist_ok=True)
+POSTS=json.loads((ROOT/'data/team.json').read_text(encoding='utf-8'))['posts']
+assert len(POSTS)==5 and len({p['url'] for p in POSTS})==5
 with site_server() as base,sync_playwright() as p:
  b=p.chromium.launch()
  for width in (390,1440):
@@ -13,7 +16,7 @@ with site_server() as base,sync_playwright() as p:
    section=q.locator('#instagram');section.scroll_into_view_if_needed();q.wait_for_timeout(250)
    if not lang:section.screenshot(path=str(ROOT/'shots'/('reels-section-%d.png'%width)),style='.hdr,.tabbar,.progress{visibility:hidden!important}')
    assert q.locator('section').nth(2).get_attribute('id')=='instagram','Reels must replace the upper video block'
-   for i in range(3):
+   for i in range(len(POSTS)):
     before=q.url;button=q.locator('#instagram button[data-video]').nth(i);button.scroll_into_view_if_needed();button.click()
     q.wait_for_function("(()=>{let v=document.querySelector('.lb video');return v&&v.readyState>=2&&v.currentTime>.1&&!v.paused})()",timeout=15000)
     v=q.locator('.lb video');assert v.get_attribute('controls') is not None;assert not v.evaluate('(v)=>v.muted');assert q.url==before
