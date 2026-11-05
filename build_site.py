@@ -159,8 +159,10 @@ def team_block(root):
     return f'''<section class="sec" id="team"><div class="wrap team-layout"><div class="team-intro"><span class="tag">Люди VOYZ</span><h2 class="h2">У путешествия <span class="hl">есть лицо</span></h2><p class="body dim">Познакомьтесь с человеком, который стоит за VOYZ. Больше личных историй, отзывов и кадров с гостями — в нашем Instagram.</p><div class="social-pills">{highlights}</div></div><div class="team-cards">{cards}</div></div></section>'''
 
 def instagram_block(root):
-    posts = ''.join(f'''<a class="social-post" href="{H(p['url'])}" target="_blank" rel="noopener noreferrer"><img src="{root}{H(p['image'])}" alt="{H(p['title'])}" width="360" height="640" loading="lazy"><span class="social-post-label">{H(p['title'])} <span aria-hidden="true">↗</span></span></a>''' for p in PEOPLE['posts'])
-    return f'''<section class="sec" id="instagram"><div class="wrap"><div class="social-heading"><div class="stack"><span class="tag">Наш Instagram</span><h2 class="h2">Ближе <span class="hl">к путешествию</span></h2><p class="body dim">Публикации @voyz_travel: люди, дороги и жизнь между маршрутами.</p></div><a class="btn ghost" href="{H(PEOPLE['instagram'])}" target="_blank" rel="noopener noreferrer">@voyz_travel <span aria-hidden="true">↗</span></a></div><div class="social-posts">{posts}</div></div></section>'''
+    cards = ''.join(f'''<button type="button" class="social-post" data-video="{root}{H(p['video'])}" data-poster="{root}{H(p['image'])}" data-name="{H(p['title'])}" data-instagram="{H(p['url'])}" aria-label="{H(tt('Смотреть видео'))}: {H(tt(p['title']))}"><img src="{root}{H(p['image'])}" alt="{H(p['title'])}" width="360" height="640" loading="lazy"><span class="social-play" aria-hidden="true">▶</span><span class="social-post-label">{H(p['title'])}</span></button>''' for p in PEOPLE['posts'])
+    return f'''<section class="sec" id="instagram"><div class="wrap"><div class="social-heading"><div class="stack"><span class="tag">Reels VOYZ</span><h2 class="h2">Кыргызстан. <span class="hl">Вживую.</span></h2><p class="body dim">Люди, дороги и моменты поездок — в коротких историях VOYZ. Смотрите прямо здесь, а за новыми историями заходите в Instagram.</p></div><a class="btn ghost" href="{H(PEOPLE['instagram'])}" target="_blank" rel="noopener noreferrer">Больше в Instagram <span aria-hidden="true">↗</span></a></div><div class="social-posts">{cards}</div></div></section>'''
+
+
 def facts_bar(t): return '<div class="facts rv">' + ''.join(f'<div><div class="num">{H(a)}</div><p class="meta">{H(b)}</p></div>' for a, b in t['facts']) + '</div>'
 
 def map_block(root):
@@ -268,10 +270,6 @@ def org_block(t, root):
     cards = ''.join(f'''<div class="oc rv"><span class="oi"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ORG_ICONS.get(a, ORG_DEFAULT)}</svg></span><span class="on">{i + 1:02d}</span><h3 class="h3">{H(a)}</h3><p>{H(b)}</p></div>''' for i, (a, b) in enumerate(t['organization']))
     return f'''<div class="orgx"><div class="orgph rv"><img src="{img(t['card_img'], 'l', root)}" alt="" loading="lazy"><span class="tag">{H(t['title'])}</span></div><div class="orgl">{cards}</div></div>'''
 
-def reel_block(root):
-    clips = [('issyk', 'Иссык-Куль'), ('bars', 'Водопады Барскоона'), ('aksai', 'Каньоны Ак-Сай'), ('serp', 'Серпантин «33 попугая»'), ('song', 'Юрты Сон-Куля'), ('jeti', 'Джети-Огуз')]
-    cards = ''.join(f'''<div class="story rv" role="button" tabindex="0" data-story data-video="{root}assets/video/{k}.mp4" data-poster="{root}assets/video/{k}.jpg" data-name="{n}"><span class="ring"><video muted loop playsinline preload="none" poster="{root}assets/video/{k}.jpg"><source src="{root}assets/video/{k}.mp4" type="video/mp4"></video><span class="vplay" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span></span><span class="sname">{n}</span></div>''' for k, n in clips)
-    return f'<div class="stories">{cards}</div>'
 
 SPN = dict(SEASONS)
 def splates(t):
@@ -334,7 +332,7 @@ def page_home():
 <section class="sec light" id="why"><div class="wrap"><span class="tag">Почему VOYZ</span><h2 class="h2" style="margin-top:22px;max-width:16ch">Не просто посмотреть. <span class="hl">Почувствовать.</span></h2>
 <p class="body dim" style="max-width:36em;margin-top:22px">Дороги за горизонт, озёра между скал, ночи под звёздным небом. Каждая поездка открывает другой Кыргызстан.</p>{why_block(why, R)}</div></section>
 
-<section class="sec" id="reel"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">В движении</span><h2 class="h2">Дорога, <span class="hl">которую хочется проехать</span></h2></div><p class="body dim">Короткие кадры с маршрутов: вода, скалы, серпантины и юрты. Так выглядит поездка до того, как вы в неё отправились.</p></div>{reel_block(R)}</div></section>
+{instagram_block(R)}
 
 <section class="sec light white" id="tours"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Флагман</span><h2 class="h2">{G['title']}</h2></div><p class="body dim">{H(G['summary'])}</p></div>
 <a class="feat rv" href="{tour_url(G, R)}"><div class="ph"><img src="{img(G['card_img'], 'l', R)}" alt="Кель-Суу" loading="lazy"><span class="tag">{H(G['badge'])}</span></div>
@@ -353,8 +351,7 @@ def page_home():
 <section class="sec light" id="faq"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Частые <span class="hl">вопросы</span></h2><p class="body dim" style="margin-top:20px">Если не нашли ответ, напишите нам: расскажем честно, подходит ли вам такой формат.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(G['faq'][:6])}</div></div></section>
 
 {team_block(R)}
-{request_block('Подбор тура', R)}
-{instagram_block(R)}'''
+{request_block('Подбор тура', R)}'''
     return body + footer(R, modal(R, 'Подбор тура'), mbar('Подобрать тур'))
 
 def page_tours():
