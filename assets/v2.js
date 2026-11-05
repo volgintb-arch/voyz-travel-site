@@ -79,9 +79,6 @@
     mo.observe(svg);
   });
 
-  // map: two 4x4 vehicles drive along the route
-  $$('.mapbox svg').forEach(function (svg) { if (window.voyzJeep) window.voyzJeep(svg, null, RM); });
-
   // parallax + scroll progress
   var par = $$('.pics .main img,.lake img'), ticking = false;
   function frame() {

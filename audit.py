@@ -3,7 +3,7 @@
 import sys, json
 from playwright.sync_api import sync_playwright
 B = 'http://localhost:8765'
-PAGES = ['/', '/tours/', '/tours/grand-expedition/', '/tours/sary-chelek/', '/tours/zima-issyk-kul/', '/tours/krysha-mira/', '/privacy/', '/credits/', '/en/', '/en/tours/grand-expedition/']
+PAGES = ['/', '/tours/', '/tours/grand-expedition/', '/privacy/', '/credits/', '/en/', '/en/tours/grand-expedition/']
 JS = r'''() => {
   const W = innerWidth, res = {scroll: document.documentElement.scrollWidth, W, over: [], clip: [], broken: [], wide: [], fonts: {}};
   const sel = el => { let s = el.tagName.toLowerCase(); if (el.id) s += '#' + el.id; if (el.className && typeof el.className === 'string') s += '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.'); return s; };

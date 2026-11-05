@@ -28,6 +28,7 @@ for t in TOURS:
     t.setdefault('organization_note', DEF['organization_note'])
     if t['slug'] != 'grand-expedition': t['faq'] = t['faq'] + DEF['faq_common']
 G = TOURS[0]                       # flagship tour (home hero, map)
+MULTI = len(TOURS) > 1             # blocks that compare several tours appear only when there are several
 MONTHS = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
 SEASONS = [('spring', 'Весна'), ('summer', 'Лето'), ('autumn', 'Осень'), ('winter', 'Зима')]
 
@@ -85,7 +86,7 @@ def lang_switch(root):
     return f'<span class="lang" role="group" aria-label="Language"><a href="{ru or "./"}" hreflang="ru" lang="ru"{" aria-current=true" if LANG == "ru" else ""}>RU</a><a href="{en}" hreflang="en" lang="en"{" aria-current=true" if LANG == "en" else ""}>EN</a></span>'
 
 def header(root, cur=''):
-    nav = [('tours/', 'Туры'), ('#year', 'Туры на весь год'), ('#faq', 'Вопросы')]
+    nav = [('tours/', 'Туры')] + ([('#year', 'Туры на весь год')] if MULTI else []) + [('#faq', 'Вопросы')]
     def href(h): return root + PFX + h if h == 'tours/' else (h if cur == 'home' else root + PFX + 'index.html' + h)
     links = ''.join(f'<a href="{href(h)}"{" aria-current=page" if (cur == "tours" and h == "tours/") else ""}>{t}</a>' for h, t in nav)
     sw = lang_switch(root)
@@ -122,7 +123,7 @@ def tabbar(root):
     p = CUR['path']
     cur = 'home' if p == '' else ('tours' if p.startswith('tours/') else '')
     base = root + PFX
-    items = [('home', 'Главная', base + 'index.html', ''), ('tours', 'Туры', base + 'tours/', ''), ('seasons', 'Сезоны', ('#year' if p == '' else base + 'index.html#year'), ''), ('request', 'Заявка', '#request', ' data-open-form="tabbar"')]
+    items = [('home', 'Главная', base + 'index.html', ''), ('tours', 'Туры' if MULTI else 'Тур', base + ('tours/' if MULTI else 'tours/%s/' % G['slug']), '')] + ([('seasons', 'Сезоны', ('#year' if p == '' else base + 'index.html#year'), '')] if MULTI else []) + [('request', 'Заявка', '#request', ' data-open-form="tabbar"')]
     html = ''.join(f'<a class="tb{" on" if k == cur else ""}" href="{h}"{extra}{" aria-current=page" if k == cur else ""}><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{TAB_ICONS[k]}</svg><span>{n}</span></a>' for k, n, h, extra in items)
     return f'<nav class="tabbar" aria-label="Навигация">{html}</nav>'
 
@@ -139,7 +140,7 @@ def footer(root, modal_html='', mbar_html=''):
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
 <div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}{PFX}privacy/">Политика конфиденциальности</a></span></div></div></footer>
-{modal_html}{tabbar(root)}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/jeep.js?v={VER}"></script><script src="{root}assets/stories.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
+{modal_html}{tabbar(root)}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/stories.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
 
 # ---------------- blocks ----------------
 def facts_bar(t): return '<div class="facts rv">' + ''.join(f'<div><div class="num">{H(a)}</div><p class="meta">{H(b)}</p></div>' for a, b in t['facts']) + '</div>'
@@ -228,12 +229,12 @@ def gal(p, root):
 
 def why_block(why, root):
     (_, t1, p1), (_, t2, p2), (_, t3, p3), (_, t4, p4) = why
-    seasons = ''.join(f'<span class="sp sp-{k}"><b>{n}</b></span>' for k, n, _ in SEAS_TXT)
+    seasons = ''.join(f'<span class="sp sp-{k}"><b>{n}</b></span>' for k, n, _ in SEAS_TXT) if MULTI else splates(G)
     chips = ''.join(f'<span class="wc">{x}</span>' for x in ('Долгие переезды', 'Конные участки', 'Пешие участки', 'Погода'))
     return f'''<div class="bento">
 <div class="bx b1 rv"><img src="{img('altyn_yurts', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">4–8</div><span class="lab">человек в группе</span><h3 class="h3">{t1}</h3><p>{p1}</p></div></div>
 <div class="bx b2 rv"><img src="{img('serp', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">2</div><h3 class="h3">{t2}</h3><p>{p2}</p></div></div>
-<div class="bx b3 rv"><div class="collage"><img src="{img('tulip', 'm', root)}" alt="" loading="lazy"><img src="{img('alakul2', 'm', root)}" alt="" loading="lazy"><img src="{img('songkul', 'm', root)}" alt="" loading="lazy"><img src="{img('bars_fall', 'm', root)}" alt="" loading="lazy"></div><div class="in"><div class="big">12</div><h3 class="h3">{t3}</h3><p>{p3}</p><div class="sps">{seasons}</div></div></div>
+<div class="bx b3 rv"><div class="collage"><img src="{img('tulip', 'm', root)}" alt="" loading="lazy"><img src="{img('alakul2', 'm', root)}" alt="" loading="lazy"><img src="{img('songkul', 'm', root)}" alt="" loading="lazy"><img src="{img('bars_fall', 'm', root)}" alt="" loading="lazy"></div><div class="in"><div class="big">{"12" if MULTI else "3"}</div><h3 class="h3">{t3}</h3><p>{p3}</p><div class="sps">{seasons}</div></div></div>
 <div class="bx b4 rv"><img src="{img('ala_trail', 'l', root)}" alt="" loading="lazy"><div class="in"><h3 class="h3">{t4}</h3><p>{p4}</p><div class="wcs">{chips}</div></div></div></div>'''
 
 def places_block(root):
@@ -284,11 +285,30 @@ KW_RU = 'туры по Кыргызстану, джип-тур Кыргызст�
 KW_EN = 'Kyrgyzstan tours, Kyrgyzstan 4x4 expedition, jeep tour Kyrgyzstan, Central Asia adventure travel, Song-Kul, Kel-Suu, Ala-Kul, Issyk-Kul, Tian Shan, yurt stay, small group tour'
 def kw(): return KW_RU if LANG == 'ru' else KW_EN
 
+def hero_facts():
+    if MULTI:
+        cells = [(len(TOURS), 'маршрутов'), (12, 'месяцев в году'), (2, 'внедорожника'), ('4–8', 'человек в группе')]
+    else:
+        cells = [(a, b) for a, b in G['facts']]
+    return ''.join(f'<div><div class="num">{H(str(a))}</div><p class="meta">{H(b)}</p></div>' for a, b in cells)
+
+def tour_row(R):
+    return f'''<div class="hhead"><span class="meta dim">Все маршруты</span><span class="hnav"><button type="button" data-hnav="-1" aria-label="Назад">←</button><button type="button" data-hnav="1" aria-label="Вперёд">→</button></span></div>
+<div class="hwrap"><div class="hrow" id="trow" tabindex="0">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard"', 1) for t in TOURS)}</div><div class="hhand" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg><span>Листайте</span></div></div>'''
+
+def section_year(R):
+    return f'''<section class="sec light" id="year"><div class="wrap"><div class="split col1" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Туры на весь год</span><h2 class="h2">Для каждого сезона <br class="dbr"><span class="hl">своя поездка</span></h2></div><p class="body dim">Весной каньоны без толп, летом высокогорные озёра, осенью золотой свет на Сон-Куле, зимой снег и горячие источники. Выберите время, а маршрут мы подскажем.</p></div>
+{calendar_block(R)}</div></section>'''
+
+def section_now(R):
+    return f'''<section class="sec light white" id="now"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">По сезону</span><h2 class="h2">Сейчас в сезоне <span class="hl" id="nowm"></span></h2></div><p class="body dim">Эти маршруты можно проехать в ближайшие недели. Остальные ждут своего сезона: весь год в каталоге.</p></div>
+<div class="grid" id="nowgrid">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard rv" hidden', 1) for t in TOURS)}</div><noscript><style>#nowgrid [hidden]{{display:block!important}}</style></noscript></div></section>'''
+
 def page_home():
     R = rootfor(0)
     why = [('1', 'Маленькая группа', 'От 4 до 8 человек. Вы не потеряетесь в толпе и не зависите от большого автобуса.'),
            ('2', 'Два внедорожника', 'Трассы, горные дороги и бездорожье: туда, куда не доедет экскурсионный транспорт.'),
-           ('3', 'Маршруты на весь год', 'Весенние каньоны, летние озёра, осенний Сон-Куль и зимний Каракол: у каждого сезона своя поездка.'),
+           ('3', 'Маршруты на весь год' if MULTI else 'Три озера за один маршрут', 'Весенние каньоны, летние озёра, осенний Сон-Куль и зимний Каракол: у каждого сезона своя поездка.' if MULTI else 'Ала-Куль, Кель-Суу и Сон-Куль за восемь дней: каждое озеро совсем не похоже на другое.'),
            ('4', 'Честно о нагрузке', 'Рассказываем заранее: где долгие переезды, где конные и пешие участки, что зависит от погоды.')]
     whyh = ''.join(f'<div class="card rv"><div class="ico">{n}</div><h3 class="h3">{a}</h3><p class="body dim" style="font-size:16px">{b}</p></div>' for n, a, b in why)
     others = ''.join(tcard(t, R) for t in TOURS[1:])
@@ -297,8 +317,8 @@ def page_home():
 <section class="hero">{hero_bg(G['hero'], G['hero_pos'], 'Озеро Кель-Суу между скал', R, VIDEOS['home'])}
 <div class="wrap"><span class="tag">Экспедиции по Кыргызстану</span><h1 class="h1" style="margin-top:22px">Туда, куда не&nbsp;доезжает <span class="hl">автобус</span></h1>
 <p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню и Памиро-Алаю: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа, продуманный маршрут, поездки в любое время года.</p>
-<div class="cta"><a class="btn" href="tours/">Смотреть все туры <span class="arrow">→</span></a><a class="btn ghost" href="#request" data-open-form="hero">Подобрать тур</a></div>
-<div class="facts rv"><div><div class="num">{len(TOURS)}</div><p class="meta">маршрутов</p></div><div><div class="num">12</div><p class="meta">месяцев в году</p></div><div><div class="num">2</div><p class="meta">внедорожника</p></div><div><div class="num">4–8</div><p class="meta">человек в группе</p></div></div></div></section>
+<div class="cta"><a class="btn" href="{tour_url(G, R) if not MULTI else 'tours/'}">{'Смотреть все туры' if MULTI else 'Смотреть тур'} <span class="arrow">→</span></a><a class="btn ghost" href="#request" data-open-form="hero">Подобрать тур</a></div>
+<div class="facts rv">{hero_facts()}</div></div></section>
 <section class="sec light" id="why"><div class="wrap"><span class="tag">Почему VOYZ</span><h2 class="h2" style="margin-top:22px;max-width:16ch">Не просто посмотреть. <span class="hl">Почувствовать.</span></h2>
 <p class="body dim" style="max-width:36em;margin-top:22px">Дороги за горизонт, озёра между скал, ночи под звёздным небом. Каждая поездка открывает другой Кыргызстан.</p>{why_block(why, R)}</div></section>
 
@@ -308,14 +328,11 @@ def page_home():
 <a class="feat rv" href="{tour_url(G, R)}"><div class="ph"><img src="{img(G['card_img'], 'l', R)}" alt="Кель-Суу" loading="lazy"><span class="tag">{H(G['badge'])}</span></div>
 <div class="tx"><p class="meta dim">{H(G['kicker'])}</p><ul class="pts">{''.join(f'<li>{H(x)}</li>' for x in G['points'])}</ul><p class="body dim" style="font-size:16px">{H(G['summary'])}</p>
 <div class="row">{''.join(f'<span class="chip">{H(a)} {H(b)}</span>' for a, b in G['facts'])}</div>
-<div class="sline">{splates(G)}<span class="body dim" style="font-size:16px">Старт и финиш — Бишкек.</span></div><span class="btn" style="align-self:flex-start">Подробнее о туре <span class="arrow">→</span></span></div></a><div class="hhead"><span class="meta dim">Все маршруты</span><span class="hnav"><button type="button" data-hnav="-1" aria-label="Назад">←</button><button type="button" data-hnav="1" aria-label="Вперёд">→</button></span></div>
-<div class="hwrap"><div class="hrow" id="trow" tabindex="0">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard"', 1) for t in TOURS)}</div><div class="hhand" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg><span>Листайте</span></div></div></div></section>
+<div class="sline">{splates(G)}<span class="body dim" style="font-size:16px">Старт и финиш — Бишкек.</span></div><span class="btn" style="align-self:flex-start">Подробнее о туре <span class="arrow">→</span></span></div></a>{tour_row(R) if MULTI else ''}</div></section>
 
-<section class="sec light" id="year"><div class="wrap"><div class="split col1" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Туры на весь год</span><h2 class="h2">Для каждого сезона <br class="dbr"><span class="hl">своя поездка</span></h2></div><p class="body dim">Весной каньоны без толп, летом высокогорные озёра, осенью золотой свет на Сон-Куле, зимой снег и горячие источники. Выберите время, а маршрут мы подскажем.</p></div>
-{calendar_block(R)}</div></section>
+{section_year(R) if MULTI else ''}
 
-<section class="sec light white" id="now"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">По сезону</span><h2 class="h2">Сейчас в сезоне <span class="hl" id="nowm"></span></h2></div><p class="body dim">Эти маршруты можно проехать в ближайшие недели. Остальные ждут своего сезона: весь год в каталоге.</p></div>
-<div class="grid" id="nowgrid">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard rv" hidden', 1) for t in TOURS)}</div><noscript><style>#nowgrid [hidden]{{display:block!important}}</style></noscript></div></section>
+{section_now(R) if MULTI else ''}
 
 <section class="sec light" id="lakes"><div class="wrap"><span class="tag">Места</span><h2 class="h2" style="margin-top:22px;max-width:18ch">Ради таких мест <span class="hl">отправляются в экспедиции</span></h2>{places_block(R)}</div></section>
 
@@ -335,7 +352,7 @@ def page_tours():
     body = head('Туры по Кыргызстану на внедорожниках — VOYZ Travel', 'Каталог авторских экспедиций VOYZ по Кыргызстану на весь год: весна, лето, осень и зима, небольшие группы, юрты, высокогорные озёра.', R, [bc, items], kw()) + header(R, 'tours') + f'''
 <section class="phead ink"><div class="wrap split"><div class="stack"><span class="tag">Каталог</span><h1 class="h1" style="font-size:clamp(40px,calc(6*var(--vw)),96px)">Наши <span class="hl">туры</span></h1></div>
 <p class="body dim">Авторские экспедиции по Кыргызстану: внедорожники, горы, озёра и юрты. Небольшие группы и маршруты на любой сезон.</p></div></section>
-<section class="sec light"><div class="wrap"><div class="cal-wrap">{calendar_block(R)}</div>{chips}<div class="grid" id="tgrid" style="margin-top:20px">{cards}
+<section class="sec light"><div class="wrap">{('<div class="cal-wrap">' + calendar_block(R) + '</div>' + chips) if MULTI else ''}<div class="grid" id="tgrid" style="margin-top:20px">{cards}
 <div class="tcard custom rv" data-seasons="spring summer autumn winter"><div class="in"><span class="tag dark">Под вас</span><div class="stack"><h2 class="h2" style="font-size:clamp(26px,calc(2.8*var(--vw)),44px)">Свой маршрут на внедорожниках</h2><p class="body" style="font-weight:700">Хотите другую длительность, даты или состав: компания друзей, семья, корпоративная поездка? Соберём маршрут под вас.</p></div><a class="btn dark" href="#request" data-open-form="catalog-custom" style="align-self:flex-start">Обсудить маршрут <span class="arrow">→</span></a></div></div>
 </div></div></section>{request_block('Свой маршрут', R, 'c')}'''
     return body + footer(R, modal(R, 'Свой маршрут'), mbar())
@@ -381,7 +398,7 @@ def page_tour(t):
 
 <section class="sec light white" id="faq"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Что обычно <span class="hl">спрашивают</span></h2><p class="body dim" style="margin-top:20px">Не нашли свой вопрос? Напишите нам, мы ответим и подскажем, подойдёт ли вам этот маршрут.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(t['faq'])}</div></div></section>
 
-<section class="sec light" id="more"><div class="wrap"><span class="tag">Другие маршруты</span><h2 class="h2" style="margin:22px 0 32px">Ещё <span class="hl">поездки</span></h2><div class="grid">{related}</div></div></section>
+{('<section class="sec light" id="more"><div class="wrap"><span class="tag">Другие маршруты</span><h2 class="h2" style="margin:22px 0 32px">Ещё <span class="hl">поездки</span></h2><div class="grid">' + related + '</div></div></section>') if related else ''}
 
 {request_block(t['title'], R)}'''
     return body + footer(R, modal(R, t['title']), mbar('Узнать стоимость и даты'))
