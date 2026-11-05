@@ -37,7 +37,7 @@ SEASONS = [('spring', 'Весна'), ('summer', 'Лето'), ('autumn', 'Осе�
 # per-build state (set in build())
 LANG, PFX, CUR = 'ru', '', {'path': '', 'og': 'home', 'ld': []}
 
-def img(k, size='l', root=''): return '%sassets/img/%s-%s.webp' % (root, k, size)
+def img(k, size='l', root=''): return '%sassets/img/%s-%s.webp?v=photos-20261105' % (root, k, size)
 def tour_url(t, root): return '%s%stours/%s/' % (root, PFX, t['slug'])
 def rootfor(depth): return '../' * (depth + (1 if LANG == 'en' else 0))
 def tt(s): return EN.get(s, s) if LANG == 'en' else s        # translate a plain string at build time
@@ -214,7 +214,7 @@ def request_block(tour_name, root, idp='r', cls='light white'):
 VIDEOS = {'home': None, 'grand-expedition': None, 'put-karavanov': 'song', 'vesna-issyk-kul': 'jeti', 'osen-son-kul': 'serp'}
 
 def home_background(root):
-    return f'''<div class="bg photo-motion"><picture><source media="(max-width:700px)" srcset="{root}assets/img/home-valley-mobile.webp"><img src="{root}assets/img/home-valley-2560.webp" srcset="{root}assets/img/home-valley-1920.webp 1920w, {root}assets/img/home-valley-2560.webp 2560w, {root}assets/img/home-valley-3840.webp 3840w" sizes="100vw" width="5712" height="3213" alt="Горная долина и юрты в Кыргызстане" fetchpriority="high" decoding="async"></picture></div>'''
+    return f'''<div class="bg photo-motion"><picture><source media="(max-width:700px)" srcset="{root}assets/img/home-alakul-mobile.webp"><img src="{root}assets/img/home-alakul-2560.webp" srcset="{root}assets/img/home-alakul-1920.webp 1920w, {root}assets/img/home-alakul-2560.webp 2560w, {root}assets/img/home-alakul-3840.webp 3840w" sizes="100vw" width="5472" height="3648" alt="Озеро Ала-Куль среди вершин Тянь-Шаня" fetchpriority="high" decoding="async"></picture></div>'''
 def hero_bg(img_key, pos, alt, root, vkey=None):
     im = f'<img src="{img(img_key, "l", root)}" alt="{H(alt)}" style="object-position:{pos}" fetchpriority="high">'
     if not vkey: return f'<div class="bg">{im}</div>'
@@ -231,12 +231,12 @@ def yplate(root):
     return f'<section class="yplate" aria-label="Сезоны"><div class="ylab"><span>Туры на весь год</span></div><div class="yrow">{cells}</div></section>'
 
 PLACES = [
-    ('kel_v', 'Кель-Суу', 'пограничная зона', 'a', ['kel_v', 'kel_lake', 'kel_arch']),
+    ('kel_v', 'Кель-Суу', 'пограничная зона', 'a', ['kel_v', 'kel_arch']),
     ('issyk', 'Иссык-Куль', 'Тянь-Шань', 's', ['issyk', 'issyk_n']),
     ('kok', 'Кок-Мойнок', 'каньоны', 's', ['kok', 'kok_pano']),
     ('song_sunset', 'Сон-Куль', 'юрты и жайлоо', 'w', ['song_sunset', 'songkul', 'song_riders', 'song_rider']),
     ('jeti_horses', 'Джети-Огуз', 'красные скалы', 'w', ['jeti_horses', 'jeti']),
-    ('skazka', 'Каньон Сказка', 'красные скалы', 't', ['skazka']),
+    ('skazka', 'Каньон Сказка', 'красные скалы', 't', ['skazka', 'skazka-detail', 'skazka-aerial']),
     ('aksai', 'Ак-Сай', 'каньоны', 't', ['aksai', 'aksai_b', 'aksai_dusk']),
     ('serp', 'Перевал 33 попугая', 'серпантин', 'w', ['serp']),
 ]
@@ -435,11 +435,17 @@ def page_credits():
     for t in TOURS:
         for k in [t['hero'], t['card_img']] + [l['img'] for l in t['lakes']] + [d[x] for d in t['days'] for x in ('img', 'img2') if d.get(x)]:
             if k not in used: used.append(k)
+    photo_assets_path = os.path.join(ROOT, 'data/photo_assets.json')
+    if os.path.exists(photo_assets_path):
+        used += [k for k in load('data/photo_assets.json') if k not in used]
+    if 'cta-original-sunset' in CR: used.append('cta-original-sunset')
     rows = ''
     for k in used:
         if k not in CR: continue
         nm = re.sub(r'\s*\(\d+\)$', '', os.path.splitext(CR[k]['title'])[0])
         rows += f'<p class="body" style="font-size:16px"><b>{H(nm)}</b> — {H(CR[k]["artist"] or "автор не указан")}, {H(CR[k]["lic"])}, <a href="{H(CR[k]["page"])}" rel="noopener" target="_blank">источник</a></p>'
+        if CR[k].get('license_url'):
+            rows += f'<p class="body" style="font-size:14px"><a href="{H(CR[k]["license_url"])}" target="_blank" rel="noopener">{H(tt("Условия лицензии"))}</a> · {H(tt("Версии для сайта: изменение размера, кадрирование, WebP. Лицензия фотографии сохранена."))}</p>'
     rows += '<p class="body" style="font-size:16px"><b>Видео</b> — архив VOYZ Travel</p>'
     rows += '<p class="body" style="font-size:16px"><b>Кок-Мойнок, Ак-Сай</b> — фотографии из архива VOYZ Travel</p><p class="body" style="font-size:16px"><b>Карта</b> — рельеф SRTM / AWS Terrain Tiles; границы Natural Earth; озёра © участники OpenStreetMap (ODbL)</p>'
     bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Авторы фотографий'), page_url(LANG, 'credits/'))])

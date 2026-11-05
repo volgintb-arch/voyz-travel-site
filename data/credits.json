@@ -1,25 +1,36 @@
 {
   "cover": {
-    "title": "VOYZ Travel / cover",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Кель-Суу - panoramio.jpg",
+    "artist": "Калачев Сергей",
+    "lic": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio.jpg",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/7/7e/%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5184,
+    "h": 3456
   },
   "kel_v": {
-    "title": "VOYZ Travel / kel_v",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Кель-Суу - panoramio.jpg",
+    "artist": "Калачев Сергей",
+    "lic": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio.jpg",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/7/7e/%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5184,
+    "h": 3456
   },
   "road": {
     "title": "Hills around Song Köl lake, Kyrgyzstan; Thomas Depenbusch; June 2012.jpg",
-    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Hills_around_Song_K%C3%B6l_lake%2C_Kyrgyzstan%3B_Thomas_Depenbusch%3B_June_2012.jpg/3840px-Hills_around_Song_K%C3%B6l_lake%2C_Kyrgyzstan%3B_Thomas_Depenbusch%3B_June_2012.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "w": 4380,
-    "h": 2924,
-    "lic": "CC BY 2.0",
     "artist": "Thomas Depenbusch",
+    "lic": "CC BY 2.0",
     "page": "https://commons.wikimedia.org/wiki/File:Hills_around_Song_K%C3%B6l_lake,_Kyrgyzstan;_Thomas_Depenbusch;_June_2012.jpg",
-    "desc": "Hills around Song Köl lake, Kyrgyzstan."
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Hills_around_Song_K%C3%B6l_lake%2C_Kyrgyzstan%3B_Thomas_Depenbusch%3B_June_2012.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 4380,
+    "h": 2924
   },
   "boom": {
     "title": "Boom Gorge 03.jpg",
@@ -32,16 +43,26 @@
     "desc": "Boom Gorge, Chuy and Issyk Kul regions, Kyrgyzstan"
   },
   "issyk_n": {
-    "title": "VOYZ Travel / issyk_n",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "View of Issyk-Kul lake from the beach of Kara-Oy village.jpg",
+    "artist": "Vanyka-slovanyka",
+    "lic": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:View_of_Issyk-Kul_lake_from_the_beach_of_Kara-Oy_village.jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/View_of_Issyk-Kul_lake_from_the_beach_of_Kara-Oy_village.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 4000,
+    "h": 3000
   },
   "altyn": {
-    "title": "VOYZ Travel / altyn",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Arashan River in Altyn Arashan, Kyrgyzstan.jpg",
+    "artist": "Adam Harangozó",
+    "lic": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Arashan_River_in_Altyn_Arashan,_Kyrgyzstan.jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/6/68/Arashan_River_in_Altyn_Arashan%2C_Kyrgyzstan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5761,
+    "h": 3840
   },
   "altyn_horses": {
     "title": "Horses at Altyn Arashan.jpg",
@@ -55,47 +76,69 @@
   },
   "ala_trail": {
     "title": "Lake Ala Kul Trek (Kyrgyzstan, August 2019) - 76 (50565164118).jpg",
-    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Lake_Ala_Kul_Trek_%28Kyrgyzstan%2C_August_2019%29_-_76_%2850565164118%29.jpg/3840px-Lake_Ala_Kul_Trek_%28Kyrgyzstan%2C_August_2019%29_-_76_%2850565164118%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "w": 5472,
-    "h": 3648,
-    "lic": "CC BY-SA 2.0",
     "artist": "Bruno Rijsman",
+    "lic": "CC BY-SA 2.0",
     "page": "https://commons.wikimedia.org/wiki/File:Lake_Ala_Kul_Trek_(Kyrgyzstan,_August_2019)_-_76_(50565164118).jpg",
-    "desc": "Lake Ala Kul Trek (Kyrgyzstan, August 2019) - 76"
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/0/07/Lake_Ala_Kul_Trek_%28Kyrgyzstan%2C_August_2019%29_-_76_%2850565164118%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5472,
+    "h": 3648
   },
   "alakul": {
-    "title": "VOYZ Travel / alakul",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Lake Ala Kul Trek (Kyrgyzstan, August 2019) - 60 (50566053452).jpg",
+    "artist": "Bruno Rijsman",
+    "lic": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Lake_Ala_Kul_Trek_(Kyrgyzstan,_August_2019)_-_60_(50566053452).jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/2/20/Lake_Ala_Kul_Trek_%28Kyrgyzstan%2C_August_2019%29_-_60_%2850566053452%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5472,
+    "h": 3648
   },
   "alakul2": {
-    "title": "VOYZ Travel / alakul2",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Lake Ala Kul Trek (Kyrgyzstan, August 2019) - 95 (50565906141).jpg",
+    "artist": "Bruno Rijsman",
+    "lic": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Lake_Ala_Kul_Trek_(Kyrgyzstan,_August_2019)_-_95_(50565906141).jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/9/93/Lake_Ala_Kul_Trek_%28Kyrgyzstan%2C_August_2019%29_-_95_%2850565906141%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5472,
+    "h": 3648
   },
   "jeti_horses": {
-    "title": "VOYZ Travel / jeti_horses",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Kyrgyzstan Djeti Oguz (48220910882).jpg",
+    "artist": "Kalpak Travel",
+    "lic": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Kyrgyzstan_Djeti_Oguz_(48220910882).jpg",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Kyrgyzstan_Djeti_Oguz_%2848220910882%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 6000,
+    "h": 4000
   },
   "jeti": {
-    "title": "VOYZ Travel / jeti",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Kyrgyzstan Djeti Oguz (48220910882).jpg",
+    "artist": "Kalpak Travel",
+    "lic": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Kyrgyzstan_Djeti_Oguz_(48220910882).jpg",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Kyrgyzstan_Djeti_Oguz_%2848220910882%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 6000,
+    "h": 4000
   },
   "skazka": {
     "title": "Issyk-Kul, Kyrgyzstan (44573339822).jpg",
-    "thumb": "https://upload.wikimedia.org/wikipedia/commons/4/42/Issyk-Kul%2C_Kyrgyzstan_%2844573339822%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-    "w": 3240,
-    "h": 2160,
-    "lic": "CC BY 2.0",
     "artist": "Ninara from Helsinki, Finland",
+    "lic": "CC BY 2.0",
     "page": "https://commons.wikimedia.org/wiki/File:Issyk-Kul,_Kyrgyzstan_(44573339822).jpg",
-    "desc": "On the southern shore of the lake Issyk-Kul. \n\nSkazka Canyon"
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/42/Issyk-Kul%2C_Kyrgyzstan_%2844573339822%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 3240,
+    "h": 2160
   },
   "bars": {
     "title": "The view on Barskoon George.jpg",
@@ -108,26 +151,37 @@
     "desc": "Водопад Барскаун: Иссык-Кульская область, Джети-Огузский район.  Вид на Барскаун от въезда."
   },
   "bars_fall": {
-    "title": "VOYZ Travel / bars_fall",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Barskoön Waterfall.jpg",
+    "artist": "Ondřej Žváček",
+    "lic": "CC BY 2.5",
+    "page": "https://commons.wikimedia.org/wiki/File:Barsko%C3%B6n_Waterfall.jpg",
+    "license_url": "https://creativecommons.org/licenses/by/2.5",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/6/62/Barsko%C3%B6n_Waterfall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 2304,
+    "h": 3072
   },
   "issyk": {
-    "title": "VOYZ Travel / issyk",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Issyk-Kul, Kyrgyzstan (43713946455).jpg",
+    "artist": "Ninara from Helsinki, Finland",
+    "lic": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Issyk-Kul,_Kyrgyzstan_(43713946455).jpg",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/8/88/Issyk-Kul%2C_Kyrgyzstan_%2843713946455%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 3332,
+    "h": 2100
   },
   "orto": {
     "title": "Нарынская область, Орто-Токой сверху.jpg",
-    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/95/%D0%9D%D0%B0%D1%80%D1%8B%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2C_%D0%9E%D1%80%D1%82%D0%BE-%D0%A2%D0%BE%D0%BA%D0%BE%D0%B9_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83.jpg/3840px-%D0%9D%D0%B0%D1%80%D1%8B%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2C_%D0%9E%D1%80%D1%82%D0%BE-%D0%A2%D0%BE%D0%BA%D0%BE%D0%B9_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "w": 5272,
-    "h": 3948,
-    "lic": "CC BY-SA 4.0",
     "artist": "Nikolai Bulykin",
+    "lic": "CC BY-SA 4.0",
     "page": "https://commons.wikimedia.org/wiki/File:%D0%9D%D0%B0%D1%80%D1%8B%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C,_%D0%9E%D1%80%D1%82%D0%BE-%D0%A2%D0%BE%D0%BA%D0%BE%D0%B9_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83.jpg",
-    "desc": "Orto-Tokoy reservoir photographed from above. Kyrgyzstan."
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/9/95/%D0%9D%D0%B0%D1%80%D1%8B%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2C_%D0%9E%D1%80%D1%82%D0%BE-%D0%A2%D0%BE%D0%BA%D0%BE%D0%B9_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5272,
+    "h": 3948
   },
   "naryn": {
     "title": "Naryn overlook.jpg",
@@ -140,22 +194,37 @@
     "desc": "Overlook of Naryn, Kyrgyzstan from the south"
   },
   "kel_arch": {
-    "title": "VOYZ Travel / kel_arch",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Кель-Суу - panoramio (2).jpg",
+    "artist": "Калачев Сергей",
+    "lic": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio_(2).jpg",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/41/%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5184,
+    "h": 3456
   },
   "kel_lake": {
-    "title": "VOYZ Travel / kel_lake",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Кель-Суу - panoramio.jpg",
+    "artist": "Калачев Сергей",
+    "lic": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio.jpg",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/7/7e/%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5184,
+    "h": 3456
   },
   "kelsuu": {
-    "title": "VOYZ Travel / kelsuu",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Кель-Суу - panoramio (2).jpg",
+    "artist": "Калачев Сергей",
+    "lic": "CC BY 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio_(2).jpg",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/41/%D0%9A%D0%B5%D0%BB%D1%8C-%D0%A1%D1%83%D1%83_-_panoramio_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5184,
+    "h": 3456
   },
   "serp": {
     "title": "Moldo-Ashuu mountain pass serpentine Ak-Talaa 01.jpg",
@@ -168,42 +237,59 @@
     "desc": "Горный перевал и серпантин Молдо-Ашуу, Ак-Талинский район"
   },
   "songkul": {
-    "title": "VOYZ Travel / songkul",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Соң-Көл, Каратал-Жапырыкский государственный заповедник, Кыргызстан 01.jpg",
+    "artist": "Vilya Shoni",
+    "lic": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%A1%D0%BE%D2%A3-%D0%9A%D3%A9%D0%BB,_%D0%9A%D0%B0%D1%80%D0%B0%D1%82%D0%B0%D0%BB-%D0%96%D0%B0%D0%BF%D1%8B%D1%80%D1%8B%D0%BA%D1%81%D0%BA%D0%B8%D0%B9_%D0%B3%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B7%D0%B0%D0%BF%D0%BE%D0%B2%D0%B5%D0%B4%D0%BD%D0%B8%D0%BA,_%D0%9A%D1%8B%D1%80%D0%B3%D1%8B%D0%B7%D1%81%D1%82%D0%B0%D0%BD_01.jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/a/ac/%D0%A1%D0%BE%D2%A3-%D0%9A%D3%A9%D0%BB%2C_%D0%9A%D0%B0%D1%80%D0%B0%D1%82%D0%B0%D0%BB-%D0%96%D0%B0%D0%BF%D1%8B%D1%80%D1%8B%D0%BA%D1%81%D0%BA%D0%B8%D0%B9_%D0%B3%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B7%D0%B0%D0%BF%D0%BE%D0%B2%D0%B5%D0%B4%D0%BD%D0%B8%D0%BA%2C_%D0%9A%D1%8B%D1%80%D0%B3%D1%8B%D0%B7%D1%81%D1%82%D0%B0%D0%BD_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 6048,
+    "h": 4032
   },
   "song_riders": {
-    "title": "VOYZ Travel / song_riders",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Horse standing by Song Kul Lake - Kyrgyztan.jpg",
+    "artist": "ElPrismaDeFer - [1]",
+    "lic": "CC BY 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Horse_standing_by_Song_Kul_Lake_-_Kyrgyztan.jpg",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Horse_standing_by_Song_Kul_Lake_-_Kyrgyztan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 4000,
+    "h": 2250
   },
   "song_sunset": {
-    "title": "VOYZ Travel / song_sunset",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Song-Kul, Kyrgyzstan (44530127062).jpg",
+    "artist": "Ninara from Helsinki, Finland",
+    "lic": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Song-Kul,_Kyrgyzstan_(44530127062).jpg",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/7/72/Song-Kul%2C_Kyrgyzstan_%2844530127062%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 3128,
+    "h": 2238
   },
   "song_rider": {
-    "title": "Song-Kul 2015 02.jpg",
-    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Song-Kul_2015_02.jpg/3840px-Song-Kul_2015_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "w": 4903,
-    "h": 3261,
-    "lic": "CC BY 4.0",
-    "artist": "Thomas Holbach",
-    "page": "https://commons.wikimedia.org/wiki/File:Song-Kul_2015_02.jpg",
-    "desc": "Der kirgisische Songköl-See in der Provinz Naryn."
+    "title": "Song Köl lake, Kyrgyzstan (29955691312).jpg",
+    "artist": "Thomas Depenbusch (Depi) from Cologne, Germany",
+    "lic": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Song_K%C3%B6l_lake,_Kyrgyzstan_(29955691312).jpg",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/7/78/Song_K%C3%B6l_lake%2C_Kyrgyzstan_%2829955691312%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 3686,
+    "h": 2668
   },
   "kalmak": {
     "title": "Road to pass Kalmak-Ashuu, Kyrgyzstan - panoramio.jpg",
-    "thumb": "https://upload.wikimedia.org/wikipedia/commons/b/be/Road_to_pass_Kalmak-Ashuu%2C_Kyrgyzstan_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-    "w": 3672,
-    "h": 2755,
-    "lic": "CC BY-SA 3.0",
     "artist": "ThomasG",
+    "lic": "CC BY-SA 3.0",
     "page": "https://commons.wikimedia.org/wiki/File:Road_to_pass_Kalmak-Ashuu,_Kyrgyzstan_-_panoramio.jpg",
-    "desc": "Road to pass Kalmak-Ashuu, Kyrgyzstan"
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/be/Road_to_pass_Kalmak-Ashuu%2C_Kyrgyzstan_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 3672,
+    "h": 2755
   },
   "milky": {
     "title": "Milky way, Lake Son Kol, Kyrgyzstan.jpg",
@@ -216,10 +302,15 @@
     "desc": "The milky way seen from lake Song-Kol, Kyrgyzstan. In the foreground the yurts from camp Kochkor can be seen."
   },
   "altyn_yurts": {
-    "title": "VOYZ Travel / altyn_yurts",
-    "artist": "VOYZ Travel",
-    "lic": "Архив VOYZ Travel",
-    "page": "https://www.instagram.com/voyz_travel/"
+    "title": "Yurts in Altyn Arashan, Kyrgyzstan.jpg",
+    "artist": "Adam Harangozó",
+    "lic": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Yurts_in_Altyn_Arashan,_Kyrgyzstan.jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Yurts_in_Altyn_Arashan%2C_Kyrgyzstan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 6000,
+    "h": 4000
   },
   "tash": {
     "title": "Tash Rabat.JPG",
@@ -366,5 +457,59 @@
     "artist": "VOYZ Travel",
     "lic": "Архив VOYZ Travel",
     "page": "https://www.instagram.com/voyz_travel/"
+  },
+  "home-alakul": {
+    "title": "Lake Ala Kul Trek (Kyrgyzstan, August 2019) - 60 (50566053452).jpg",
+    "artist": "Bruno Rijsman",
+    "lic": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Lake_Ala_Kul_Trek_(Kyrgyzstan,_August_2019)_-_60_(50566053452).jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/2/20/Lake_Ala_Kul_Trek_%28Kyrgyzstan%2C_August_2019%29_-_60_%2850566053452%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5472,
+    "h": 3648
+  },
+  "barskoon": {
+    "title": "The view on Barskoon George.jpg",
+    "artist": "Nastasya Liliya",
+    "lic": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:The_view_on_Barskoon_George.jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/eb/The_view_on_Barskoon_George.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 4032,
+    "h": 3024
+  },
+  "skazka-detail": {
+    "title": "Иссык-Кульская область, каньон Сказка (5).jpg",
+    "artist": "Nikolai Bulykin",
+    "lic": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%98%D1%81%D1%81%D1%8B%D0%BA-%D0%9A%D1%83%D0%BB%D1%8C%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C,_%D0%BA%D0%B0%D0%BD%D1%8C%D0%BE%D0%BD_%D0%A1%D0%BA%D0%B0%D0%B7%D0%BA%D0%B0_(5).jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/1/19/%D0%98%D1%81%D1%81%D1%8B%D0%BA-%D0%9A%D1%83%D0%BB%D1%8C%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2C_%D0%BA%D0%B0%D0%BD%D1%8C%D0%BE%D0%BD_%D0%A1%D0%BA%D0%B0%D0%B7%D0%BA%D0%B0_%285%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 4608,
+    "h": 3456
+  },
+  "skazka-aerial": {
+    "title": "Иссык-Кульская область, каньон Сказка сверху (1).jpg",
+    "artist": "Nikolai Bulykin",
+    "lic": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%98%D1%81%D1%81%D1%8B%D0%BA-%D0%9A%D1%83%D0%BB%D1%8C%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C,_%D0%BA%D0%B0%D0%BD%D1%8C%D0%BE%D0%BD_%D0%A1%D0%BA%D0%B0%D0%B7%D0%BA%D0%B0_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83_(1).jpg",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/d/d1/%D0%98%D1%81%D1%81%D1%8B%D0%BA-%D0%9A%D1%83%D0%BB%D1%8C%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2C_%D0%BA%D0%B0%D0%BD%D1%8C%D0%BE%D0%BD_%D0%A1%D0%BA%D0%B0%D0%B7%D0%BA%D0%B0_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "changes": "Resized, cropped as needed, converted to WebP; same license as source.",
+    "w": 5272,
+    "h": 3948
+  },
+  "cta-original-sunset": {
+    "title": "Song-Kul, Kyrgyzstan (44580008121).jpg",
+    "thumb": "https://upload.wikimedia.org/wikipedia/commons/0/08/Song-Kul%2C_Kyrgyzstan_%2844580008121%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "w": 3310,
+    "h": 2115,
+    "lic": "CC BY 2.0",
+    "artist": "Ninara from Helsinki, Finland",
+    "page": "https://commons.wikimedia.org/wiki/File:Song-Kul,_Kyrgyzstan_(44580008121).jpg",
+    "desc": "Evening in the Yurt Camp\n\nSong Köl (also Son Kul) is an alpine lake in northern Naryn Province, Kyrgyzstan. It lies at an altitude of 3016 m. The lake's maximum length is 29 km, breadth about 18 km, a"
   }
 }
