@@ -184,6 +184,13 @@
     imgs = []; open('is-vid'); cap.querySelector('b').textContent = el.getAttribute('data-name') || ''; cap.querySelector('span').textContent = ''; th.innerHTML = ''; th.style.display = 'none';
     box.querySelector('.lb-p').style.display = box.querySelector('.lb-n').style.display = 'none';
     st.innerHTML = '<video controls autoplay playsinline loop poster="' + (el.getAttribute('data-poster') || '') + '"><source src="' + el.getAttribute('data-video') + '" type="video/mp4"></video>';
+    if (el.hasAttribute('data-instagram')) {
+      st.querySelector('video').loop = false;
+      var source = document.createElement('a');
+      source.href = el.getAttribute('data-instagram'); source.target = '_blank'; source.rel = 'noopener noreferrer';
+      source.className = 'lb-source'; source.textContent = EN0() ? 'Original Reel on Instagram ↗' : 'Оригинал Reels в Instagram ↗';
+      cap.querySelector('span').appendChild(source);
+    }
   }
   function trigger(e) {
     var g = e.target.closest && e.target.closest('[data-gal]'); if (g) { e.preventDefault(); gallery(g); return; }

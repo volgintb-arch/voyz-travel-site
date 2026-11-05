@@ -13,13 +13,37 @@
     }
   ],
   "highlights": [
-    {"title": "Обо мне", "url": "https://www.instagram.com/stories/highlights/18130142188840881/"},
-    {"title": "Отзывы", "url": "https://www.instagram.com/stories/highlights/18123287201289751/"},
-    {"title": "Наши гости", "url": "https://www.instagram.com/stories/highlights/18219608059354521/"}
+    {
+      "title": "Обо мне",
+      "url": "https://www.instagram.com/stories/highlights/18130142188840881/"
+    },
+    {
+      "title": "Отзывы",
+      "url": "https://www.instagram.com/stories/highlights/18123287201289751/"
+    },
+    {
+      "title": "Наши гости",
+      "url": "https://www.instagram.com/stories/highlights/18219608059354521/"
+    }
   ],
   "posts": [
-    {"image": "assets/social/yurt.jpg", "title": "Ночёвка в юрте", "url": "https://www.instagram.com/voyz_travel/reel/DfWg45Ctuvf/"},
-    {"image": "assets/social/canyon.jpg", "title": "Кыргызстан за пределами асфальта", "url": "https://www.instagram.com/voyz_travel/reel/DfO3Vm4NY_H/"},
-    {"image": "assets/social/guests.jpg", "title": "Люди и впечатления", "url": "https://www.instagram.com/voyz_travel/reel/DfE6k_nNfet/"}
+    {
+      "image": "assets/social/yurt.jpg",
+      "title": "Ночёвка в юрте",
+      "url": "https://www.instagram.com/voyz_travel/reel/DfWg45Ctuvf/",
+      "video": "assets/social/yurt.mp4"
+    },
+    {
+      "image": "assets/social/canyon.jpg",
+      "title": "Кыргызстан за пределами асфальта",
+      "url": "https://www.instagram.com/voyz_travel/reel/DfO3Vm4NY_H/",
+      "video": "assets/social/canyon.mp4"
+    },
+    {
+      "image": "assets/social/guests.jpg",
+      "title": "Люди и впечатления",
+      "url": "https://www.instagram.com/voyz_travel/reel/DfE6k_nNfet/",
+      "video": "assets/social/guests.mp4"
+    }
   ]
 }

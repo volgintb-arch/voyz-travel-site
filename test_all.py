@@ -45,7 +45,8 @@ def run():
                         check(bool(re.search(r'\bid=["\x27]'+re.escape(u.fragment)+r'["\x27\s>]',content)),tag+': missing anchor '+url)
                 if path in ('','tours/grand-expedition/'):
                     check(page.locator('#team .person-avatar').count()>0,tag+': team portrait')
-                    check(page.locator('#instagram .social-post').count()==3,tag+': Instagram posts')
+                    check(page.locator('#instagram button[data-video]').count()==3,tag+': playable Reels')
+                    check(page.locator('#instagram').count()==1 and page.locator('#reel').count()==0,tag+': duplicate video section')
                     options=page.locator('form[data-request]').first.locator('[name=people] option').all_text_contents()
                     check(all(str(i) in options for i in range(1,13)),tag+': group options 1–12')
                 print('PASS page',tag,flush=True)
