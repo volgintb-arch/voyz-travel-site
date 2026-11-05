@@ -1,9 +1,9 @@
 """Mobile layout audit: horizontal overflow, clipped elements, words that break mid-word or are wider than their box.
-   usage: python audit.py [width ...]   (default 360 390 430 768)"""
+   usage: python audit.py [width ...]   (default 320 390 768 1024 1440 1920 2560)"""
 import sys, json
 from playwright.sync_api import sync_playwright
-B = 'http://localhost:8765'
-PAGES = ['/', '/tours/', '/tours/grand-expedition/', '/privacy/', '/credits/', '/en/', '/en/tours/grand-expedition/']
+from test_support import active_paths, site_server, settle
+PAGES = ['/' + lang + path for lang in ('', 'en/') for path in active_paths()]
 JS = r'''() => {
   const W = innerWidth, res = {scroll: document.documentElement.scrollWidth, W, over: [], clip: [], broken: [], wide: [], fonts: {}};
   const sel = el => { let s = el.tagName.toLowerCase(); if (el.id) s += '#' + el.id; if (el.className && typeof el.className === 'string') s += '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.'); return s; };
@@ -42,17 +42,14 @@ def uniq(a, n=8):
         if x not in seen: seen.add(x); out.append(x)
     return out[:n], len(set(a))
 if __name__ == '__main__':
-    widths = [int(x) for x in sys.argv[1:]] or [360, 390, 430, 768]
+    widths = [int(x) for x in sys.argv[1:]] or [320, 390, 768, 1024, 1440, 1920, 2560]
     total = 0
-    with sync_playwright() as p:
+    with site_server() as B, sync_playwright() as p:
         b = p.chromium.launch()
         for w in widths:
-            c = b.new_context(viewport={'width': w, 'height': 844}, is_mobile=True, has_touch=True, device_scale_factor=2); pg = c.new_page(); pg.set_default_timeout(20000)
+            c = b.new_context(viewport={'width': w, 'height': 844}, is_mobile=w<=700, has_touch=w<=1024, device_scale_factor=1, reduced_motion='reduce'); pg = c.new_page(); pg.set_default_timeout(20000)
             for path in PAGES:
-                pg.goto(B + path + '?full=1', wait_until='load'); pg.wait_for_timeout(500)
-                H = pg.evaluate('document.documentElement.scrollHeight')
-                for y in range(0, H, 700): pg.evaluate('window.scrollTo(0,%d)' % y); pg.wait_for_timeout(60)
-                pg.evaluate('window.scrollTo(0,0)'); pg.wait_for_timeout(200)
+                pg.goto(B + path, wait_until='domcontentloaded'); settle(pg, scroll=True)
                 r = pg.evaluate(JS); issues = []
                 if r['scroll'] > r['W'] + 1: issues.append('PAGE scrolls sideways: %d > %d' % (r['scroll'], r['W']))
                 for k in ('over', 'clip', 'broken', 'wide'):
@@ -63,4 +60,5 @@ if __name__ == '__main__':
                 for i in issues: print('        -', i)
             c.close()
         b.close()
-    print('\nPAGES WITH ISSUES:', total)
+    print('\nISSUE CATEGORIES:', total)
+    sys.exit(1 if total else 0)

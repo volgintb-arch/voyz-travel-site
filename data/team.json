@@ -1,0 +1,25 @@
+{
+  "instagram": "https://www.instagram.com/voyz_travel/",
+  "verified_at": "2026-11-05",
+  "members": [
+    {
+      "name": "Павел",
+      "role": "Основатель VOYZ · организатор путешествий",
+      "photo": "assets/team/pavel.jpg",
+      "bio": "Авторские джип-туры по Кыргызстану — дело Павла. В его Instagram — дороги, люди и места, из которых складывается путешествие.",
+      "experience": "60+ организованных путешествий",
+      "source": "https://www.instagram.com/voyz_travel/",
+      "about_url": "https://www.instagram.com/stories/highlights/18130142188840881/"
+    }
+  ],
+  "highlights": [
+    {"title": "Обо мне", "url": "https://www.instagram.com/stories/highlights/18130142188840881/"},
+    {"title": "Отзывы", "url": "https://www.instagram.com/stories/highlights/18123287201289751/"},
+    {"title": "Наши гости", "url": "https://www.instagram.com/stories/highlights/18219608059354521/"}
+  ],
+  "posts": [
+    {"image": "assets/social/yurt.jpg", "title": "Ночёвка в юрте", "url": "https://www.instagram.com/voyz_travel/reel/DfWg45Ctuvf/"},
+    {"image": "assets/social/canyon.jpg", "title": "Кыргызстан за пределами асфальта", "url": "https://www.instagram.com/voyz_travel/reel/DfO3Vm4NY_H/"},
+    {"image": "assets/social/guests.jpg", "title": "Люди и впечатления", "url": "https://www.instagram.com/voyz_travel/reel/DfE6k_nNfet/"}
+  ]
+}

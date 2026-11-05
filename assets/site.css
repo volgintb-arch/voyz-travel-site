@@ -1,4 +1,21 @@
 /* VOYZ Travel — site styles. Type system: 4 styles only (h1 / h2 / h3 / body) + meta. */
+.team-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:center}
+.team-intro .h2{margin:22px 0}.team-intro>.body{max-width:40em}
+.team-cards{min-width:0}.person-card{padding:clamp(24px,3vw,42px);border:1px solid var(--line);border-radius:var(--r);background:var(--card)}
+.person-top{display:flex;gap:20px;align-items:center;margin-bottom:24px}.person-top>div{min-width:0}.person-top .h3{margin-top:8px;font-size:clamp(25px,3vw,42px)}
+.person-avatar{flex:none;width:96px;height:96px;object-fit:cover;border-radius:50%;border:2px solid var(--lime)}
+.person-experience{display:inline-block;color:var(--lime);font-weight:800;margin:24px 0}
+.person-link{display:flex;justify-content:space-between;gap:16px;padding-top:20px;border-top:1px solid var(--line);font-weight:800}
+.social-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}.social-pill{display:flex;align-items:center;gap:18px;border:1px solid var(--line);border-radius:99px;padding:12px 18px;font-size:14px;min-height:44px}
+.social-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;margin-bottom:36px}.social-heading .stack{max-width:44em}.social-heading .btn{flex-shrink:0}
+.social-posts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:1100px;margin-inline:auto}
+.social-post{position:relative;display:block;min-width:0;aspect-ratio:9/16;border-radius:var(--r);overflow:hidden;background:var(--card)}
+.social-post img{width:100%;height:100%;object-fit:cover;transition:transform .35s}.social-post:hover img{transform:scale(1.025)}
+.social-post-label{position:absolute;left:10px;right:10px;bottom:10px;display:flex;justify-content:space-between;gap:12px;background:rgba(0,0,0,.84);color:#fff;border-radius:18px;padding:14px;font-size:14px;font-weight:800}
+.person-link:focus-visible,.social-pill:focus-visible,.social-post:focus-visible{outline:3px solid var(--lime);outline-offset:4px}
+@media(max-width:1024px){.team-layout{grid-template-columns:1fr}.social-heading{align-items:flex-start;flex-direction:column}.subnav .wrap{overflow-x:auto;flex-wrap:nowrap}.subnav a.l{flex-shrink:0}}
+@media(max-width:700px){.social-posts{gap:10px}.social-post{border-radius:16px}.social-post-label{font-size:11px;padding:9px;left:5px;right:5px;bottom:5px;border-radius:10px}.person-top{gap:16px}.person-avatar{width:80px;height:80px}.social-posts{grid-template-columns:1fr 1fr}.social-post:last-child{display:none}}
+@media(prefers-reduced-motion:reduce){.social-post img{transition:none}.social-post:hover img{transform:none}}
 @font-face{font-family:'Unbounded';src:url('fonts/Unbounded-Black.ttf') format('truetype');font-weight:900;font-display:swap}
 @font-face{font-family:'Unbounded';src:url('fonts/Unbounded-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
 :root{
@@ -73,6 +90,7 @@ section{position:relative}
 .hero:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,.05) 34%,rgba(0,0,0,.9) 100%)}
 .hero .wrap{width:100%;padding-bottom:clamp(40px,calc(6*var(--vw)),88px);padding-top:140px}
 .hero .h1{max-width:12ch}
+.hero .h1.tour-title{max-width:100%;width:min(100%,18ch)}
 .hero .lead{max-width:34em;margin-top:26px;color:rgba(255,255,255,.9)}
 .hero .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
 .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:clamp(36px,calc(5*var(--vw)),64px);background:var(--line);border-radius:var(--r);overflow:hidden}
