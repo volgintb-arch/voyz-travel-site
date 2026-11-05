@@ -19,6 +19,7 @@ VER = str(int(__import__('time').time()))   # cache-busting suffix for css/js, n
 
 def load(p): return json.load(open(os.path.join(ROOT, p), encoding='utf-8'))
 BASE, EXTRA, CR = load('data/tours.json'), load('data/tours_extra.json'), load('data/credits.json')
+PEOPLE = load('data/team.json')
 EN_PATH = os.path.join(ROOT, 'data/en.json')
 EN = load('data/en.json') if os.path.exists(EN_PATH) else {}
 HAS_EN = os.path.exists(EN_PATH)
@@ -28,6 +29,7 @@ for t in TOURS:
     t.setdefault('organization_note', DEF['organization_note'])
     if t['slug'] != 'grand-expedition': t['faq'] = t['faq'] + DEF['faq_common']
 G = TOURS[0]                       # flagship tour (home hero, map)
+GROUP_MIN, GROUP_MAX = G.get('group_min', 6), G.get('group_max', 12)
 MULTI = len(TOURS) > 1             # blocks that compare several tours appear only when there are several
 MONTHS = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
 SEASONS = [('spring', 'Весна'), ('summer', 'Лето'), ('autumn', 'Осень'), ('winter', 'Зима')]
@@ -48,7 +50,7 @@ def org_ld():
             "logo": SITE_URL + "/assets/icons/icon-512.png", "image": SITE_URL + "/assets/og/home-%s.jpg" % LANG,
             "description": tt('Авторские путешествия по Кыргызстану на внедорожниках. Небольшие группы, продуманные маршруты, поездки в любое время года.'),
             "areaServed": [{"@type": "Country", "name": "Kyrgyzstan"}, {"@type": "Place", "name": "Europe"}, {"@type": "Place", "name": "Asia"}],
-            "knowsLanguage": ["ru", "en"], "slogan": tt('Кыргызстан. За пределами привычного.')}
+            "knowsLanguage": ["ru", "en"], "sameAs": [PEOPLE['instagram']], "slogan": tt('Кыргызстан. За пределами привычного.')}
 
 def crumbs(items):
     return {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(items)]}
@@ -86,7 +88,7 @@ def lang_switch(root):
     return f'<span class="lang" role="group" aria-label="Language"><a href="{ru or "./"}" hreflang="ru" lang="ru"{" aria-current=true" if LANG == "ru" else ""}>RU</a><a href="{en}" hreflang="en" lang="en"{" aria-current=true" if LANG == "en" else ""}>EN</a></span>'
 
 def header(root, cur=''):
-    nav = [('tours/', 'Туры')] + ([('#year', 'Туры на весь год')] if MULTI else []) + [('#faq', 'Вопросы')]
+    nav = [('tours/', 'Туры')] + ([('#year', 'Туры на весь год')] if MULTI else []) + [('#team', 'Люди VOYZ'), ('#faq', 'Вопросы')]
     def href(h): return root + PFX + h if h == 'tours/' else (h if cur == 'home' else root + PFX + 'index.html' + h)
     links = ''.join(f'<a href="{href(h)}"{" aria-current=page" if (cur == "tours" and h == "tours/") else ""}>{t}</a>' for h, t in nav)
     sw = lang_switch(root)
@@ -96,7 +98,7 @@ def header(root, cur=''):
 
 def form(tour_name='', idp='f', source='page', root=''):
     months = ''.join(f'<option>{m}</option>' for m in ['Весна', 'Лето', 'Осень', 'Зима', 'Пока не знаю'])
-    people = ''.join(f'<option>{p}</option>' for p in ['1', '2', '3', '4', '5', '6', '7', '8', 'Больше 8'])
+    people = ''.join(f'<option>{p}</option>' for p in [*map(str, range(1, GROUP_MAX + 1)), 'Больше %d' % GROUP_MAX])
     return f'''<form class="form" data-request data-tour="{H(tour_name)}" data-source="{source}" novalidate>
 <div class="fields" style="display:flex;flex-direction:column;gap:16px">
 <div class="two"><div class="field"><label for="{idp}n">Как вас зовут</label><input id="{idp}n" name="name" autocomplete="name" placeholder="Имя" required></div>
@@ -131,6 +133,8 @@ def mbar(label='Оставить заявку'): return ''
 def _old_mbar(label='Оставить заявку'): return f'<div class="mbar"><a class="btn" href="#request" data-open-form="mobile-bar">{label}</a></div>'
 
 def footer(root, modal_html='', mbar_html=''):
+    if not modal_html:
+        modal_html = modal(root).replace('<div class="modal"', '<div class="modal" id="request"', 1)
     links = ''.join(f'<li><a href="{tour_url(t, root)}">{H(t["title"])}</a></li>' for t in TOURS)
     return f'''<footer class="ftr"><div class="wrap"><div class="cols">
 <div><div class="logo-lg"><img src="{root}assets/logo.svg" alt="VOYZ" width="220" height="29"></div>
@@ -138,11 +142,25 @@ def footer(root, modal_html='', mbar_html=''):
 <div><p class="meta dim">Туры</p><ul>{links}<li><a href="{root}{PFX}tours/">Все туры</a></li></ul></div>
 <div><p class="meta dim">Связаться</p><ul><li><a href="#request" data-open-form="footer">Оставить заявку</a></li>
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
+<li><a href="https://www.instagram.com/voyz_travel/" target="_blank" rel="noopener noreferrer">Instagram · @voyz_travel ↗</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
 <div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}{PFX}privacy/">Политика конфиденциальности</a></span></div></div></footer>
 {modal_html}{tabbar(root)}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/stories.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
 
 # ---------------- blocks ----------------
+
+def team_block(root):
+    cards = ''
+    for person in PEOPLE['members']:
+        cards += f'''<article class="person-card"><div class="person-top"><img class="person-avatar" src="{root}{H(person['photo'])}" alt="{H(person['name'])}" width="96" height="96" loading="lazy"><div><p class="meta dim">{H(person['role'])}</p><h3 class="h3">{H(person['name'])}</h3></div></div>
+<p class="body dim">{H(person['bio'])}</p><p class="person-experience">{H(person['experience'])}</p>
+<a class="person-link" href="{H(person['about_url'])}" target="_blank" rel="noopener noreferrer">Познакомиться в Instagram <span aria-hidden="true">↗</span></a></article>'''
+    highlights = ''.join(f'<a class="social-pill" href="{H(h["url"])}" target="_blank" rel="noopener noreferrer">{H(h["title"])} <span aria-hidden="true">↗</span></a>' for h in PEOPLE['highlights'])
+    return f'''<section class="sec" id="team"><div class="wrap team-layout"><div class="team-intro"><span class="tag">Люди VOYZ</span><h2 class="h2">У путешествия <span class="hl">есть лицо</span></h2><p class="body dim">Познакомьтесь с человеком, который стоит за VOYZ. Больше личных историй, отзывов и кадров с гостями — в нашем Instagram.</p><div class="social-pills">{highlights}</div></div><div class="team-cards">{cards}</div></div></section>'''
+
+def instagram_block(root):
+    posts = ''.join(f'''<a class="social-post" href="{H(p['url'])}" target="_blank" rel="noopener noreferrer"><img src="{root}{H(p['image'])}" alt="{H(p['title'])}" width="360" height="640" loading="lazy"><span class="social-post-label">{H(p['title'])} <span aria-hidden="true">↗</span></span></a>''' for p in PEOPLE['posts'])
+    return f'''<section class="sec" id="instagram"><div class="wrap"><div class="social-heading"><div class="stack"><span class="tag">Наш Instagram</span><h2 class="h2">Ближе <span class="hl">к путешествию</span></h2><p class="body dim">Публикации @voyz_travel: люди, дороги и жизнь между маршрутами.</p></div><a class="btn ghost" href="{H(PEOPLE['instagram'])}" target="_blank" rel="noopener noreferrer">@voyz_travel <span aria-hidden="true">↗</span></a></div><div class="social-posts">{posts}</div></div></section>'''
 def facts_bar(t): return '<div class="facts rv">' + ''.join(f'<div><div class="num">{H(a)}</div><p class="meta">{H(b)}</p></div>' for a, b in t['facts']) + '</div>'
 
 def map_block(root):
@@ -334,7 +352,9 @@ def page_home():
 
 <section class="sec light" id="faq"><div class="wrap faqwrap"><div class="faqhead"><span class="tag dark">Вопросы</span><h2 class="h2" style="margin-top:22px">Частые <span class="hl">вопросы</span></h2><p class="body dim" style="margin-top:20px">Если не нашли ответ, напишите нам: расскажем честно, подходит ли вам такой формат.</p><a class="btn" href="#request" data-open-form="faq" style="margin-top:26px">Задать вопрос <span class="arrow">→</span></a></div><div>{faq_block(G['faq'][:6])}</div></div></section>
 
-{request_block('Подбор тура', R)}'''
+{team_block(R)}
+{request_block('Подбор тура', R)}
+{instagram_block(R)}'''
     return body + footer(R, modal(R, 'Подбор тура'), mbar('Подобрать тур'))
 
 def page_tours():
@@ -363,7 +383,7 @@ def page_tour(t):
             "itinerary": {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": d['n'], "name": d['title'], "description": d['route']} for d in t['days']]}}
     bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Туры'), page_url(LANG, 'tours/')), (t['title'], page_url(LANG, 'tours/%s/' % t['slug']))])
     has_map = t.get('map')
-    sub = [('lakes', 'Главное')] + ([('route', 'Маршрут')] if has_map else []) + [('days', 'По дням'), ('fit', 'Для кого'), ('org', 'Организация'), ('faq', 'Вопросы')]
+    sub = [('lakes', 'Главное')] + ([('route', 'Маршрут')] if has_map else []) + [('days', 'По дням'), ('fit', 'Для кого'), ('org', 'Организация'), ('team', 'Люди VOYZ'), ('faq', 'Вопросы')]
     subnav = ''.join(f'<a class="l" href="#{i}">{n}</a>' for i, n in sub)
     first, _, rest = t['title'].partition(' ')
     h1 = f'{H(first)} <span class="hl">{H(rest)}</span>' if rest else f'<span class="hl">{H(t["title"])}</span>'
@@ -373,7 +393,7 @@ def page_tour(t):
     title = f'{t["title"]} — {ndays} дней на внедорожниках по Кыргызстану · VOYZ'
     body = head(title, t['summary'], R, [bc, trip, faq_ld(t['faq'])], kw()) + header(R, 'tour') + f'''
 <section class="hero">{hero_bg(t['hero'], t['hero_pos'], t['title'], R, VIDEOS.get(t['slug']))}
-<div class="wrap"><span class="tag">{H(t['badge'])}</span><h1 class="h1" style="margin-top:22px;font-size:clamp(34px,calc(6.4*var(--vw)),104px)">{h1}</h1>
+<div class="wrap"><span class="tag">{H(t['badge'])}</span><h1 class="h1 tour-title" style="margin-top:22px;font-size:clamp(34px,calc(6.4*var(--vw)),104px)">{h1}</h1>
 <p class="body lead">{H(t['headline'])}.</p>
 <div class="cta"><a class="btn" href="#request" data-open-form="tour-hero">Узнать стоимость и даты <span class="arrow">→</span></a><a class="btn ghost" href="#days">Смотреть программу</a></div>{facts_bar(t)}</div></section>
 <nav class="subnav" aria-label="Разделы тура"><div class="wrap">{subnav}<a class="btn sm" href="#request" data-open-form="subnav">Оставить заявку</a></div></nav>
@@ -394,7 +414,9 @@ def page_tour(t):
 
 {('<section class="sec light" id="more"><div class="wrap"><span class="tag">Другие маршруты</span><h2 class="h2" style="margin:22px 0 32px">Ещё <span class="hl">поездки</span></h2><div class="grid">' + related + '</div></div></section>') if related else ''}
 
-{request_block(t['title'], R)}'''
+{team_block(R)}
+{request_block(t['title'], R)}
+{instagram_block(R)}'''
     return body + footer(R, modal(R, t['title']), mbar('Узнать стоимость и даты'))
 
 def page_privacy():

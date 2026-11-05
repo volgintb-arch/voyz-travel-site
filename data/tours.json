@@ -7,6 +7,8 @@
   "tours": [
     {
       "slug": "grand-expedition",
+      "group_min": 6,
+      "group_max": 12,
       "badge": "Флагманская экспедиция",
       "title": "Grand Expedition",
       "kicker": "Кыргызстан · Тянь-Шань",
