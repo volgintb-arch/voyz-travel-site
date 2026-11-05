@@ -1,0 +1,122 @@
+[
+  {
+    "key": "cover",
+    "source": "stills/kel-suu.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "kelsuu",
+    "source": "stills/kel-suu.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "kel_v",
+    "source": "stills/kel-suu.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "kel_arch",
+    "source": "stills/kel-suu.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "kel_lake",
+    "source": "stills/kel-suu.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "alakul",
+    "source": "stills/ala-kul.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "alakul2",
+    "source": "stills/ala-kul-aerial.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "kok",
+    "source": "stills/kok-moynok.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "kok_pano",
+    "source": "stills/kok-moynok.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "issyk",
+    "source": "stills/issyk-kul.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "issyk_n",
+    "source": "stills/issyk-kul.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "aksai",
+    "source": "stills/aksai.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "jeti",
+    "source": "stills/jeti-oguz.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "jeti_horses",
+    "source": "originals/IMG_4174.HEIC",
+    "width": 3024,
+    "height": 4032
+  },
+  {
+    "key": "bars_fall",
+    "source": "stills/barskoon.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "songkul",
+    "source": "originals/IMG_4201.HEIC",
+    "width": 3024,
+    "height": 4032
+  },
+  {
+    "key": "song_sunset",
+    "source": "originals/IMG_4202.HEIC",
+    "width": 3024,
+    "height": 4032
+  },
+  {
+    "key": "song_riders",
+    "source": "stills/song-kul.jpg",
+    "width": 1920,
+    "height": 950
+  },
+  {
+    "key": "altyn",
+    "source": "originals/IMG_4154.JPG",
+    "width": 5712,
+    "height": 3213
+  },
+  {
+    "key": "altyn_yurts",
+    "source": "originals/IMG_4181.HEIC",
+    "width": 4032,
+    "height": 3024
+  }
+]
