@@ -208,20 +208,14 @@ def yplate(root):
     return f'<section class="yplate" aria-label="Сезоны"><div class="ylab"><span>Туры на весь год</span></div><div class="yrow">{cells}</div></section>'
 
 PLACES = [
-    ('alakul', 'Ала-Куль', '≈ 3500 м', 'a', ['alakul', 'alakul2', 'ala_trail']),
-    ('kel_v', 'Кель-Суу', 'пограничная зона', 't', ['kel_v', 'kel_lake', 'kel_arch']),
-    ('song_sunset', 'Сон-Куль', 'юрты и жайлоо', 'w', ['song_sunset', 'songkul', 'song_riders', 'song_rider']),
+    ('kel_v', 'Кель-Суу', 'пограничная зона', 'a', ['kel_v', 'kel_lake', 'kel_arch']),
     ('issyk', 'Иссык-Куль', 'Тянь-Шань', 's', ['issyk', 'issyk_n']),
-    ('jeti_horses', 'Джети-Огуз', 'красные скалы', 'w', ['jeti_horses', 'jeti']),
     ('kok', 'Кок-Мойнок', 'каньоны', 's', ['kok', 'kok_pano']),
-    ('altyn', 'Алтын-Арашан', 'горная долина', 's', ['altyn', 'altyn_horses', 'altyn_yurts']),
-    ('skazka', 'Каньон Сказка', 'красные скалы', 's', ['skazka']),
-    ('bars_fall', 'Барскоон', 'водопад со льдом', 's', ['bars_fall', 'bars']),
-    ('aksai', 'Ак-Сай', 'каньоны', 's', ['aksai', 'aksai_b', 'aksai_dusk']),
-    ('orto', 'Орто-Токой', 'озеро', 's', ['orto']),
-    ('naryn', 'Нарын', 'река и ущелье', 's', ['naryn']),
-    ('serp', 'Перевал 33 попугая', 'серпантин', 's', ['serp']),
-    ('kalmak', 'Калмак-Ашуу', 'перевал', 's', ['kalmak']),
+    ('song_sunset', 'Сон-Куль', 'юрты и жайлоо', 'w', ['song_sunset', 'songkul', 'song_riders', 'song_rider']),
+    ('jeti_horses', 'Джети-Огуз', 'красные скалы', 'w', ['jeti_horses', 'jeti']),
+    ('skazka', 'Каньон Сказка', 'красные скалы', 't', ['skazka']),
+    ('aksai', 'Ак-Сай', 'каньоны', 't', ['aksai', 'aksai_b', 'aksai_dusk']),
+    ('serp', 'Перевал 33 попугая', 'серпантин', 'w', ['serp']),
 ]
 def gal(p, root):
     k, n, a, c, imgs = p
