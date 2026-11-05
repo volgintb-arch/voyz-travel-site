@@ -313,7 +313,7 @@ def page_home():
     whyh = ''.join(f'<div class="card rv"><div class="ico">{n}</div><h3 class="h3">{a}</h3><p class="body dim" style="font-size:16px">{b}</p></div>' for n, a, b in why)
     others = ''.join(tcard(t, R) for t in TOURS[1:])
     items = {"@type": "ItemList", "name": tt('Туры VOYZ'), "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": page_url(LANG, 'tours/%s/' % t['slug']), "name": t['title']} for i, t in enumerate(TOURS)]}
-    body = head('VOYZ Travel — туры на внедорожниках по Кыргызстану', 'Авторские экспедиции по Кыргызстану на внедорожниках на весь год: Ала-Куль, Кель-Суу, Сон-Куль, Алай, Сары-Челек, зимний Иссык-Куль.', R, [items, faq_ld(G['faq'][:6])], kw()) + header(R, 'home') + f'''
+    body = head('VOYZ Travel — туры на внедорожниках по Кыргызстану', 'Авторская экспедиция по Кыргызстану на внедорожниках: восемь дней, три высокогорных озера (Ала-Куль, Кель-Суу, Сон-Куль), небольшая группа и два внедорожника.', R, [items, faq_ld(G['faq'][:6])], kw()) + header(R, 'home') + f'''
 <section class="hero">{hero_bg(G['hero'], G['hero_pos'], 'Озеро Кель-Суу между скал', R, VIDEOS['home'])}
 <div class="wrap"><span class="tag">Экспедиции по Кыргызстану</span><h1 class="h1" style="margin-top:22px">Туда, куда не&nbsp;доезжает <span class="hl">автобус</span></h1>
 <p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню и Памиро-Алаю: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа, продуманный маршрут, поездки в любое время года.</p>
@@ -349,7 +349,7 @@ def page_tours():
     cards = ''.join(tcard(t, R, big=True) for t in TOURS)
     items = {"@type": "ItemList", "name": tt('Туры VOYZ'), "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": page_url(LANG, 'tours/%s/' % t['slug']), "name": t['title']} for i, t in enumerate(TOURS)]}
     bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Туры'), page_url(LANG, 'tours/'))])
-    body = head('Туры по Кыргызстану на внедорожниках — VOYZ Travel', 'Каталог авторских экспедиций VOYZ по Кыргызстану на весь год: весна, лето, осень и зима, небольшие группы, юрты, высокогорные озёра.', R, [bc, items], kw()) + header(R, 'tours') + f'''
+    body = head('Туры по Кыргызстану на внедорожниках — VOYZ Travel', 'Авторские экспедиции VOYZ по Кыргызстану на внедорожниках: небольшие группы, юрты, высокогорные озёра.', R, [bc, items], kw()) + header(R, 'tours') + f'''
 <section class="phead ink"><div class="wrap split"><div class="stack"><span class="tag">Каталог</span><h1 class="h1" style="font-size:clamp(40px,calc(6*var(--vw)),96px)">Наши <span class="hl">туры</span></h1></div>
 <p class="body dim">Авторские экспедиции по Кыргызстану: внедорожники, горы, озёра и юрты. Небольшие группы и маршруты на любой сезон.</p></div></section>
 <section class="sec light"><div class="wrap">{('<div class="cal-wrap">' + calendar_block(R) + '</div>' + chips) if MULTI else ''}<div class="grid" id="tgrid" style="margin-top:20px">{cards}
