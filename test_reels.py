@@ -1,6 +1,7 @@
 """Verify actual local Reel playback, controls, source links, and no forced navigation."""
 from playwright.sync_api import sync_playwright
 from test_support import site_server,settle,ROOT
+(ROOT/"shots").mkdir(exist_ok=True)
 with site_server() as base,sync_playwright() as p:
  b=p.chromium.launch()
  for width in (390,1440):
@@ -22,4 +23,15 @@ with site_server() as base,sync_playwright() as p:
     assert q.locator('.lb video').count()==0,'Player must be unloaded on close'
     print('PASS playback',width,lang or 'ru',i+1,flush=True)
   c.close()
+ # Overlay must fit even when the desktop page is scaled and in phone landscape.
+ for width,height in ((320,568),(390,667),(844,390),(1920,920),(2560,1080)):
+  q=b.new_page(viewport={'width':width,'height':height},reduced_motion='reduce')
+  q.goto(base+'/',wait_until='domcontentloaded');settle(q)
+  q.locator('#instagram button[data-video]').last.click()
+  q.wait_for_function("document.querySelector('.lb video').videoWidth>0")
+  for sel in ('.lb','.lb video','.lb-cap','.lb-x'):
+   r=q.locator(sel).bounding_box()
+   assert r['x']>=-1 and r['y']>=-1 and r['x']+r['width']<=width+1 and r['y']+r['height']<=height+1,(width,height,sel,r)
+  q.screenshot(path=str(ROOT/'shots'/('player-fit-%dx%d.png'%(width,height))))
+  print('PASS player fits',width,height,flush=True);q.close()
  b.close()

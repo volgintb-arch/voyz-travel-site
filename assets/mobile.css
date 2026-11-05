@@ -3,9 +3,12 @@
 .team-intro .h2{font-size:clamp(24px,3vw,46px)}
 .faqhead .h2{font-size:clamp(22px,2.6vw,40px)}
 section[id]{scroll-margin-top:160px}
-.lb-cap{flex-wrap:wrap;justify-content:center;text-align:center}
+.lb{zoom:calc(1 / var(--z,1));display:grid;grid-template-rows:minmax(0,1fr) auto auto;width:100vw;height:100dvh;max-height:100dvh;overflow:hidden;padding:calc(64px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom));gap:12px}
+.lb-stage{height:100%;min-height:0;min-width:0;max-width:100%;overflow:hidden}
+.lb .lb-stage img,.lb.is-vid .lb-stage video{display:block;width:auto;height:100%;max-width:100%;max-height:100%;min-height:0;object-fit:contain}
+.lb-cap{flex-wrap:wrap;justify-content:center;text-align:center;max-width:100%;min-width:0}
 .lb-source{font-family:'Mulish',system-ui,sans-serif;font-size:13px;font-weight:700;text-decoration:underline;text-underline-offset:4px}
-@media(max-width:700px){.lb.is-vid .lb-stage video{max-height:calc(100dvh - 200px)}.lb-cap b{font-size:15px}}
+@media(max-width:700px){.lb-cap b{font-size:15px}.lb{padding-inline:10px;gap:10px}.lb-cap{gap:6px}}
 @media(max-width:700px){
   #team,#instagram{scroll-margin-top:90px}
   .social-posts{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px;scrollbar-width:thin}
