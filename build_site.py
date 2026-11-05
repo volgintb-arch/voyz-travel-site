@@ -226,8 +226,8 @@ def why_block(why, root):
     seasons = ''.join(f'<span class="sp sp-{k}"><b>{n}</b></span>' for k, n, _ in SEAS_TXT) if MULTI else splates(G)
     chips = ''.join(f'<span class="wc">{x}</span>' for x in ('Долгие переезды', 'Конные участки', 'Пешие участки', 'Погода'))
     return f'''<div class="bento">
-<div class="bx b1 rv"><img src="{img('altyn_yurts', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">4–8</div><span class="lab">человек в группе</span><h3 class="h3">{t1}</h3><p>{p1}</p></div></div>
-<div class="bx b2 rv"><img src="{img('serp', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">2</div><h3 class="h3">{t2}</h3><p>{p2}</p></div></div>
+<div class="bx b1 rv"><img src="{img('altyn_yurts', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">6–12</div><span class="lab">человек в группе</span><h3 class="h3">{t1}</h3><p>{p1}</p></div></div>
+<div class="bx b2 rv"><img src="{img('serp', 'l', root)}" alt="" loading="lazy"><div class="in"><div class="big">4×4</div><h3 class="h3">{t2}</h3><p>{p2}</p></div></div>
 <div class="bx b3 rv"><div class="collage"><img src="{img('tulip', 'm', root)}" alt="" loading="lazy"><img src="{img('alakul2', 'm', root)}" alt="" loading="lazy"><img src="{img('songkul', 'm', root)}" alt="" loading="lazy"><img src="{img('bars_fall', 'm', root)}" alt="" loading="lazy"></div><div class="in"><div class="big">{"12" if MULTI else "3"}</div><h3 class="h3">{t3}</h3><p>{p3}</p><div class="sps">{seasons}</div></div></div>
 <div class="bx b4 rv"><img src="{img('ala_trail', 'l', root)}" alt="" loading="lazy"><div class="in"><h3 class="h3">{t4}</h3><p>{p4}</p><div class="wcs">{chips}</div></div></div></div>'''
 
@@ -281,7 +281,7 @@ def kw(): return KW_RU if LANG == 'ru' else KW_EN
 
 def hero_facts():
     if MULTI:
-        cells = [(len(TOURS), 'маршрутов'), (12, 'месяцев в году'), (2, 'внедорожника'), ('4–8', 'человек в группе')]
+        cells = [(len(TOURS), 'маршрутов'), (12, 'месяцев в году'), ('4×4', 'внедорожники'), ('6–12', 'человек в группе')]
     else:
         cells = [(a, b) for a, b in G['facts']]
     return ''.join(f'<div><div class="num">{H(str(a))}</div><p class="meta">{H(b)}</p></div>' for a, b in cells)
@@ -300,17 +300,17 @@ def section_now(R):
 
 def page_home():
     R = rootfor(0)
-    why = [('1', 'Маленькая группа', 'От 4 до 8 человек. Вы не потеряетесь в толпе и не зависите от большого автобуса.'),
-           ('2', 'Два внедорожника', 'Трассы, горные дороги и бездорожье: туда, куда не доедет экскурсионный транспорт.'),
+    why = [('1', 'Маленькая группа', 'От 6 до 12 человек. Вы не потеряетесь в толпе и не зависите от большого автобуса.'),
+           ('2', 'Внедорожники', 'Трассы, горные дороги и бездорожье: туда, куда не доедет экскурсионный транспорт.'),
            ('3', 'Маршруты на весь год' if MULTI else 'Три озера за один маршрут', 'Весенние каньоны, летние озёра, осенний Сон-Куль и зимний Каракол: у каждого сезона своя поездка.' if MULTI else 'Ала-Куль, Кель-Суу и Сон-Куль за восемь дней: каждое озеро совсем не похоже на другое.'),
            ('4', 'Честно о нагрузке', 'Рассказываем заранее: где долгие переезды, где конные и пешие участки, что зависит от погоды.')]
     whyh = ''.join(f'<div class="card rv"><div class="ico">{n}</div><h3 class="h3">{a}</h3><p class="body dim" style="font-size:16px">{b}</p></div>' for n, a, b in why)
     others = ''.join(tcard(t, R) for t in TOURS[1:])
     items = {"@type": "ItemList", "name": tt('Туры VOYZ'), "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": page_url(LANG, 'tours/%s/' % t['slug']), "name": t['title']} for i, t in enumerate(TOURS)]}
-    body = head('VOYZ Travel — туры на внедорожниках по Кыргызстану', 'Авторская экспедиция по Кыргызстану на внедорожниках: восемь дней, три высокогорных озера (Ала-Куль, Кель-Суу, Сон-Куль), небольшая группа и два внедорожника.', R, [items, faq_ld(G['faq'][:6])], kw()) + header(R, 'home') + f'''
+    body = head('VOYZ Travel — туры на внедорожниках по Кыргызстану', 'Авторская экспедиция по Кыргызстану на внедорожниках: восемь дней, три высокогорных озера (Ала-Куль, Кель-Суу, Сон-Куль), небольшая группа и внедорожники.', R, [items, faq_ld(G['faq'][:6])], kw()) + header(R, 'home') + f'''
 <section class="hero">{hero_bg(G['hero'], G['hero_pos'], 'Озеро Кель-Суу между скал', R, VIDEOS['home'])}
 <div class="wrap"><span class="tag">Экспедиции по Кыргызстану</span><h1 class="h1" style="margin-top:22px">Туда, куда не&nbsp;доезжает <span class="hl">автобус</span></h1>
-<p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню и Памиро-Алаю: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа, продуманный маршрут, поездки в любое время года.</p>
+<p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа и продуманный маршрут.</p>
 <div class="cta"><a class="btn" href="{tour_url(G, R) if not MULTI else 'tours/'}">{'Смотреть все туры' if MULTI else 'Смотреть тур'} <span class="arrow">→</span></a><a class="btn ghost" href="#request" data-open-form="hero">Подобрать тур</a></div>
 <div class="facts rv">{hero_facts()}</div></div></section>
 <section class="sec light" id="why"><div class="wrap"><span class="tag">Почему VOYZ</span><h2 class="h2" style="margin-top:22px;max-width:16ch">Не просто посмотреть. <span class="hl">Почувствовать.</span></h2>

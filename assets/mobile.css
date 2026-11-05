@@ -94,3 +94,20 @@
 }
 @media(max-width:700px){.places .lake .tag{padding:5px 8px;letter-spacing:-.01em}.places .lake .in{padding:10px}}
 @media(max-width:700px){.places .lake .h2,.places .pl-a .h2{font-size:clamp(11.5px,3.45vw,16px)!important}.places .pl-a .h2{font-size:clamp(18px,5.4vw,24px)!important}}
+
+/* phone hero: one screen, short copy, compact figures, one main button (request lives in the tab bar) */
+@media(max-width:700px){
+  .hero{min-height:calc(100svh - 0px);padding-bottom:calc(112px + env(safe-area-inset-bottom))}
+  .hero .wrap{display:flex;flex-direction:column;justify-content:flex-end;min-height:calc(100svh - 150px)}
+  .hero .h1{font-size:clamp(28px,8.6vw,38px)}
+  .hero .lead{font-size:15px;line-height:1.45;max-width:30em;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .hero .cta .btn.ghost{display:none}
+  .hero .wrap>.tag{align-self:flex-start}
+  .hero .cta{margin-top:18px}
+  .hero .facts{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:20px;border-radius:20px}
+  .hero .facts>div{padding:12px 6px;text-align:center}
+  .hero .facts .num{font-size:clamp(16px,5vw,21px)}
+  .hero .facts .meta{font-size:10.5px;line-height:1.2;margin-top:4px;overflow-wrap:normal;hyphens:none}
+}
+@media(max-width:700px){.hero .facts>div{padding:12px 3px}.hero .facts .meta{font-size:9.5px;letter-spacing:-.01em}}
+@media(max-width:380px){.hero .facts .meta{font-size:8.5px}}
