@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parent
 def active_tours():
     return sum((json.loads((ROOT / ('data/' + n)).read_text(encoding='utf-8'))['tours'] for n in ('tours.json', 'tours_extra.json')), [])
 def active_paths():
-    return ['', 'tours/', 'privacy/', 'credits/'] + ['tours/%s/' % t['slug'] for t in active_tours()]
+    return ['', 'tours/', 'privacy/'] + ['tours/%s/' % t['slug'] for t in active_tours()]
 @contextmanager
 def site_server():
     if os.environ.get('BASE_URL'):

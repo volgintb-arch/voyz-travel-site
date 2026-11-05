@@ -429,28 +429,6 @@ def page_privacy():
 <h2 class="h3">Кому передаются данные</h2><p class="body">Мы не продаём и не передаём ваши данные третьим лицам, кроме случаев, когда это нужно для организации поездки (например, для оформления разрешений в пограничную зону) и только с вашего согласия.</p>
 <h2 class="h3">Как отозвать согласие</h2><p class="body">Напишите нам любым удобным способом — мы удалим ваши данные.</p></div></section>''' + footer(R)
 
-def page_credits():
-    R = rootfor(1)
-    used = []
-    for t in TOURS:
-        for k in [t['hero'], t['card_img']] + [l['img'] for l in t['lakes']] + [d[x] for d in t['days'] for x in ('img', 'img2') if d.get(x)]:
-            if k not in used: used.append(k)
-    photo_assets_path = os.path.join(ROOT, 'data/photo_assets.json')
-    if os.path.exists(photo_assets_path):
-        used += [k for k in load('data/photo_assets.json') if k not in used]
-    if 'cta-original-sunset' in CR: used.append('cta-original-sunset')
-    rows = ''
-    for k in used:
-        if k not in CR: continue
-        nm = re.sub(r'\s*\(\d+\)$', '', os.path.splitext(CR[k]['title'])[0])
-        rows += f'<p class="body" style="font-size:16px"><b>{H(nm)}</b> — {H(CR[k]["artist"] or "автор не указан")}, {H(CR[k]["lic"])}, <a href="{H(CR[k]["page"])}" rel="noopener" target="_blank">источник</a></p>'
-        if CR[k].get('license_url'):
-            rows += f'<p class="body" style="font-size:14px"><a href="{H(CR[k]["license_url"])}" target="_blank" rel="noopener">{H(tt("Условия лицензии"))}</a> · {H(tt("Версии для сайта: изменение размера, кадрирование, WebP. Лицензия фотографии сохранена."))}</p>'
-    rows += '<p class="body" style="font-size:16px"><b>Видео</b> — архив VOYZ Travel</p>'
-    rows += '<p class="body" style="font-size:16px"><b>Кок-Мойнок, Ак-Сай</b> — фотографии из архива VOYZ Travel</p><p class="body" style="font-size:16px"><b>Карта</b> — рельеф SRTM / AWS Terrain Tiles; границы Natural Earth; озёра © участники OpenStreetMap (ODbL)</p>'
-    bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Авторы фотографий'), page_url(LANG, 'credits/'))])
-    return head('Авторы фотографий — VOYZ Travel', 'Благодарим авторов фотографий и данных.', R, [bc]) + header(R) + f'<section class="phead ink"><div class="wrap"><span class="tag">Благодарим</span><h1 class="h2" style="margin:22px 0 40px">Авторы фотографий</h1><div class="credits">{rows}</div></div></section>' + footer(R)
-
 # ---------------- translation pass (RU -> EN) ----------------
 CYR = re.compile('[А-Яа-яЁё]')
 MISSING = set()
@@ -496,7 +474,7 @@ def write(path, content):
     p = os.path.join(ROOT, path); os.makedirs(os.path.dirname(p), exist_ok=True)
     open(p, 'w', encoding='utf-8').write(content)
 
-PAGES = [('', 'home', lambda: page_home()), ('tours/', 'tours', lambda: page_tours()), ('privacy/', 'home', lambda: page_privacy()), ('credits/', 'home', lambda: page_credits())]
+PAGES = [('', 'home', lambda: page_home()), ('tours/', 'tours', lambda: page_tours()), ('privacy/', 'home', lambda: page_privacy())]
 
 _NB_SKIP = {'script', 'style', 'title', 'textarea', 'option', 'noscript', 'svg'}
 def nobreak(doc):

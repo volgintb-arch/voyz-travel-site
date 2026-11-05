@@ -1,4 +1,4 @@
-"""Check licensed photo attribution and responsive hero delivery."""
+"""Check photo provenance records and responsive hero delivery."""
 import json
 from PIL import Image
 from playwright.sync_api import sync_playwright
@@ -22,10 +22,8 @@ with site_server() as u,sync_playwright() as p:
    hero=q.locator('.hero .bg img');assert hero.evaluate('(e)=>e.complete&&e.naturalWidth>=1440')
    assert ('mobile' if width==390 else '3840') in hero.evaluate('(e)=>e.currentSrc')
    q.screenshot(path=str(ROOT/f'shots/licensed-hero-{width}-{lang.replace("/","") or "ru"}.png'))
-   q.goto(u+'/'+lang+'credits/',wait_until='networkidle')
-   for row in assets.values():
-    assert q.locator('a').evaluate_all('(a,url)=>a.some(x=>x.href===url)',row['source'])
-    assert q.locator('a').evaluate_all('(a,url)=>a.some(x=>x.href===url)',row['license_url'])
+   assert q.locator('a[href*="credits/"]').count()==0
+   assert q.request.get(u+'/'+lang+'credits/').status==404
    c.close()
  b.close()
-print('PASS: photo files, no upscaling, author/license links and RU/EN responsive hero')
+print('PASS: photo files, no upscaling, source records and RU/EN responsive hero')
