@@ -78,7 +78,7 @@ def head(title, desc, root, extra_ld=None, keywords=''):
 <link rel="apple-touch-icon" href="{root}assets/icons/apple-touch-icon.png"><link rel="manifest" href="{root}site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/site.css?v={VER}"><link rel="stylesheet" href="{root}assets/v2.css?v={VER}"><link rel="stylesheet" href="{root}assets/mobile.css?v={VER}">
+<link rel="stylesheet" href="{root}assets/site.css?v={VER}"><link rel="stylesheet" href="{root}assets/v2.css?v={VER}"><link rel="stylesheet" href="{root}assets/mobile.css?v={VER}"><link rel="stylesheet" href="{root}assets/schedule.css?v={VER}">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script></head><body>'''
 
 def lang_switch(root):
@@ -88,7 +88,7 @@ def lang_switch(root):
     return f'<span class="lang" role="group" aria-label="Language"><a href="{ru or "./"}" hreflang="ru" lang="ru"{" aria-current=true" if LANG == "ru" else ""}>RU</a><a href="{en}" hreflang="en" lang="en"{" aria-current=true" if LANG == "en" else ""}>EN</a></span>'
 
 def header(root, cur=''):
-    nav = [('tours/', 'Туры')] + ([('#year', 'Туры на весь год')] if MULTI else []) + [('#team', 'Люди VOYZ'), ('#faq', 'Вопросы')]
+    nav = [('tours/', 'Туры'), ('#schedule', 'Расписание')] + ([('#year', 'Туры на весь год')] if MULTI else []) + [('#team', 'Люди VOYZ'), ('#faq', 'Вопросы')]
     def href(h): return root + PFX + h if h == 'tours/' else (h if cur == 'home' else root + PFX + 'index.html' + h)
     links = ''.join(f'<a href="{href(h)}"{" aria-current=page" if (cur == "tours" and h == "tours/") else ""}>{t}</a>' for h, t in nav)
     sw = lang_switch(root)
@@ -145,7 +145,7 @@ def footer(root, modal_html='', mbar_html=''):
 <li><a href="https://www.instagram.com/voyz_travel/" target="_blank" rel="noopener noreferrer">Instagram · @voyz_travel ↗</a></li>
 <li><a href="https://voyz.ru" rel="noopener">voyz.ru</a></li></ul></div></div>
 <div class="bot meta dim"><span>© VOYZ Travel</span><span><a href="{root}{PFX}privacy/">Политика конфиденциальности</a></span></div></div></footer>
-{modal_html}{tabbar(root)}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/stories.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script></body></html>'''
+{modal_html}{tabbar(root)}<script src="{root}assets/config.js?v={VER}"></script><script src="{root}assets/site.js?v={VER}"></script><script src="{root}assets/scale.js?v={VER}"></script><script src="{root}assets/stories.js?v={VER}"></script><script src="{root}assets/v2.js?v={VER}"></script><script src="{root}assets/schedule.js?v={VER}"></script></body></html>'''
 
 # ---------------- blocks ----------------
 
@@ -317,6 +317,39 @@ def section_now(R):
     return f'''<section class="sec light white" id="now"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">По сезону</span><h2 class="h2">Сейчас в сезоне <span class="hl" id="nowm"></span></h2></div><p class="body dim">Эти маршруты можно проехать в ближайшие недели. Остальные ждут своего сезона: весь год в каталоге.</p></div>
 <div class="grid" id="nowgrid">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard rv" hidden', 1) for t in TOURS)}</div><noscript><style>#nowgrid [hidden]{{display:block!important}}</style></noscript></div></section>'''
 
+SEASON = load('data/season2027.json')
+SPARK = '<svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.4 5.6 11.4 12 12-6.4.6-11.4 5.6-12 12-.6-6.4-5.6-11.4-12-12C6.4 11.4 11.4 6.4 12 0z"/></svg>'
+def _vyezd(n): return 'выезд' if n % 10 == 1 and n % 100 != 11 else ('выезда' if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14) else 'выездов')
+def schedule_block(R):
+    S = SEASON
+    def start(d, name, n):
+        cnt = f'<b class="sx">×{n}</b>' if n > 1 else ''
+        dd = f'<span class="sd">{H(d)}</span>' if d else ''
+        return f'<li>{dd}<span class="sn">{H(name)}</span>{cnt}</li>'
+    months = ''
+    for m in S['months']:
+        n = sum(x[2] for x in m['starts'])
+        months += f'''<button type="button" class="smon" data-smon="{m['m']}" aria-pressed="false"><span class="smn">{H(m['name'])}</span><span class="smc">{n} <small>{_vyezd(n)}</small></span><ul>{''.join(start(*x) for x in m['starts'])}</ul></button>'''
+    total = sum(x[2] for m in S['months'] for x in m['starts'])
+    rows = ''
+    for p in S['programs']:
+        price = H(p['price']) if p.get('price') else 'уточняется'
+        when = ''.join(f'<span>{H(w)}</span>' for w in p['when'])
+        badges = ''.join(f'<span class="pb">{H(b)}</span>' for b in p['badges'])
+        more = f'<a class="plink" href="{tour_url(G, R)}">(+) Программа тура</a>' if p.get('link') else ''
+        rows += f'''<article class="prog rv" data-months="{' '.join(map(str, p['months']))}"><div class="pinfo"><h3 class="ptitle">{H(p['title'])}</h3><p class="pdesc"><span class="plus">(+)</span> {H(p['desc'])}</p>
+<dl class="pdl"><div><dt>длительность:</dt><dd><span class="pill">{H(p['days'])}</span> <span class="pn">{H(p['nights'])}</span></dd></div><div><dt>группа:</dt><dd><span class="pill">{H(p['group'])}</span></dd></div><div><dt>когда едем:</dt><dd class="pwhen">{when}</dd></div><div class="pprice"><dt>стоимость:</dt><dd>{price}</dd></div></dl>
+<div class="pact"><a class="btn dark" href="#request" data-open-form="schedule" data-sched-tour="{H(p['title'])}">(+) Забронировать место</a>{more}</div></div>
+<div class="pph"><img src="{img(p['img'], 'l', R)}" alt="{H(p['title'])}" loading="lazy"><div class="pbs">{badges}</div></div></article>'''
+    terms = ''.join(f'<div class="term">{SPARK}<h3 class="h3">{H(a)}</h3><p class="body dim">{H(b)}</p></div>' for a, b in S['terms'])
+    return f'''<section class="sec light white sched" id="schedule"><div class="wrap">
+<div class="shead rv">{SPARK}<span class="tag">{H(S['title'])}</span><h2 class="h2">Расписание <span class="hl">выездов</span></h2><p class="body dim">{H(S['lead'])}</p></div>
+<div class="smonths rv" role="group" aria-label="Месяцы">{months}</div>
+<div class="sbar"><span class="meta dim">Всего {total} {_vyezd(total)} · май — сентябрь · нажмите на месяц, чтобы отфильтровать</span><button type="button" class="sall" data-smon="all" hidden>Все программы ×</button></div>
+<div class="progs">{rows}</div>
+<div class="terms">{terms}</div>
+<p class="sfoot meta dim">{H(S['footnote'])}</p></div></section>'''
+
 def page_home():
     R = rootfor(0)
     why = [('1', 'Маленькая группа', 'От 6 до 12 человек. Вы не потеряетесь в толпе и не зависите от большого автобуса.'),
@@ -342,6 +375,8 @@ def page_home():
 <div class="tx"><p class="meta dim">{H(G['kicker'])}</p><ul class="pts">{''.join(f'<li>{H(x)}</li>' for x in G['points'])}</ul><p class="body dim" style="font-size:16px">{H(G['summary'])}</p>
 <div class="row">{''.join(f'<span class="chip">{H(a)} {H(b)}</span>' for a, b in G['facts'])}</div>
 <div class="sline">{splates(G)}<span class="body dim" style="font-size:16px">Старт и финиш — Бишкек.</span></div><span class="btn" style="align-self:flex-start">Подробнее о туре <span class="arrow">→</span></span></div></a>{tour_row(R) if MULTI else ''}</div></section>
+
+{schedule_block(R)}
 
 {section_year(R) if MULTI else ''}
 
