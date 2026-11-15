@@ -78,7 +78,7 @@ def head(title, desc, root, extra_ld=None, keywords=''):
 <link rel="apple-touch-icon" href="{root}assets/icons/apple-touch-icon.png"><link rel="manifest" href="{root}site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/site.css?v={VER}"><link rel="stylesheet" href="{root}assets/v2.css?v={VER}"><link rel="stylesheet" href="{root}assets/mobile.css?v={VER}"><link rel="stylesheet" href="{root}assets/schedule.css?v={VER}">
+<link rel="stylesheet" href="{root}assets/site.css?v={VER}"><link rel="stylesheet" href="{root}assets/v2.css?v={VER}"><link rel="stylesheet" href="{root}assets/mobile.css?v={VER}"><link rel="stylesheet" href="{root}assets/schedule.css?v={VER}"><link rel="stylesheet" href="{root}assets/theme.css?v={VER}">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script></head><body>'''
 
 def lang_switch(root):

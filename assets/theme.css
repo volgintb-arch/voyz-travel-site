@@ -1,0 +1,81 @@
+/* ===== VOYZ: светлая тема (поверх site/v2/mobile.css). Тёплый светлый фон, тонкие линии, без чёрных плашек. ===== */
+:root{--paper:#F6F5F1;--ink:#161616;--soft:#5E5E5A;--hair:rgba(0,0,0,.12);--muted-l:#5E5E5A}
+body{background:var(--paper);color:var(--ink)}
+
+/* --- все бывшие тёмные зоны становятся светлыми: переопределяем «тёмные» переменные внутри них --- */
+.sec:not(.ctaband),.phead,.ftr,.modal .box,.tabbar,.subnav{
+  --black:var(--paper);--white:var(--ink);--card:#fff;--card-2:#EFEEE9;--line:var(--hair);--muted:var(--soft);
+  background:var(--paper)!important;color:var(--ink)}
+.sec.white{background:var(--paper)!important}
+.sec .dim,.phead .dim,.ftr .dim,.modal .dim{color:var(--soft)}
+
+/* тонкая линия между блоками, как разделители в журнале */
+.sec:not(.ctaband)::before{content:"";position:absolute;top:0;left:var(--pad);right:var(--pad);height:1px;background:var(--hair);pointer-events:none}
+.hero+.sec::before,.phead+.sec::before,.ctaband+.sec::before{display:none}
+
+/* --- заголовки: широкий гротеск без «чёрной» жирности и без маркера --- */
+.h1,.h2,.num{font-weight:700;letter-spacing:-.005em}
+.phead .h1,.phead .h2,.modal .h2,.ftr .h2{color:var(--ink)}
+.v2 .h3,.h3{font-weight:700}
+.light .hl,.sec .hl,.phead .hl,.modal .hl{background:none!important;color:inherit!important;text-decoration:none!important;padding:0!important}
+.hero .h1{font-weight:700}
+.hero .hl{color:var(--lime)}
+
+/* --- метки и кнопки: лайм вместо чёрного --- */
+.tag,.sec .tag,.phead .tag{background:var(--lime)!important;color:#111!important}
+.btn,.btn.dark,.sec .btn.dark{background-color:var(--lime);color:#111}
+.sec .btn.ghost,.phead .btn.ghost,.modal .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid rgba(0,0,0,.28)}
+.btn:hover{box-shadow:0 10px 26px -12px rgba(120,150,0,.55)}
+
+/* --- шапка: светлое стекло, тёмный логотип и текст --- */
+.hdr,.hdr.solid{background:rgba(246,245,241,.86)!important;-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);border-bottom:1px solid var(--hair);color:var(--ink)}
+.hdr .logo-link img,.ftr .logo-lg img{filter:invert(1)}
+.hdr .nav a:not(.btn){color:var(--ink)}
+.hdr .lang,.hdr .lang a,.hdr [class*=lang] a{color:var(--ink);border-color:var(--hair)}
+
+/* --- подвал --- */
+.ftr{border-top:1px solid var(--hair)}
+.ftr a{color:var(--ink)}
+
+/* --- окно заявки и поля --- */
+.modal{background:rgba(20,20,20,.35)}
+.modal .box{background:#fff!important;border:0;box-shadow:0 30px 80px -30px rgba(0,0,0,.35)}
+.modal .close{color:var(--ink);border-color:var(--hair);background:#fff}
+.field input,.field select,.field textarea,.light .field input,.light .field select,.light .field textarea{background:#fff;color:var(--ink);border:1.5px solid var(--hair)}
+.modal .field input,.modal .field select,.modal .field textarea{background:#F6F5F1}
+.consent{color:var(--soft)}.consent a{color:var(--ink);text-decoration-color:var(--lime)}
+
+/* --- карточки в бывших тёмных блоках (команда, Instagram, организация) --- */
+.person-card,.sec .card{background:#fff;border:1px solid var(--hair)}
+.person-experience{color:var(--ink);background:linear-gradient(transparent 62%,var(--lime) 62%)}
+.social-pill{border-color:var(--hair);color:var(--ink)}
+.social-post-label{background:rgba(255,255,255,.92);color:var(--ink)}
+.social-play{background:rgba(255,255,255,.92);color:var(--ink)}
+
+/* --- нижняя панель на телефоне --- */
+.tabbar{background:rgba(255,255,255,.92)!important;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--hair);box-shadow:0 12px 30px -14px rgba(0,0,0,.25)}
+.tabbar .tb{color:var(--ink)}.tabbar .tb.on{background:var(--lime);color:#111}
+
+/* --- шрифт заголовков: Unbounded Medium, спокойнее чем Black --- */
+@font-face{font-family:'Unbounded';src:url('fonts/Unbounded-Medium.woff2') format('woff2');font-weight:500;font-display:swap}
+.h1,.h2,.num{font-weight:500!important;letter-spacing:-.01em}
+.smon .smn,.smon .smc,.ptitle,.pprice dd{font-weight:500}
+
+/* --- первый экран: текст на фото остаётся белым --- */
+.hero{color:#fff}
+.hero .h1{color:#fff}
+
+/* --- карточка флагмана: светлая вместо чёрной --- */
+.light .feat,.feat{background:#fff!important;color:var(--ink)!important;border:1px solid var(--hair)}
+.light .feat .dim,.feat .dim{color:var(--soft)!important}
+.light .feat .chip,.feat .chip{border-color:var(--hair)!important;color:var(--ink)}
+
+/* --- мелочи после светлой темы --- */
+.feat .pts li{color:var(--ink);font-weight:500}
+.ctaband .h2{color:#fff!important}.ctaband .hl{color:var(--lime)!important}
+.legend i.r{border-top-color:#9a9a94}
+summary:after{background:transparent;color:var(--ink);border:1.5px solid rgba(0,0,0,.22)}
+details[open] summary:after{background:var(--lime);border-color:var(--lime)}
+.tcard.custom{border:1px solid var(--hair)}.tcard.custom .btn.dark{background:var(--lime);color:#111}
+.oc{background:#fff;border:1px solid var(--hair)}.oc:hover{background:#fff;border-color:var(--lime)}.oc .h3{color:var(--ink)}.oc p{color:var(--soft)}.oc .on{color:rgba(0,0,0,.06)}
+summary:after,.faq summary:after{color:var(--ink)!important;background:transparent!important}details[open] summary:after{background:var(--lime)!important}
