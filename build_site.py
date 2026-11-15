@@ -127,7 +127,7 @@ def tabbar(root):
     p = CUR['path']
     cur = 'home' if p == '' else ('tours' if p.startswith('tours/') else '')
     base = root + PFX
-    items = [('home', 'Главная', base + 'index.html', ''), ('tours', 'Туры' if MULTI else 'Тур', base + ('tours/' if MULTI else 'tours/%s/' % G['slug']), '')] + ([('seasons', 'Сезоны', ('#year' if p == '' else base + 'index.html#year'), '')] if MULTI else []) + [('seasons', 'Даты', ('#schedule' if p == '' else base + 'index.html#schedule'), '')] + [('request', 'Заявка', '#request', ' data-open-form="tabbar"')]
+    items = [('home', 'Главная', base + 'index.html', ''), ('tours', 'Туры', base + 'tours/', '')] + ([('seasons', 'Сезоны', ('#year' if p == '' else base + 'index.html#year'), '')] if MULTI else []) + [('seasons', 'Даты', ('#schedule' if p == '' else base + 'index.html#schedule'), '')] + [('request', 'Заявка', '#request', ' data-open-form="tabbar"')]
     html = ''.join(f'<a class="tb{" on" if k == cur else ""}" href="{h}"{extra}{" aria-current=page" if k == cur else ""}><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{TAB_ICONS[k]}</svg><span>{n}</span></a>' for k, n, h, extra in items)
     return f'<nav class="tabbar" aria-label="Навигация">{html}</nav>'
 
@@ -137,7 +137,7 @@ def _old_mbar(label='Оставить заявку'): return f'<div class="mbar"
 def footer(root, modal_html='', mbar_html=''):
     if not modal_html:
         modal_html = modal(root).replace('<div class="modal"', '<div class="modal" id="request"', 1)
-    links = ''.join(f'<li><a href="{tour_url(t, root)}">{H(t["title"])}</a></li>' for t in TOURS)
+    links = ''.join(f'<li><a href="{tour_url(G, root) if pr.get("link") else root + PFX + "tours/#p-" + pr["id"]}">{H(pr["title"].replace("Кыргызстан. ", ""))}</a></li>' for pr in SEASON['programs'])
     return f'''<footer class="ftr"><div class="wrap"><div class="cols">
 <div><div class="logo-lg"><img src="{root}assets/logo.svg" alt="VOYZ" width="220" height="29"></div>
 <p class="body dim" style="margin-top:20px;max-width:26em">Авторские путешествия по Кыргызстану на внедорожниках. Небольшие группы, продуманные маршруты и честный разговор о том, что вас ждёт.</p></div>
@@ -303,8 +303,8 @@ def kw(): return KW_RU if LANG == 'ru' else KW_EN
 def hero_facts():
     if MULTI:
         cells = [(len(TOURS), 'маршрутов'), (12, 'месяцев в году'), ('4×4', 'внедорожники'), ('6–12', 'человек в группе')]
-    else:
-        cells = [(a, b) for a, b in G['facts']]
+    else:  # главная: факты сезона, а не одного тура
+        cells = [(len(SEASON['programs']), 'программы сезона'), (sum(x[2] for m in SEASON['months'] for x in m['starts']), 'выездов в 2027'), ('6–8', 'человек в группе'), ('4×4', 'внедорожники')]
     return ''.join(f'<div><div class="num">{H(str(a))}</div><p class="meta">{H(b)}</p></div>' for a, b in cells)
 
 def tour_row(R):
@@ -321,7 +321,7 @@ def section_now(R):
 
 SPARK = '<svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.4 5.6 11.4 12 12-6.4.6-11.4 5.6-12 12-.6-6.4-5.6-11.4-12-12C6.4 11.4 11.4 6.4 12 0z"/></svg>'
 def _vyezd(n): return 'выезд' if n % 10 == 1 and n % 100 != 11 else ('выезда' if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14) else 'выездов')
-def schedule_block(R):
+def schedule_block(R, intro=True):
     S = SEASON
     def start(d, name, n):
         cnt = f'<b class="sx">×{n}</b>' if n > 1 else ''
@@ -338,13 +338,13 @@ def schedule_block(R):
         when = ''.join(f'<span>{H(w)}</span>' for w in p['when'])
         badges = ''.join(f'<span class="pb">{H(b)}</span>' for b in p['badges'])
         more = f'<a class="plink" href="{tour_url(G, R)}">(+) Программа тура</a>' if p.get('link') else ''
-        rows += f'''<article class="prog rv" data-months="{' '.join(map(str, p['months']))}"><div class="pinfo"><h3 class="ptitle">{H(p['title'])}</h3><p class="pdesc"><span class="plus">(+)</span> {H(p['desc'])}</p>
+        rows += f'''<article class="prog rv" id="p-{p['id']}" data-months="{' '.join(map(str, p['months']))}"><div class="pinfo"><h3 class="ptitle">{H(p['title'])}</h3><p class="pdesc"><span class="plus">(+)</span> {H(p['desc'])}</p>
 <dl class="pdl"><div><dt>длительность:</dt><dd><span class="pill">{H(p['days'])}</span> <span class="pn">{H(p['nights'])}</span></dd></div><div><dt>группа:</dt><dd><span class="pill">{H(p['group'])}</span></dd></div><div><dt>когда едем:</dt><dd class="pwhen">{when}</dd></div><div class="pprice"><dt>стоимость:</dt><dd>{price}</dd></div></dl>
 <div class="pact"><a class="btn dark" href="#request" data-open-form="schedule" data-sched-tour="{H(p['title'])}" data-sched-id="{p['id']}">(+) Забронировать место</a>{more}</div></div>
 <div class="pph"><img src="{img(p['img'], 'l', R)}" alt="{H(p['title'])}" loading="lazy"><div class="pbs">{badges}</div></div></article>'''
     terms = ''.join(f'<div class="term">{SPARK}<h3 class="h3">{H(a)}</h3><p class="body dim">{H(b)}</p></div>' for a, b in S['terms'])
     return f'''<section class="sec light white sched" id="schedule"><div class="wrap">
-<div class="shead rv">{SPARK}<span class="tag">{H(S['title'])}</span><h2 class="h2">Расписание <span class="hl">выездов</span></h2><p class="body dim">{H(S['lead'])}</p></div>
+{f'<div class="shead rv">{SPARK}<span class="tag">{H(S["title"])}</span><h2 class="h2">Расписание <span class="hl">выездов</span></h2><p class="body dim">{H(S["lead"])}</p></div>' if intro else ''}
 <div class="smonths rv" role="group" aria-label="Месяцы">{months}</div>
 <div class="sbar"><span class="meta dim">Всего {total} {_vyezd(total)} · май — сентябрь · нажмите на месяц, чтобы отфильтровать</span><button type="button" class="sall" data-smon="all" hidden>Все программы ×</button></div>
 <div class="progs">{rows}</div>
@@ -364,7 +364,7 @@ def page_home():
 <section class="hero">{home_background(R)}
 <div class="wrap"><span class="tag">Экспедиции по Кыргызстану</span><h1 class="h1" style="margin-top:22px">Туда, куда не&nbsp;доезжает <span class="hl">автобус</span></h1>
 <p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа и продуманный маршрут.</p>
-<div class="cta"><a class="btn" href="{tour_url(G, R) if not MULTI else 'tours/'}">{'Смотреть все туры' if MULTI else 'Смотреть тур'} <span class="arrow">→</span></a><a class="btn ghost" href="#schedule">Даты и цены</a></div>
+<div class="cta"><a class="btn" href="{R}{PFX}tours/">Смотреть все туры <span class="arrow">→</span></a><a class="btn ghost" href="#schedule">Даты и цены</a></div>
 <div class="facts rv">{hero_facts()}</div></div></section>
 <section class="sec light" id="why"><div class="wrap"><span class="tag">Почему VOYZ</span><h2 class="h2" style="margin-top:22px;max-width:16ch">Не просто посмотреть. <span class="hl">Почувствовать.</span></h2>
 <p class="body dim" style="max-width:36em;margin-top:22px">Дороги за горизонт, озёра между скал, ночи под звёздным небом. Каждая поездка открывает другой Кыргызстан.</p>{why_block(why, R)}</div></section>
@@ -401,10 +401,9 @@ def page_tours():
     bc = crumbs([(tt('Главная'), page_url(LANG, '')), (tt('Туры'), page_url(LANG, 'tours/'))])
     body = head('Туры по Кыргызстану на внедорожниках — VOYZ Travel', 'Авторские экспедиции VOYZ по Кыргызстану на внедорожниках: небольшие группы, юрты, высокогорные озёра.', R, [bc, items], kw()) + header(R, 'tours') + f'''
 <section class="phead ink"><div class="wrap split"><div class="stack"><span class="tag">Каталог</span><h1 class="h1" style="font-size:clamp(40px,calc(6*var(--vw)),96px)">Наши <span class="hl">туры</span></h1></div>
-<p class="body dim">Авторские экспедиции по Кыргызстану: внедорожники, горы, озёра и юрты. Небольшие группы и маршруты на любой сезон.</p></div></section>
-<section class="sec light"><div class="wrap">{('<div class="cal-wrap">' + calendar_block(R) + '</div>' + chips) if MULTI else ''}<div class="grid" id="tgrid" style="margin-top:20px">{cards}
-<div class="tcard custom rv" data-seasons="spring summer autumn winter"><div class="in"><span class="tag dark">Под вас</span><div class="stack"><h2 class="h2" style="font-size:clamp(26px,calc(2.8*var(--vw)),44px)">Свой маршрут на внедорожниках</h2><p class="body" style="font-weight:700">Хотите другую длительность, даты или состав: компания друзей, семья, корпоративная поездка? Соберём маршрут под вас.</p></div><a class="btn dark" href="#request" data-open-form="catalog-custom" style="align-self:flex-start">Обсудить маршрут <span class="arrow">→</span></a></div></div>
-</div></div></section>{request_block('Свой маршрут', R, 'c')}'''
+<p class="body dim">Четыре программы сезона 2027: от семи дней по каньонам и Иссык-Кулю до большой экспедиции к Кель-Суу и Сон-Кулю. Небольшие группы, внедорожники и ночь в Бишкеке включена.</p></div></section>
+{schedule_block(R, intro=False).replace('class="sec light white sched"', 'class="sec light white sched incat"', 1)}
+<section class="sec light white custom-band"><div class="wrap"><div class="cband rv"><div class="stack"><span class="tag">Под вас</span><h2 class="h2">Свой маршрут <span class="hl">на внедорожниках</span></h2><p class="body dim">Другая длительность, свои даты или своя компания: друзья, семья, коллеги. Соберём маршрут под вас и посчитаем стоимость.</p></div><a class="btn" href="#request" data-open-form="catalog-custom">Обсудить маршрут <span class="arrow">→</span></a></div></div></section>{request_block('Свой маршрут', R, 'c')}'''
     return body + footer(R, modal(R, 'Свой маршрут'), mbar())
 
 def page_tour(t):

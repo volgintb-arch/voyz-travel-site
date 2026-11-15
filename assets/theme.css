@@ -79,3 +79,14 @@ details[open] summary:after{background:var(--lime);border-color:var(--lime)}
 .tcard.custom{border:1px solid var(--hair)}.tcard.custom .btn.dark{background:var(--lime);color:#111}
 .oc{background:#fff;border:1px solid var(--hair)}.oc:hover{background:#fff;border-color:var(--lime)}.oc .h3{color:var(--ink)}.oc p{color:var(--soft)}.oc .on{color:rgba(0,0,0,.06)}
 summary:after,.faq summary:after{color:var(--ink)!important;background:transparent!important}details[open] summary:after{background:var(--lime)!important}
+
+/* --- каталог туров --- */
+.phead+.sched.incat{padding-top:clamp(24px,calc(3*var(--vw)),48px)}
+.custom-band{padding-top:0!important}.custom-band::before{display:none}
+.cband{display:flex;align-items:center;justify-content:space-between;gap:clamp(24px,4vw,64px);flex-wrap:wrap;padding:clamp(28px,calc(4*var(--vw)),56px);border-radius:var(--r);background:#fff;border:1px solid var(--hair)}
+.cband .stack{max-width:44em}.cband .h2{font-size:clamp(26px,calc(3*var(--vw)),46px);margin:16px 0 14px}
+.cband .btn{flex:none}
+@media(max-width:700px){.cband .btn{width:100%}}
+.custom-band+.ctaband{display:none}
+.prog{scroll-margin-top:110px}
+@media(max-width:560px){.pprice dd .pn{display:block;margin:4px 0 0}.pprice dd{font-size:24px}}
