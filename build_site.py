@@ -333,7 +333,7 @@ def schedule_block(R):
     total = sum(x[2] for m in S['months'] for x in m['starts'])
     rows = ''
     for p in S['programs']:
-        price = H(p['price']) if p.get('price') else 'уточняется'
+        price = H(p['price']) + ' <span class="pn">за человека</span>' if p.get('price') else 'уточняется'
         when = ''.join(f'<span>{H(w)}</span>' for w in p['when'])
         badges = ''.join(f'<span class="pb">{H(b)}</span>' for b in p['badges'])
         more = f'<a class="plink" href="{tour_url(G, R)}">(+) Программа тура</a>' if p.get('link') else ''

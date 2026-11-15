@@ -53,3 +53,4 @@
 }
 @media(max-width:560px){.sched .shead .h2{font-size:30px}.pdl>div{grid-template-columns:110px minmax(0,1fr)}.pact .btn{width:100%}.sched .shead{text-align:left;padding-left:0;padding-right:0}.sched .shead .body{margin:0}}
 .sched .pact .btn{background:var(--lime);color:#111;border-color:var(--lime)}.sched .pact .btn:hover{background:#c6e800;border-color:#c6e800;color:#111}
+.sched .pwhen{display:flex;flex-wrap:wrap;gap:4px 18px}.sched .pwhen span{display:inline-block;white-space:nowrap}.sched .pprice .pn{font-family:Mulish;font-weight:700;text-transform:none;letter-spacing:0}
