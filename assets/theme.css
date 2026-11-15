@@ -90,3 +90,7 @@ summary:after,.faq summary:after{color:var(--ink)!important;background:transpare
 .custom-band+.ctaband{display:none}
 .prog{scroll-margin-top:110px}
 @media(max-width:560px){.pprice dd .pn{display:block;margin:4px 0 0}.pprice dd{font-size:24px}}
+/* анимация слов обрезала точки над Ё */
+.w{padding-top:.2em;margin-top:-.2em}
+/* первый экран на светлом фото: текст читается */
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,.18) 45%,rgba(0,0,0,0) 70%);pointer-events:none}

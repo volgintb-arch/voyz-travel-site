@@ -136,7 +136,8 @@
       "badges": [
         "7 дней",
         "Весна и осень"
-      ]
+      ],
+      "slug": "svoim-putyom"
     },
     {
       "id": "nomads",
@@ -160,7 +161,8 @@
       "badges": [
         "7 дней",
         "2 ночи на Сон-Куле"
-      ]
+      ],
+      "slug": "doroga-k-kochevnikam"
     },
     {
       "id": "grand",
@@ -189,7 +191,7 @@
         "8 дней",
         "Флагман"
       ],
-      "link": true
+      "slug": "grand-expedition"
     },
     {
       "id": "special",

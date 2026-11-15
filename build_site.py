@@ -30,7 +30,8 @@ for t in TOURS:
     if t['slug'] != 'grand-expedition': t['faq'] = t['faq'] + DEF['faq_common']
 G = TOURS[0]                       # flagship tour (home hero, map)
 GROUP_MIN, GROUP_MAX = G.get('group_min', 6), G.get('group_max', 12)
-MULTI = len(TOURS) > 1             # blocks that compare several tours appear only when there are several
+MULTI = False  # каталог строится по сезону (data/season2027.json), старые блоки «туры на весь год» не нужны
+_UNUSED_MULTI = len(TOURS) > 1             # blocks that compare several tours appear only when there are several
 MONTHS = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
 SEASONS = [('spring', 'Весна'), ('summer', 'Лето'), ('autumn', 'Осень'), ('winter', 'Зима')]
 
@@ -137,7 +138,7 @@ def _old_mbar(label='Оставить заявку'): return f'<div class="mbar"
 def footer(root, modal_html='', mbar_html=''):
     if not modal_html:
         modal_html = modal(root).replace('<div class="modal"', '<div class="modal" id="request"', 1)
-    links = ''.join(f'<li><a href="{tour_url(G, root) if pr.get("link") else root + PFX + "tours/#p-" + pr["id"]}">{H(pr["title"].replace("Кыргызстан. ", ""))}</a></li>' for pr in SEASON['programs'])
+    links = ''.join(f'<li><a href="{root + PFX + "tours/" + pr["slug"] + "/" if pr.get("slug") else root + PFX + "tours/#p-" + pr["id"]}">{H(pr["title"].replace("Кыргызстан. ", ""))}</a></li>' for pr in SEASON['programs'])
     return f'''<footer class="ftr"><div class="wrap"><div class="cols">
 <div><div class="logo-lg"><img src="{root}assets/logo.svg" alt="VOYZ" width="220" height="29"></div>
 <p class="body dim" style="margin-top:20px;max-width:26em">Авторские путешествия по Кыргызстану на внедорожниках. Небольшие группы, продуманные маршруты и честный разговор о том, что вас ждёт.</p></div>
@@ -186,7 +187,7 @@ def days_block(t, root):
         note = f'<p class="note">{H(d["note"])}</p>' if d.get('note') else ''
         moments = ''.join(f'<li>{H(m)}</li>' for m in d['moments'])
         out.append(f'''<article class="day rv" id="day-{d['n']}"><div class="pics"><div class="main"><img src="{img(d['img'], 'm', root)}" srcset="{img(d['img'], 'm', root)} 900w, {img(d['img'], 'l', root)} 1900w" sizes="(max-width:900px) 100vw, calc(55*var(--vw))" alt="{H(d['caption'])}" style="object-position:{d['pos']}" loading="lazy"></div>{sub}<span class="cap">{H(d['caption'])}</span></div>
-<div class="stack" style="--gap:22px"><div class="dn" aria-hidden="true">{d['n']:02d}</div><p class="tag">День {d['n']}</p><h3 class="h2" style="font-size:clamp(24px,calc(2.8*var(--vw)),42px)">{H(d['title'])}</h3><p class="meta route">{H(d['route'])}</p><p class="body">{H(d['text'])}</p><ul class="moments">{moments}</ul>{note}<div class="stay"><b>Ночёвка</b><span>{H(d['stay'])}</span></div></div></article>''')
+<div class="stack" style="--gap:22px"><div class="dn" aria-hidden="true">{d['n']:02d}</div><p class="tag">День {d['n']}</p><h3 class="h2" style="font-size:clamp(24px,calc(2.8*var(--vw)),42px)">{H(d['title'])}</h3><p class="meta route">{H(d['route'])}</p><p class="body">{H(d['text'])}</p><ul class="moments">{moments}</ul>{note}{f'<div class="stay"><b>Ночёвка</b><span>{H(d["stay"])}</span></div>' if d.get('stay') else ''}</div></article>''')
     return '<div class="days">' + ''.join(out) + '</div>'
 
 def steps_block():
@@ -337,7 +338,7 @@ def schedule_block(R, intro=True):
         price = H(p['price']) + ' <span class="pn">за человека</span>' if p.get('price') else 'уточняется'
         when = ''.join(f'<span>{H(w)}</span>' for w in p['when'])
         badges = ''.join(f'<span class="pb">{H(b)}</span>' for b in p['badges'])
-        more = f'<a class="plink" href="{tour_url(G, R)}">(+) Программа тура</a>' if p.get('link') else ''
+        more = f'<a class="plink" href="{R}{PFX}tours/{p["slug"]}/">(+) Программа по дням</a>' if p.get('slug') else ''
         rows += f'''<article class="prog rv" id="p-{p['id']}" data-months="{' '.join(map(str, p['months']))}"><div class="pinfo"><h3 class="ptitle">{H(p['title'])}</h3><p class="pdesc"><span class="plus">(+)</span> {H(p['desc'])}</p>
 <dl class="pdl"><div><dt>длительность:</dt><dd><span class="pill">{H(p['days'])}</span> <span class="pn">{H(p['nights'])}</span></dd></div><div><dt>группа:</dt><dd><span class="pill">{H(p['group'])}</span></dd></div><div><dt>когда едем:</dt><dd class="pwhen">{when}</dd></div><div class="pprice"><dt>стоимость:</dt><dd>{price}</dd></div></dl>
 <div class="pact"><a class="btn dark" href="#request" data-open-form="schedule" data-sched-tour="{H(p['title'])}" data-sched-id="{p['id']}">(+) Забронировать место</a>{more}</div></div>
