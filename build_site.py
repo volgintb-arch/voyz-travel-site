@@ -96,14 +96,16 @@ def header(root, cur=''):
 <nav class="nav" aria-label="Основное">{links}{sw}<a class="btn sm" href="#request" data-open-form="header">Подобрать тур</a></nav>
 <div class="hlang">{sw}</div></div></header>'''
 
+SEASON = load('data/season2027.json')
 def form(tour_name='', idp='f', source='page', root=''):
-    months = ''.join(f'<option>{m}</option>' for m in ['Весна', 'Лето', 'Осень', 'Зима', 'Пока не знаю'])
+    _pid = {w: pr['id'] for pr in SEASON['programs'] for w in pr['when']}
+    months = ''.join('<optgroup label="%s">%s</optgroup>' % (H(m['name']), ''.join(f'<option data-prog="{_pid.get(d, "")}">{H(d)} · {H(n)}</option>' for d, n, _ in m['starts'])) for m in SEASON['months']) + ''.join(f'<option>{m}</option>' for m in ['Другие даты или свой маршрут', 'Пока не знаю'])
     people = ''.join(f'<option>{p}</option>' for p in [*map(str, range(1, GROUP_MAX + 1)), 'Больше %d' % GROUP_MAX])
     return f'''<form class="form" data-request data-tour="{H(tour_name)}" data-source="{source}" novalidate>
 <div class="fields" style="display:flex;flex-direction:column;gap:16px">
 <div class="two"><div class="field"><label for="{idp}n">Как вас зовут</label><input id="{idp}n" name="name" autocomplete="name" placeholder="Имя" required></div>
-<div class="field"><label for="{idp}c">Как с вами связаться</label><input id="{idp}c" name="contact" autocomplete="tel" placeholder="Telegram, телефон или почта" required></div></div>
-<div class="two"><div class="field"><label for="{idp}m">Когда хотите поехать</label><select id="{idp}m" name="month"><option value="">Выберите сезон</option>{months}</select></div>
+<div class="field"><label for="{idp}c">Как с вами связаться</label><input id="{idp}c" name="contact" autocomplete="tel" placeholder="Telegram или телефон" required></div></div>
+<div class="two"><div class="field"><label for="{idp}m">Какой выезд</label><select id="{idp}m" name="month"><option value="">Выберите даты</option>{months}</select></div>
 <div class="field"><label for="{idp}p">Сколько вас человек</label><select id="{idp}p" name="people"><option value="">Выберите</option>{people}</select></div></div>
 <div class="field"><label for="{idp}t">Пожелания</label><textarea id="{idp}t" name="comment" placeholder="Что важно для вас в поездке: опыт, дети, сроки, вопросы"></textarea></div>
 <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных и с <a href="{root}{PFX}privacy/">политикой конфиденциальности</a></span></label>
@@ -125,7 +127,7 @@ def tabbar(root):
     p = CUR['path']
     cur = 'home' if p == '' else ('tours' if p.startswith('tours/') else '')
     base = root + PFX
-    items = [('home', 'Главная', base + 'index.html', ''), ('tours', 'Туры' if MULTI else 'Тур', base + ('tours/' if MULTI else 'tours/%s/' % G['slug']), '')] + ([('seasons', 'Сезоны', ('#year' if p == '' else base + 'index.html#year'), '')] if MULTI else []) + [('request', 'Заявка', '#request', ' data-open-form="tabbar"')]
+    items = [('home', 'Главная', base + 'index.html', ''), ('tours', 'Туры' if MULTI else 'Тур', base + ('tours/' if MULTI else 'tours/%s/' % G['slug']), '')] + ([('seasons', 'Сезоны', ('#year' if p == '' else base + 'index.html#year'), '')] if MULTI else []) + [('seasons', 'Даты', ('#schedule' if p == '' else base + 'index.html#schedule'), '')] + [('request', 'Заявка', '#request', ' data-open-form="tabbar"')]
     html = ''.join(f'<a class="tb{" on" if k == cur else ""}" href="{h}"{extra}{" aria-current=page" if k == cur else ""}><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{TAB_ICONS[k]}</svg><span>{n}</span></a>' for k, n, h, extra in items)
     return f'<nav class="tabbar" aria-label="Навигация">{html}</nav>'
 
@@ -139,7 +141,7 @@ def footer(root, modal_html='', mbar_html=''):
     return f'''<footer class="ftr"><div class="wrap"><div class="cols">
 <div><div class="logo-lg"><img src="{root}assets/logo.svg" alt="VOYZ" width="220" height="29"></div>
 <p class="body dim" style="margin-top:20px;max-width:26em">Авторские путешествия по Кыргызстану на внедорожниках. Небольшие группы, продуманные маршруты и честный разговор о том, что вас ждёт.</p></div>
-<div><p class="meta dim">Туры</p><ul>{links}<li><a href="{root}{PFX}tours/">Все туры</a></li></ul></div>
+<div><p class="meta dim">Туры</p><ul>{links}<li><a href="{root}{PFX}tours/">Все туры</a></li><li><a href="{root}{PFX}index.html#schedule">Даты и цены 2027</a></li></ul></div>
 <div><p class="meta dim">Связаться</p><ul><li><a href="#request" data-open-form="footer">Оставить заявку</a></li>
 <li><a data-contact="telegram" hidden>Telegram</a></li><li><a data-contact="whatsapp" hidden>WhatsApp</a></li><li><a data-contact="phone" hidden>Позвонить</a></li><li><a data-contact="email" hidden>Написать на почту</a></li>
 <li><a href="https://www.instagram.com/voyz_travel/" target="_blank" rel="noopener noreferrer">Instagram · @voyz_travel ↗</a></li>
@@ -317,7 +319,6 @@ def section_now(R):
     return f'''<section class="sec light white" id="now"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">По сезону</span><h2 class="h2">Сейчас в сезоне <span class="hl" id="nowm"></span></h2></div><p class="body dim">Эти маршруты можно проехать в ближайшие недели. Остальные ждут своего сезона: весь год в каталоге.</p></div>
 <div class="grid" id="nowgrid">{''.join(tcard(t, R).replace('class="tcard rv"', 'class="tcard rv" hidden', 1) for t in TOURS)}</div><noscript><style>#nowgrid [hidden]{{display:block!important}}</style></noscript></div></section>'''
 
-SEASON = load('data/season2027.json')
 SPARK = '<svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.4 5.6 11.4 12 12-6.4.6-11.4 5.6-12 12-.6-6.4-5.6-11.4-12-12C6.4 11.4 11.4 6.4 12 0z"/></svg>'
 def _vyezd(n): return 'выезд' if n % 10 == 1 and n % 100 != 11 else ('выезда' if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14) else 'выездов')
 def schedule_block(R):
@@ -339,7 +340,7 @@ def schedule_block(R):
         more = f'<a class="plink" href="{tour_url(G, R)}">(+) Программа тура</a>' if p.get('link') else ''
         rows += f'''<article class="prog rv" data-months="{' '.join(map(str, p['months']))}"><div class="pinfo"><h3 class="ptitle">{H(p['title'])}</h3><p class="pdesc"><span class="plus">(+)</span> {H(p['desc'])}</p>
 <dl class="pdl"><div><dt>длительность:</dt><dd><span class="pill">{H(p['days'])}</span> <span class="pn">{H(p['nights'])}</span></dd></div><div><dt>группа:</dt><dd><span class="pill">{H(p['group'])}</span></dd></div><div><dt>когда едем:</dt><dd class="pwhen">{when}</dd></div><div class="pprice"><dt>стоимость:</dt><dd>{price}</dd></div></dl>
-<div class="pact"><a class="btn dark" href="#request" data-open-form="schedule" data-sched-tour="{H(p['title'])}">(+) Забронировать место</a>{more}</div></div>
+<div class="pact"><a class="btn dark" href="#request" data-open-form="schedule" data-sched-tour="{H(p['title'])}" data-sched-id="{p['id']}">(+) Забронировать место</a>{more}</div></div>
 <div class="pph"><img src="{img(p['img'], 'l', R)}" alt="{H(p['title'])}" loading="lazy"><div class="pbs">{badges}</div></div></article>'''
     terms = ''.join(f'<div class="term">{SPARK}<h3 class="h3">{H(a)}</h3><p class="body dim">{H(b)}</p></div>' for a, b in S['terms'])
     return f'''<section class="sec light white sched" id="schedule"><div class="wrap">
@@ -363,14 +364,14 @@ def page_home():
 <section class="hero">{home_background(R)}
 <div class="wrap"><span class="tag">Экспедиции по Кыргызстану</span><h1 class="h1" style="margin-top:22px">Туда, куда не&nbsp;доезжает <span class="hl">автобус</span></h1>
 <p class="body lead">Авторские туры на внедорожниках по Тянь-Шаню: высокогорные озёра, красные каньоны, ночи в юртах. Небольшая группа и продуманный маршрут.</p>
-<div class="cta"><a class="btn" href="{tour_url(G, R) if not MULTI else 'tours/'}">{'Смотреть все туры' if MULTI else 'Смотреть тур'} <span class="arrow">→</span></a><a class="btn ghost" href="#request" data-open-form="hero">Подобрать тур</a></div>
+<div class="cta"><a class="btn" href="{tour_url(G, R) if not MULTI else 'tours/'}">{'Смотреть все туры' if MULTI else 'Смотреть тур'} <span class="arrow">→</span></a><a class="btn ghost" href="#schedule">Даты и цены</a></div>
 <div class="facts rv">{hero_facts()}</div></div></section>
 <section class="sec light" id="why"><div class="wrap"><span class="tag">Почему VOYZ</span><h2 class="h2" style="margin-top:22px;max-width:16ch">Не просто посмотреть. <span class="hl">Почувствовать.</span></h2>
 <p class="body dim" style="max-width:36em;margin-top:22px">Дороги за горизонт, озёра между скал, ночи под звёздным небом. Каждая поездка открывает другой Кыргызстан.</p>{why_block(why, R)}</div></section>
 
 {instagram_block(R)}
 
-<section class="sec light white" id="tours"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Флагман</span><h2 class="h2">{G['title']}</h2></div><p class="body dim">{H(G['summary'])}</p></div>
+<section class="sec light white" id="tours"><div class="wrap"><div class="split" style="margin-bottom:clamp(28px,calc(4*var(--vw)),48px)"><div class="stack"><span class="tag">Флагман</span><h2 class="h2">{G['title']}</h2></div><p class="body dim">{H(SEASON['flag_note'])} <a class="plink" href="#schedule">Все даты →</a></p></div>
 <a class="feat rv" href="{tour_url(G, R)}"><div class="ph"><img src="{img(G['card_img'], 'l', R)}" alt="Кель-Суу" loading="lazy"><span class="tag">{H(G['badge'])}</span></div>
 <div class="tx"><p class="meta dim">{H(G['kicker'])}</p><ul class="pts">{''.join(f'<li>{H(x)}</li>' for x in G['points'])}</ul><p class="body dim" style="font-size:16px">{H(G['summary'])}</p>
 <div class="row">{''.join(f'<span class="chip">{H(a)} {H(b)}</span>' for a, b in G['facts'])}</div>

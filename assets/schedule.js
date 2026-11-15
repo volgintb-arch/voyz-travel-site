@@ -12,6 +12,10 @@
   if (all) all.addEventListener('click', function () { apply('all'); });
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('[data-sched-tour]'); if (!a) return;
-    var f = document.querySelector('.modal form'); if (f) f.dataset.tour = a.getAttribute('data-sched-tour');
+    var f = document.querySelector('.modal form'); if (!f) return;
+    f.dataset.tour = a.getAttribute('data-sched-tour');
+    // в форме сразу выбран ближайший выезд этой программы
+    var id = a.getAttribute('data-sched-id'), sel = f.querySelector('select[name=month]');
+    if (id && sel) { var o = sel.querySelector('option[data-prog="' + id + '"]'); if (o) sel.value = o.value; }
   }, true);
 })();
